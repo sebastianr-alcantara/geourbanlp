@@ -1,903 +1,336 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0">
-
-    <meta
-        name="description"
-        content="Geo Urban LP - Geovisor de Habilitación Urbana">
-
-    <title>
-        Geo Urban LP | Habilitación Urbana
-    </title>
-
-    <link
-        rel="icon"
-        href="../assets/icons/geourbanlp-light-icon.svg"
-        type="image/svg+xml">
-
-    <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/ol@10.6.1/ol.css">
-
-    <link
-        rel="stylesheet"
-        href="m-habilitacion-urbana.css">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Geo Urban LP - Geovisor de Habilitación Urbana">
+    <title>Geo Urban LP | Habilitación Urbana</title>
+    <link rel="icon" href="../assets/icons/geourbanlp-light-icon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@10.6.1/ol.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://cesium.com/downloads/cesiumjs/releases/1.125/Build/Cesium/Widgets/widgets.css">
+    <link rel="stylesheet" href="m-habilitacion-urbana.css">
 </head>
-
-
 <body>
-
     <div class="viewer">
-
-
-        <!-- ========================= -->
-        <!-- HEADER                    -->
-        <!-- ========================= -->
-
         <header class="viewer-header">
-
             <div class="viewer-header-left">
-
-                <a
-                    href="../modules.html"
-                    class="viewer-brand"
-                    aria-label="Volver a módulos">
-
-                    <img
-                        src="../assets/icons/geourbanlp-light-logo.svg"
-                        alt="Geo Urban LP"
-                        class="viewer-logo viewer-logo-light">
-
-                    <img
-                        src="../assets/icons/geourbanlp-dark-logo.svg"
-                        alt=""
-                        aria-hidden="true"
-                        class="viewer-logo viewer-logo-dark">
-
-                </a>
-
-                <div class="viewer-module">
-
-                    <span>
-                        GEOVISOR
-                    </span>
-
-                    <strong>
-                        Habilitación Urbana
-                    </strong>
-
+                <div class="viewer-brand" aria-label="Geo Urban LP">
+                    <img src="../../assets/icons/geourbanlp-light-logo.svg" class="viewer-logo viewer-logo-light">
+                    <img src="../../assets/icons/geourbanlp-dark-logo.svg" aria-hidden="true" class="viewer-logo viewer-logo-dark">
                 </div>
-
+                <div class="viewer-module">
+                    <span>GEOVISOR</span>
+                    <strong>Habilitación Urbana</strong>
+                </div>
             </div>
-
-
             <div class="viewer-header-actions">
-
-                <select
-                    id="select-theme"
-                    class="theme-select"
-                    aria-label="Seleccionar apariencia">
-
-                    <option value="system">
-                        Sistema
-                    </option>
-
-                    <option value="light">
-                        Claro
-                    </option>
-
-                    <option value="dark">
-                        Oscuro
-                    </option>
-
+                <div class="user-welcome" aria-label="Usuario actual">
+                    <span class="material-icons" aria-hidden="true">account_circle</span>
+                    <strong data-demo-user-name>SEBASTIÁN ROMALDO ALCÁNTARA LUYO</strong>
+                </div>
+                <select id="select-theme" class="theme-select" aria-label="Seleccionar apariencia">
+                    <option value="system">Sistema</option>
+                    <option value="light">Claro</option>
+                    <option value="dark">Oscuro</option>
                 </select>
-
-
-                <a
-                    href="../modules.html"
-                    class="btn-header"
-                    aria-label="Volver a módulos">
-
-                    Módulos
-
+                <a href="../modules.html" class="btn-header" aria-label="Volver a Módulos">
+                    <span class="material-icons" aria-hidden="true">logout</span>
+                    <span>Volver a Módulos</span>
                 </a>
-
             </div>
-
         </header>
 
-
-
-        <!-- ========================= -->
-        <!-- VIEWER BODY               -->
-        <!-- ========================= -->
-
         <div class="viewer-body">
-
-
-            <!-- ========================= -->
-            <!-- LEFT TOOLBAR              -->
-            <!-- ========================= -->
-
-            <aside
-                class="viewer-toolbar"
-                aria-label="Herramientas del geovisor">
-
-
-                <button
-                    class="tool-button"
-                    data-panel="layers"
-                    type="button"
-                    title="Capas">
-
-                    <span class="tool-icon">
-                        ◫
-                    </span>
-
-                    <span>
-                        Capas
-                    </span>
-
+            <aside class="viewer-toolbar" aria-label="Herramientas del geovisor">
+                <button class="tool-button active" data-panel="layers" type="button" title="Capas">
+                    <span class="tool-icon material-icons" aria-hidden="true">layers</span>
+                    <span>Capas</span>
                 </button>
-
-
-                <button
-                    class="tool-button"
-                    data-panel="drawing"
-                    type="button"
-                    title="Dibujo">
-
-                    <span class="tool-icon">
-                        ✎
-                    </span>
-
-                    <span>
-                        Dibujar
-                    </span>
-
+                <button class="tool-button" data-panel="timeline" type="button" title="Línea de tiempo">
+                    <span class="tool-icon material-icons" aria-hidden="true">date_range</span>
+                    <span>Tiempo</span>
                 </button>
-
-
-                <button
-                    class="tool-button"
-                    data-panel="location"
-                    type="button"
-                    title="Localización">
-
-                    <span class="tool-icon">
-                        ◎
-                    </span>
-
-                    <span>
-                        Ubicar
-                    </span>
-
+                <button class="tool-button" data-panel="services" type="button" title="Servicios WFS/WMS e importación">
+                    <span class="tool-icon material-icons" aria-hidden="true">layers</span>
+                    <span>Servicios</span>
                 </button>
-
-
-                <button
-                    class="tool-button"
-                    data-panel="reports"
-                    type="button"
-                    title="Reportes">
-
-                    <span class="tool-icon">
-                        ▥
-                    </span>
-
-                    <span>
-                        Reportes
-                    </span>
-
+                <button class="tool-button" data-panel="legend" type="button" title="Leyenda del mapa">
+                    <span class="tool-icon material-icons" aria-hidden="true">list_alt</span>
+                    <span>Leyenda</span>
                 </button>
-
-
-                <button
-                    class="tool-button"
-                    data-panel="records"
-                    type="button"
-                    title="Registros relacionados">
-
-                    <span class="tool-icon">
-                        ＋
-                    </span>
-
-                    <span>
-                        Registros
-                    </span>
-
+                <button class="tool-button" data-panel="drawing" type="button" title="Dibujo">
+                    <span class="tool-icon material-icons" aria-hidden="true">edit</span>
+                    <span>Dibujar</span>
                 </button>
-
-
+                <button class="tool-button" data-panel="measurement" type="button" title="Medir distancia o área">
+                    <span class="tool-icon material-icons" aria-hidden="true">straighten</span>
+                    <span>Medir</span>
+                </button>
+                <button class="tool-button" data-panel="location" type="button" title="Localización">
+                    <span class="tool-icon material-icons" aria-hidden="true">my_location</span>
+                    <span>Ubicar</span>
+                </button>
+                <button class="tool-button" data-panel="directions" type="button" title="Crear una ruta">
+                    <span class="tool-icon material-icons" aria-hidden="true">directions</span>
+                    <span>Rutas</span>
+                </button>
+                <button class="tool-button" data-panel="reports" type="button" title="Reportes">
+                    <span class="tool-icon material-icons" aria-hidden="true">assessment</span>
+                    <span>Reportes</span>
+                </button>
             </aside>
 
-
-
-            <!-- ========================= -->
-            <!-- SIDE PANEL                -->
-            <!-- ========================= -->
-
-            <aside
-                id="viewer-panel"
-                class="viewer-panel">
-
+            <aside id="viewer-panel" class="viewer-panel">
                 <div class="viewer-panel-header">
-
-                    <div>
-
-                        <span class="panel-label">
-                            HERRAMIENTAS
-                        </span>
-
-                        <h2 id="panel-title">
-                            Capas
-                        </h2>
-
+                    <div class="viewer-panel-heading">
+                        <span class="panel-label">HERRAMIENTAS</span>
+                        <h2 id="panel-title">Capas</h2>
                     </div>
-
-                    <button
-                        id="btn-close-panel"
-                        class="btn-close-panel"
-                        type="button"
-                        aria-label="Cerrar panel">
-
-                        ×
-
-                    </button>
-
+                    <button id="btn-close-panel" class="btn-close-panel" type="button" aria-label="Cerrar panel">×</button>
                 </div>
-
-
                 <div class="viewer-panel-content">
-
-
-                    <!-- ========================= -->
-                    <!-- LAYERS                    -->
-                    <!-- ========================= -->
-
-                    <section
-                        id="panel-layers"
-                        class="panel-section active">
-
-                        <div class="panel-section-description">
-                            Activa o desactiva la información visible en el mapa.
-                        </div>
-
-
-                        <div class="layer-group">
-
-                            <div class="layer-group-title">
-                                Reserva Territorial
+                    <section id="panel-layers" class="panel-section active">
+                        <div class="panel-section-description">Activa o desactiva la información visible en el mapa.</div>
+                        <details class="layer-group layer-group-parent">
+                            <summary class="layer-group-title">Los Portales</summary>
+                            <details class="layer-subgroup">
+                                <summary class="layer-subgroup-title">Desarrollo Inmobiliario</summary>
+                                <label class="layer-item">
+                                    <input type="checkbox" data-layer="terrenos" checked>
+                                    <span>Terrenos de interés</span>
+                                </label>
+                                <label class="layer-item">
+                                    <input type="checkbox" data-layer="prospeccion">
+                                    <span>Prospección</span>
+                                </label>
+                                <label class="layer-item">
+                                    <input type="checkbox" data-layer="compras">
+                                    <span>Terrenos comprados</span>
+                                </label>
+                            </details>
+                            <details class="layer-subgroup">
+                                <summary class="layer-subgroup-title">Desarrollo Arquitectónico</summary>
+                                <label class="layer-item">
+                                    <input type="checkbox" data-layer="zonificacion">
+                                    <span>Zonificación</span>
+                                </label>
+                                <label class="layer-item">
+                                    <input type="checkbox" data-layer="vias">
+                                    <span>Sistema vial</span>
+                                </label>
+                                <label class="layer-item">
+                                    <input type="checkbox" data-layer="afectaciones">
+                                    <span>Afectaciones</span>
+                                </label>
+                            </details>
+                        </details>
+                        <details class="layer-group layer-group-parent">
+                            <summary class="layer-group-title">Información Base</summary>
+                            <details class="layer-subgroup">
+                                <summary class="layer-subgroup-title">Capas de servicios WFS/WMS</summary>
+                                <div id="managed-service-layers" class="managed-layer-list">
+                                    <p class="empty-layer-message">Conecta un servicio desde la herramienta Servicios para agregar capas base.</p>
+                                </div>
+                            </details>
+                            <details class="layer-subgroup">
+                                <summary class="layer-subgroup-title">Capas de ejemplo e importadas (GeoJSON/KML/KMZ)</summary>
+                                <div id="managed-file-layers" class="managed-layer-list">
+                                    <p class="empty-layer-message">Los datos GeoJSON de ejemplo y los archivos KML/KMZ aparecerán aquí.</p>
+                                </div>
+                            </details>
+                        </details>
+                        <details class="layer-group layer-group-parent">
+                            <summary class="layer-group-title">Mapa Base</summary>
+                            <div class="basemap-group-content">
+                                <p class="panel-section-description">Selecciona el mapa base. Google Maps requiere una clave API y Cesium ion un token. CesiumJS es software libre bajo licencia Apache 2.0. Las claves no se guardan; restringe la clave de Google por dominio.</p>
+                                <div class="basemap-options" role="group" aria-label="Seleccionar mapa base">
+                                    <button class="basemap-button active" data-basemap="osm" type="button" aria-pressed="true">OpenStreetMap</button>
+                                    <button class="basemap-button" data-basemap="google" type="button" aria-pressed="false">Google</button>
+                                    <button class="basemap-button" data-basemap="google-hybrid" type="button" aria-pressed="false">Google Híbrido</button>
+                                    <button class="basemap-button" data-basemap="3d" type="button" aria-pressed="false">Mapa 3D (Cesium)</button>
+                                </div>
+                                <div class="form-group">
+                                    <label for="google-api-key">Clave API de Google Maps</label>
+                                    <input id="google-api-key" type="password" autocomplete="off" placeholder="Introduce tu clave API">
+                                </div>
+                                <div class="form-group">
+                                    <label for="cesium-ion-token">Token de Cesium ion</label>
+                                    <input id="cesium-ion-token" type="password" autocomplete="off" placeholder="Introduce tu token de acceso">
+                                </div>
+                                <p id="basemap-status" class="basemap-status" role="status" aria-live="polite">OpenStreetMap es el mapa base predeterminado.</p>
                             </div>
-
-
-                            <label class="layer-item">
-
-                                <input
-                                    type="checkbox"
-                                    data-layer="terrenos"
-                                    checked>
-
-                                <span>
-                                    Terrenos de interés
-                                </span>
-
-                            </label>
-
-
-                            <label class="layer-item">
-
-                                <input
-                                    type="checkbox"
-                                    data-layer="prospeccion">
-
-                                <span>
-                                    Prospección
-                                </span>
-
-                            </label>
-
-
-                            <label class="layer-item">
-
-                                <input
-                                    type="checkbox"
-                                    data-layer="compras">
-
-                                <span>
-                                    Terrenos comprados
-                                </span>
-
-                            </label>
-
-                        </div>
-
-
-                        <div class="layer-group">
-
-                            <div class="layer-group-title">
-                                Planeamiento
-                            </div>
-
-
-                            <label class="layer-item">
-
-                                <input
-                                    type="checkbox"
-                                    data-layer="zonificacion">
-
-                                <span>
-                                    Zonificación
-                                </span>
-
-                            </label>
-
-
-                            <label class="layer-item">
-
-                                <input
-                                    type="checkbox"
-                                    data-layer="vias">
-
-                                <span>
-                                    Sistema vial
-                                </span>
-
-                            </label>
-
-
-                            <label class="layer-item">
-
-                                <input
-                                    type="checkbox"
-                                    data-layer="afectaciones">
-
-                                <span>
-                                    Afectaciones
-                                </span>
-
-                            </label>
-
-                        </div>
-
+                        </details>
                     </section>
 
-
-
-                    <!-- ========================= -->
-                    <!-- DRAWING                   -->
-                    <!-- ========================= -->
-
-                    <section
-                        id="panel-drawing"
-                        class="panel-section">
-
-                        <div class="panel-section-description">
-                            Dibuja geometrías temporales para análisis y medición.
+                    <section id="panel-timeline" class="panel-section">
+                        <div class="panel-section-description">Filtra los terrenos y capas con el atributo fecha_registro. La fecha seleccionada muestra las entidades registradas hasta ese día.</div>
+                        <div class="timeline-control">
+                            <label for="timeline-date">Fecha de corte</label>
+                            <output id="timeline-date-output" for="timeline-date">Sin datos</output>
+                            <input id="timeline-date" type="range" min="0" max="0" step="1" value="0" disabled>
                         </div>
+                        <button id="btn-toggle-timeline" class="panel-secondary timeline-toggle" type="button" aria-pressed="false" disabled>Activar línea de tiempo</button>
+                        <p id="timeline-status" class="timeline-status" role="status" aria-live="polite">Carga una capa que incluya el atributo fecha_registro para usar la línea de tiempo.</p>
+                    </section>
 
+                    <section id="panel-services" class="panel-section">
+                        <div class="panel-section-description">Conecta un servicio WFS o WMS publicado con acceso desde el navegador. La importación KMZ/KML se procesa localmente.</div>
+                        <div class="form-group">
+                            <label for="service-type">Tipo de servicio</label>
+                            <select id="service-type">
+                                <option value="WFS">WFS (entidades y atributos)</option>
+                                <option value="WMS">WMS (mapa renderizado)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="service-url">URL del servicio</label>
+                            <input id="service-url" type="url" placeholder="https://servidor/geoserver/ows" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="service-layer-name">Nombre de capa</label>
+                            <input id="service-layer-name" type="text" placeholder="espacio:capa" required>
+                        </div>
+                        <button id="btn-add-service" class="panel-primary" type="button">Agregar servicio</button>
+                        <div class="file-import-group">
+                            <label for="spatial-file">Archivo espacial (KML o KMZ)</label>
+                            <input id="spatial-file" type="file" accept=".kml,.kmz,application/vnd.google-earth.kml+xml,application/vnd.google-earth.kmz">
+                            <button id="btn-import-file" class="panel-secondary" type="button">Importar archivo</button>
+                        </div>
+                        <p id="service-status" class="service-status" role="status" aria-live="polite">Los servicios deben permitir solicitudes CORS desde este sitio.</p>
+                        <div id="service-layer-controls" class="service-layer-controls">
+                            <p class="empty-layer-message">Las herramientas de simbología aparecerán al agregar una capa.</p>
+                        </div>
+                    </section>
 
+                    <section id="panel-legend" class="panel-section">
+                        <div class="panel-section-description">La leyenda se actualiza al agregar capas y cambiar su simbología.</div>
+                        <div id="legend-content" class="legend-content">
+                            <p class="empty-layer-message">No hay capas externas con simbología para mostrar.</p>
+                        </div>
+                    </section>
+
+                    <section id="panel-drawing" class="panel-section">
+                        <div class="panel-section-description">Dibuja geometrías y edita sus vértices al terminar. Arrastra un vértice para moverlo o haz clic en un segmento para añadir otro.</div>
                         <div class="drawing-grid">
-
-                            <button
-                                class="panel-action"
-                                data-draw="Point"
-                                type="button">
-
-                                Punto
-
-                            </button>
-
-
-                            <button
-                                class="panel-action"
-                                data-draw="LineString"
-                                type="button">
-
-                                Línea
-
-                            </button>
-
-
-                            <button
-                                class="panel-action"
-                                data-draw="Polygon"
-                                type="button">
-
-                                Polígono
-
-                            </button>
-
-
-                            <button
-                                id="btn-clear-drawing"
-                                class="panel-action secondary"
-                                type="button">
-
-                                Limpiar
-
-                            </button>
-
+                            <button class="panel-action" data-draw="Point" type="button">Punto</button>
+                            <button class="panel-action" data-draw="LineString" type="button">Línea</button>
+                            <button class="panel-action" data-draw="Polygon" type="button">Polígono</button>
                         </div>
-
+                        <p id="drawing-edit-status" class="vertex-edit-status" role="status" aria-live="polite">Al completar un dibujo podrás editar sus vértices.</p>
+                        <div class="drawing-clear">
+                            <button id="btn-edit-drawing" class="panel-secondary vertex-edit-button" type="button" aria-pressed="false">
+                                <span class="material-icons" aria-hidden="true">edit</span>
+                                <span>Editar vértices</span>
+                            </button>
+                            <button id="btn-clear-drawing" class="panel-action clear-drawing-button" type="button">
+                                <span class="material-icons" aria-hidden="true">delete_sweep</span>
+                                <span>Limpiar dibujos</span>
+                            </button>
+                        </div>
                     </section>
 
-
-
-                    <!-- ========================= -->
-                    <!-- LOCATION                  -->
-                    <!-- ========================= -->
-
-                    <section
-                        id="panel-location"
-                        class="panel-section">
-
-                        <div class="panel-section-description">
-                            Busca una ubicación mediante coordenadas o tu posición actual.
+                    <section id="panel-measurement" class="panel-section">
+                        <div class="panel-section-description">Mide una distancia o superficie y edita los vértices al terminar. Haz clic en un segmento para añadir un vértice.</div>
+                        <div class="drawing-grid">
+                            <button class="panel-action" data-measure="LineString" type="button">Medir longitud</button>
+                            <button class="panel-action" data-measure="Polygon" type="button">Medir área</button>
                         </div>
-
-
-                        <div class="form-group">
-
-                            <label for="input-longitude">
-                                Longitud
-                            </label>
-
-                            <input
-                                id="input-longitude"
-                                type="number"
-                                step="any"
-                                placeholder="-77.0428">
-
+                        <div class="drawing-clear">
+                            <button id="btn-edit-measurement" class="panel-secondary vertex-edit-button" type="button" aria-pressed="false">
+                                <span class="material-icons" aria-hidden="true">edit</span>
+                                <span>Editar vértices</span>
+                            </button>
+                            <button id="btn-clear-measurement" class="panel-action clear-drawing-button" type="button">
+                                <span class="material-icons" aria-hidden="true">delete_sweep</span>
+                                <span>Limpiar medidas</span>
+                            </button>
                         </div>
-
-
-                        <div class="form-group">
-
-                            <label for="input-latitude">
-                                Latitud
-                            </label>
-
-                            <input
-                                id="input-latitude"
-                                type="number"
-                                step="any"
-                                placeholder="-12.0464">
-
-                        </div>
-
-
-                        <button
-                            id="btn-go-coordinate"
-                            class="panel-primary"
-                            type="button">
-
-                            Ir a coordenada
-
-                        </button>
-
-
-                        <button
-                            id="btn-my-location"
-                            class="panel-secondary"
-                            type="button">
-
-                            Usar mi ubicación
-
-                        </button>
-
+                        <output id="measure-result" class="measure-result" aria-live="polite">Selecciona una herramienta para comenzar.</output>
                     </section>
 
-
-
-                    <!-- ========================= -->
-                    <!-- REPORTS                   -->
-                    <!-- ========================= -->
-
-                    <section
-                        id="panel-reports"
-                        class="panel-section">
-
-                        <div class="panel-section-description">
-                            Indicadores generales de habilitación urbana.
+                    <section id="panel-location" class="panel-section">
+                        <div class="panel-section-description">Busca una ubicación mediante coordenadas o tu posición actual.</div>
+                        <button id="btn-pick-coordinate" class="panel-secondary location-pick-button" type="button" aria-pressed="false">Seleccionar punto en el mapa</button>
+                        <p id="location-pick-status" class="location-pick-status" role="status" aria-live="polite">Selecciona la herramienta para obtener coordenadas de un punto.</p>
+                        <div class="form-group">
+                            <label for="input-longitude">Longitud</label>
+                            <input id="input-longitude" type="number" step="any" placeholder="-77.0428">
                         </div>
+                        <div class="form-group">
+                            <label for="input-latitude">Latitud</label>
+                            <input id="input-latitude" type="number" step="any" placeholder="-12.0464">
+                        </div>
+                        <button id="btn-go-coordinate" class="panel-primary" type="button">Ir a coordenada</button>
+                        <button id="btn-my-location" class="panel-secondary" type="button" aria-pressed="false">Seguir mi ubicación</button>
+                    </section>
 
+                    <section id="panel-directions" class="panel-section">
+                        <div class="panel-section-description">Crea una ruta en Google Maps desde una dirección o tu ubicación hasta un destino.</div>
+                        <form id="directions-form" action="https://www.google.com/maps/dir/" method="get" target="_blank" rel="noopener noreferrer">
+                            <input type="hidden" name="api" value="1">
+                            <div class="form-group">
+                                <label for="directions-origin">Origen</label>
+                                <input id="directions-origin" name="origin" type="text" autocomplete="off" placeholder="Dirección o latitud, longitud" required>
+                            </div>
+                            <button id="btn-use-current-origin" class="panel-secondary" type="button">Usar mi ubicación actual</button>
+                            <div class="form-group">
+                                <label for="directions-destination">Destino</label>
+                                <input id="directions-destination" name="destination" type="text" autocomplete="off" placeholder="Dirección o latitud, longitud" required>
+                            </div>
+                            <button id="btn-use-map-destination" class="panel-secondary" type="button">Usar coordenadas seleccionadas</button>
+                            <div class="form-group">
+                                <label for="directions-mode">Medio de transporte</label>
+                                <select id="directions-mode" name="travelmode">
+                                    <option value="driving">Automóvil</option>
+                                    <option value="walking">A pie</option>
+                                    <option value="bicycling">Bicicleta</option>
+                                    <option value="transit">Transporte público</option>
+                                </select>
+                            </div>
+                            <button class="panel-primary" type="submit">Abrir ruta en Google Maps</button>
+                        </form>
+                        <p id="directions-status" class="directions-status" role="status" aria-live="polite">La ruta se abrirá en una nueva pestaña. No requiere una clave API.</p>
+                    </section>
 
+                    <section id="panel-reports" class="panel-section">
+                        <div class="panel-section-description">Indicadores generales de habilitación urbana.</div>
                         <div class="kpi-grid">
-
-
-                            <article class="kpi-card">
-
-                                <span>
-                                    Terrenos
-                                </span>
-
-                                <strong id="kpi-terrenos">
-                                    0
-                                </strong>
-
-                            </article>
-
-
-                            <article class="kpi-card">
-
-                                <span>
-                                    Área evaluada
-                                </span>
-
-                                <strong id="kpi-area">
-                                    0 ha
-                                </strong>
-
-                            </article>
-
-
-                            <article class="kpi-card">
-
-                                <span>
-                                    En negociación
-                                </span>
-
-                                <strong id="kpi-negociacion">
-                                    0
-                                </strong>
-
-                            </article>
-
-
-                            <article class="kpi-card">
-
-                                <span>
-                                    Comprados
-                                </span>
-
-                                <strong id="kpi-comprados">
-                                    0
-                                </strong>
-
-                            </article>
-
+                            <article class="kpi-card"><span>Terrenos</span><strong id="kpi-terrenos">0</strong></article>
+                            <article class="kpi-card"><span>Área evaluada</span><strong id="kpi-area">0 ha</strong></article>
+                            <article class="kpi-card"><span>En negociación</span><strong id="kpi-negociacion">0</strong></article>
+                            <article class="kpi-card"><span>Comprados</span><strong id="kpi-comprados">0</strong></article>
                         </div>
-
-
-                        <button
-                            id="btn-open-report"
-                            class="panel-primary"
-                            type="button">
-
-                            Ver reporte completo
-
-                        </button>
-
+                        <button id="btn-open-report" class="panel-primary" type="button">Ver reporte completo</button>
                     </section>
-
-
-
-                    <!-- ========================= -->
-                    <!-- RELATED RECORDS           -->
-                    <!-- ========================= -->
-
-                    <section
-                        id="panel-records"
-                        class="panel-section">
-
-                        <div class="panel-section-description">
-                            Agrega información relacionada al terreno seleccionado.
-                        </div>
-
-
-                        <div
-                            id="selected-feature-message"
-                            class="selected-feature-message">
-
-                            Selecciona un terreno en el mapa.
-
-                        </div>
-
-
-                        <button
-                            class="record-action"
-                            data-record="contacto"
-                            type="button">
-
-                            + Contacto
-
-                        </button>
-
-
-                        <button
-                            class="record-action"
-                            data-record="negociacion"
-                            type="button">
-
-                            + Negociación
-
-                        </button>
-
-
-                        <button
-                            class="record-action"
-                            data-record="revision-partida"
-                            type="button">
-
-                            + Revisión de partida
-
-                        </button>
-
-
-                        <button
-                            class="record-action"
-                            data-record="visita"
-                            type="button">
-
-                            + Visita de campo
-
-                        </button>
-
-                    </section>
-
 
                 </div>
-
             </aside>
-
-
-
-            <!-- ========================= -->
-            <!-- MAP                      -->
-            <!-- ========================= -->
 
             <main class="map-container">
-
-                <div
-                    id="map"
-                    class="map">
-                </div>
-
-
-                <div class="map-controls">
-
-
-                    <button
-                        id="btn-home"
-                        class="map-control"
-                        type="button"
-                        title="Vista inicial">
-
-                       ⌂
-
-                    </button>
-
-
-                    <button
-                        id="btn-location"
-                        class="map-control"
-                        type="button"
-                        title="Mi ubicación">
-
-                        ◎
-
-                    </button>
-
-
-                </div>
-
-
-
-                <!-- ========================= -->
-                <!-- FEATURE POPUP             -->
-                <!-- ========================= -->
-
-                <div
-                    id="feature-popup"
-                    class="feature-popup"
-                    hidden>
-
+                <div id="map" class="map"></div>
+                <div id="cesium-map" class="cesium-map" aria-label="Mapa tridimensional de Perú" hidden></div>
+                <div id="feature-popup" class="feature-popup" hidden>
                     <div class="feature-popup-header">
-
-                        <div>
-
-                            <span>
-                                TERRENO
-                            </span>
-
-                            <strong id="popup-title">
-                                Terreno seleccionado
-                            </strong>
-
+                        <div class="feature-popup-heading">
+                            <span id="popup-kind">TERRENO</span>
+                            <strong id="popup-title">Terreno seleccionado</strong>
                         </div>
-
-
-                        <button
-                            id="btn-close-popup"
-                            type="button">
-
-                            ×
-
-                        </button>
-
+                        <button id="btn-close-popup" type="button" aria-label="Cerrar detalle">×</button>
                     </div>
-
-
                     <div class="feature-popup-body">
-
-
-                        <div class="popup-field">
-
-                            <span>
-                                Código
-                            </span>
-
-                            <strong id="popup-code">
-                                -
-                            </strong>
-
-                        </div>
-
-
-                        <div class="popup-field">
-
-                            <span>
-                                Área
-                            </span>
-
-                            <strong id="popup-area">
-                                -
-                            </strong>
-
-                        </div>
-
-
-                        <div class="popup-field">
-
-                            <span>
-                                Estado
-                            </span>
-
-                            <strong id="popup-status">
-                                -
-                            </strong>
-
-                        </div>
-
-
+                        <div class="popup-field"><span id="popup-code-label">Código</span><strong id="popup-code">-</strong></div>
+                        <div class="popup-field"><span id="popup-area-label">Área</span><strong id="popup-area">-</strong></div>
+                        <div class="popup-field"><span id="popup-status-label">Estado</span><strong id="popup-status">-</strong></div>
                     </div>
-
-
-                    <button
-                        id="btn-feature-detail"
-                        class="popup-detail"
-                        type="button">
-
-                        Ver detalle
-
-                    </button>
-
+                    <button id="btn-feature-detail" class="popup-detail" type="button">Ver detalle</button>
                 </div>
-
-
             </main>
-
         </div>
-
     </div>
 
-
-    <!-- ========================= -->
-    <!-- RECORD MODAL              -->
-    <!-- ========================= -->
-
-    <dialog
-        id="record-modal"
-        class="record-modal">
-
-        <form
-            id="record-form"
-            method="dialog">
-
-            <div class="record-modal-header">
-
-                <div>
-
-                    <span>
-                        NUEVO REGISTRO
-                    </span>
-
-                    <h2 id="record-modal-title">
-                        Registro relacionado
-                    </h2>
-
-                </div>
-
-
-                <button
-                    id="btn-close-record"
-                    type="button"
-                    aria-label="Cerrar">
-
-                    ×
-
-                </button>
-
-            </div>
-
-
-            <div class="record-modal-body">
-
-                <div class="form-group">
-
-                    <label for="record-description">
-                        Descripción
-                    </label>
-
-                    <textarea
-                        id="record-description"
-                        rows="4"
-                        required>
-                    </textarea>
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label for="record-date">
-                        Fecha
-                    </label>
-
-                    <input
-                        id="record-date"
-                        type="date"
-                        required>
-
-                </div>
-
-            </div>
-
-
-            <div class="record-modal-footer">
-
-                <button
-                    id="btn-cancel-record"
-                    class="modal-secondary"
-                    type="button">
-
-                    Cancelar
-
-                </button>
-
-
-                <button
-                    class="modal-primary"
-                    type="submit">
-
-                    Guardar
-
-                </button>
-
-            </div>
-
-        </form>
-
-    </dialog>
-
-
-    <script
-        src="https://cdn.jsdelivr.net/npm/ol@10.6.1/dist/ol.js">
-    </script>
-
-    <script
-        src="m-habilitacion-urbana.js">
-    </script>
-
+    <script src="https://cdn.jsdelivr.net/npm/ol@10.6.1/dist/ol.js"></script>
+    <script src="m-habilitacion-urbana.js"></script>
+    <script src="../demo-profile.js"></script>
 </body>
-
 </html>

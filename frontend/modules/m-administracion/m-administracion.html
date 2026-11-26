@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Administración de Geo Urban LP">
+    <title>Geo Urban LP | Administración</title>
+    <link rel="icon" href="../../assets/icons/geourbanlp-light-icon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="m-administracion.css">
+</head>
+<body>
+    <div class="admin-app">
+        <header class="admin-header">
+            <a class="admin-brand" href="../modules.html" aria-label="Volver a módulos">
+                <img src="../../assets/icons/geourbanlp-light-logo.svg" alt="Geo Urban LP" class="brand-logo brand-logo-light">
+                <img src="../../assets/icons/geourbanlp-dark-logo.svg" alt="" aria-hidden="true" class="brand-logo brand-logo-dark">
+            </a>
+            <div class="admin-header-title">
+                <span>ADMINISTRACIÓN</span>
+                <strong>Gestión de plataforma</strong>
+            </div>
+            <div class="admin-header-actions">
+                <div class="user-welcome" aria-label="Usuario actual">
+                    <span class="material-icons" aria-hidden="true">account_circle</span>
+                    <strong data-demo-user-name>SEBASTIÁN ROMALDO ALCÁNTARA LUYO</strong>
+                </div>
+                <label class="visually-hidden" for="select-theme">Apariencia</label>
+                <select id="select-theme" class="theme-select" aria-label="Seleccionar apariencia">
+                    <option value="system">Sistema</option>
+                    <option value="light">Claro</option>
+                    <option value="dark">Oscuro</option>
+                </select>
+                <a class="header-link" href="../modules.html">
+                    <span class="material-icons" aria-hidden="true">logout</span>
+                    <span>Volver a Módulos</span>
+                </a>
+            </div>
+        </header>
+
+        <div class="admin-layout">
+            <aside class="admin-sidebar" aria-label="Secciones de administración">
+                <nav class="admin-navigation">
+                    <button class="nav-item active" type="button" data-view="overview" aria-current="page">
+                        <span class="material-icons" aria-hidden="true">dashboard</span><span>Resumen</span>
+                    </button>
+                    <button class="nav-item" type="button" data-view="users">
+                        <span class="material-icons" aria-hidden="true">manage_accounts</span><span>Usuarios y roles</span>
+                    </button>
+                    <button class="nav-item" type="button" data-view="areas">
+                        <span class="material-icons" aria-hidden="true">domain</span><span>Áreas y plazas</span>
+                    </button>
+                    <button class="nav-item" type="button" data-view="activity">
+                        <span class="material-icons" aria-hidden="true">query_stats</span><span>Actividad</span>
+                    </button>
+                    <button class="nav-item" type="button" data-view="layers">
+                        <span class="material-icons" aria-hidden="true">account_tree</span><span>Estructura de capas</span>
+                    </button>
+                </nav>
+                <div class="sidebar-note">
+                    <span class="material-icons" aria-hidden="true">info</span>
+                    <p>Esta pantalla administra datos de demostración locales.</p>
+                </div>
+            </aside>
+
+            <main class="admin-main">
+                <div class="page-heading">
+                    <div>
+                        <span class="eyebrow">GEO URBAN LP</span>
+                        <h1>Administración del sistema</h1>
+                        <p>Usuarios, permisos, actividad y organización de capas.</p>
+                    </div>
+                    <button id="btn-reset-demo" class="button button-quiet" type="button">
+                        <span class="material-icons" aria-hidden="true">restart_alt</span>Restablecer ejemplo
+                    </button>
+                </div>
+
+                <div class="prototype-warning" role="note">
+                    <span class="material-icons" aria-hidden="true">warning</span>
+                    <p><strong>Prototipo local:</strong> los cambios se guardan en este navegador. No hay autenticación ni control real de acceso; no uses datos personales o permisos reales aquí.</p>
+                </div>
+                <p id="admin-status" class="admin-status" role="status" aria-live="polite"></p>
+
+                <section id="view-overview" class="admin-view">
+                    <div class="section-heading">
+                        <div><h2>Resumen</h2><p>Estado de la configuración de ejemplo.</p></div>
+                    </div>
+                    <div class="metric-grid">
+                        <article class="metric-card"><span>Usuarios</span><strong id="metric-users">0</strong><small>Perfiles de demostración</small></article>
+                        <article class="metric-card"><span>Áreas de trabajo</span><strong id="metric-areas">0</strong><small>Con alcance por módulo</small></article>
+                        <article class="metric-card"><span>Plazas</span><strong id="metric-plazas">0</strong><small>Ubicaciones asignables</small></article>
+                        <article class="metric-card"><span>Registros este mes</span><strong id="metric-activity">0</strong><small>Conteo de actividad de ejemplo</small></article>
+                    </div>
+                    <div class="content-card form-card">
+                        <div class="section-heading"><div><h3>Nombre mostrado en los módulos</h3><p>Este nombre de demostración aparece en los encabezados de este navegador.</p></div></div>
+                        <form id="demo-user-name-form" class="inline-form compact-form">
+                            <label>Nombre de usuario<input id="demo-user-name" name="name" type="text" required maxlength="80" placeholder="SEBASTIÁN ROMALDO ALCÁNTARA LUYO"></label>
+                            <button class="button button-primary" type="submit"><span class="material-icons" aria-hidden="true">save</span>Guardar nombre</button>
+                        </form>
+                        <p id="demo-user-status" class="profile-status" role="status" aria-live="polite"></p>
+                    </div>
+                    <div class="content-card overview-card">
+                        <div class="section-heading"><div><h3>Accesos rápidos</h3><p>Gestiona cada aspecto desde su sección.</p></div></div>
+                        <div class="quick-actions">
+                            <button class="quick-action" type="button" data-open-view="users"><span class="material-icons" aria-hidden="true">manage_accounts</span><span>Asignar roles por módulo</span></button>
+                            <button class="quick-action" type="button" data-open-view="areas"><span class="material-icons" aria-hidden="true">location_on</span><span>Configurar áreas y plazas</span></button>
+                            <button class="quick-action" type="button" data-open-view="activity"><span class="material-icons" aria-hidden="true">bar_chart</span><span>Consultar actividad mensual</span></button>
+                            <button class="quick-action" type="button" data-open-view="layers"><span class="material-icons" aria-hidden="true">account_tree</span><span>Editar grupos de capas</span></button>
+                        </div>
+                    </div>
+                    <div class="content-card role-guide">
+                        <div class="section-heading"><div><h3>Perfiles disponibles</h3><p>La asignación se configura por usuario y módulo.</p></div></div>
+                        <div class="role-guide-grid">
+                            <article><strong>Desarrollador</strong><span>Configuración y soporte técnico.</span></article>
+                            <article><strong>Administrador</strong><span>Gestión operativa de usuarios y datos.</span></article>
+                            <article><strong>Creador</strong><span>Creación de registros autorizados.</span></article>
+                            <article><strong>Visualizador</strong><span>Consulta de información permitida.</span></article>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="view-users" class="admin-view" hidden>
+                    <div class="section-heading">
+                        <div><h2>Usuarios y roles</h2><p>Asigna área, plazas autorizadas y un perfil distinto para cada módulo.</p></div>
+                    </div>
+                    <div class="content-card form-card">
+                        <h3>Agregar usuario de ejemplo</h3>
+                        <form id="user-form" class="inline-form">
+                            <label>Nombre<input name="name" type="text" required maxlength="80" placeholder="Nombre para mostrar"></label>
+                            <label>Correo de ejemplo<input name="email" type="email" required maxlength="120" placeholder="usuario@example.local"></label>
+                            <label>Área<select name="areaId" id="new-user-area" required></select></label>
+                            <button class="button button-primary" type="submit"><span class="material-icons" aria-hidden="true">person_add</span>Agregar usuario</button>
+                        </form>
+                    </div>
+                    <div id="user-list" class="user-list" aria-live="polite"></div>
+                </section>
+
+                <section id="view-areas" class="admin-view" hidden>
+                    <div class="section-heading">
+                        <div><h2>Áreas y plazas</h2><p>El acceso efectivo de ejemplo combina el rol del usuario con los módulos habilitados para su área.</p></div>
+                    </div>
+                    <div class="content-card form-card">
+                        <h3>Crear área de trabajo</h3>
+                        <form id="area-form" class="inline-form compact-form">
+                            <label>Nombre del área<input name="name" type="text" required maxlength="80" placeholder="Ej. Planeamiento"></label>
+                            <button class="button button-primary" type="submit"><span class="material-icons" aria-hidden="true">add</span>Agregar área</button>
+                        </form>
+                    </div>
+                    <div id="area-list" class="area-list"></div>
+                    <div class="content-card form-card plaza-card">
+                        <div class="section-heading"><div><h3>Plazas de trabajo</h3><p>Agrega ubicaciones y asígnalas individualmente en la ficha de cada usuario.</p></div></div>
+                        <form id="plaza-form" class="inline-form compact-form">
+                            <label>Nombre de plaza<input name="name" type="text" required maxlength="80" placeholder="Ej. Cusco"></label>
+                            <button class="button button-primary" type="submit"><span class="material-icons" aria-hidden="true">add_location_alt</span>Agregar plaza</button>
+                        </form>
+                        <div id="plaza-list" class="plaza-list"></div>
+                    </div>
+                </section>
+
+                <section id="view-activity" class="admin-view" hidden>
+                    <div class="section-heading">
+                        <div><h2>Actividad de creación</h2><p>Consulta cuántos registros creó cada persona por área y mes.</p></div>
+                        <button id="btn-export-activity" class="button button-secondary" type="button"><span class="material-icons" aria-hidden="true">download</span>Exportar CSV</button>
+                    </div>
+                    <div class="prototype-note"><span class="material-icons" aria-hidden="true">info</span>Los conteos mostrados son datos de ejemplo. En producción deben provenir de eventos auditables del backend.</div>
+                    <div class="content-card activity-filters">
+                        <label>Mes<input id="activity-month" type="month"></label>
+                        <label>Área<select id="activity-area"></select></label>
+                        <label>Persona<select id="activity-person"></select></label>
+                    </div>
+                    <div class="metric-grid activity-metrics">
+                        <article class="metric-card"><span>Registros</span><strong id="activity-total">0</strong><small>Según filtros actuales</small></article>
+                        <article class="metric-card"><span>Personas activas</span><strong id="activity-people">0</strong><small>Con registros en el periodo</small></article>
+                        <article class="metric-card"><span>Áreas activas</span><strong id="activity-areas">0</strong><small>Con registros en el periodo</small></article>
+                    </div>
+                    <div class="content-card table-card">
+                        <div class="table-scroll">
+                            <table>
+                                <thead><tr><th>Mes</th><th>Área</th><th>Persona</th><th>Registros creados</th></tr></thead>
+                                <tbody id="activity-table-body"></tbody>
+                            </table>
+                        </div>
+                        <p id="activity-empty" class="empty-state" hidden>No hay registros para los filtros seleccionados.</p>
+                    </div>
+                </section>
+
+                <section id="view-layers" class="admin-view" hidden>
+                    <div class="section-heading">
+                        <div><h2>Estructura de capas</h2><p>Define grupos y subgrupos para organizar capas por módulo.</p></div>
+                        <label class="module-picker">Módulo<select id="structure-module"></select></label>
+                    </div>
+                    <div class="prototype-note"><span class="material-icons" aria-hidden="true">info</span>Esta estructura de ejemplo se guarda localmente; todavía no está conectada al árbol de capas del geovisor.</div>
+                    <div class="content-card form-card">
+                        <h3>Crear grupo</h3>
+                        <form id="layer-group-form" class="inline-form compact-form">
+                            <label>Nombre del grupo<input name="name" type="text" required maxlength="80" placeholder="Ej. Información Base"></label>
+                            <button class="button button-primary" type="submit"><span class="material-icons" aria-hidden="true">create_new_folder</span>Agregar grupo</button>
+                        </form>
+                    </div>
+                    <div id="layer-structure-list" class="layer-structure-list"></div>
+                </section>
+            </main>
+        </div>
+    </div>
+    <script src="m-administracion.js"></script>
+    <script src="../demo-profile.js"></script>
+</body>
+</html>

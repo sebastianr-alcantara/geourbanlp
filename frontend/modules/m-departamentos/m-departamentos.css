@@ -1,0 +1,187 @@
+:root {
+    --primary: #17324D;
+    --accent: #C47D55;
+    --background: #F4F6F7;
+    --surface: #FFFFFF;
+    --text: #17324D;
+    --text-secondary: #536875;
+    --border: #D9E1E5;
+    --radius-md: 0.55rem;
+    font-family: "Century Gothic", "Avenir Next", "Segoe UI", sans-serif;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    min-width: 20rem;
+    min-height: 100%;
+    margin: 0;
+}
+
+body {
+    background: var(--background);
+    color: var(--text);
+}
+
+.departments-page {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+.departments-header {
+    display: flex;
+    min-height: 4.25rem;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.5rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+}
+
+.departments-brand {
+    display: flex;
+    width: 10rem;
+    height: 2.8rem;
+    align-items: center;
+}
+
+.departments-logo {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: left center;
+}
+
+.departments-logo-dark {
+    display: none;
+}
+
+.departments-title {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding-left: 1rem;
+    border-left: 1px solid var(--border);
+}
+
+.departments-title span {
+    color: var(--text-secondary);
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.08rem;
+}
+
+.departments-title strong {
+    font-size: 0.9rem;
+}
+
+.user-welcome {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: 0.3rem;
+    margin-left: auto;
+    color: var(--text-secondary);
+    font-size: 0.72rem;
+    white-space: nowrap;
+}
+
+.user-welcome .material-icons {
+    color: var(--accent);
+    font-size: 1.15rem;
+}
+
+.user-welcome strong {
+    max-width: 16rem;
+    overflow: hidden;
+    color: var(--text);
+    text-overflow: ellipsis;
+}
+
+.departments-back {
+    display: inline-flex;
+    min-height: 2.3rem;
+    align-items: center;
+    gap: 0.4rem;
+    margin-left: auto;
+    padding: 0.45rem 0.7rem;
+    border: 1px solid var(--primary);
+    border-radius: var(--radius-md);
+    background: var(--primary);
+    color: var(--background);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+.departments-back:hover {
+    background: #21445F;
+    transform: translateY(-1px);
+}
+
+.departments-back .material-icons {
+    font-size: 1.1rem;
+}
+
+.departments-main {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.departments-placeholder {
+    display: flex;
+    max-width: 32rem;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 2.5rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--surface);
+    text-align: center;
+}
+
+.departments-placeholder > .material-icons {
+    color: var(--accent);
+    font-size: 2.5rem;
+}
+
+.departments-placeholder h1,
+.departments-placeholder p {
+    margin: 0;
+}
+
+.departments-placeholder p {
+    color: var(--text-secondary);
+}
+
+@media (max-width: 560px) {
+    .departments-header {
+        flex-wrap: wrap;
+        padding: 0.5rem 0.75rem;
+    }
+
+    .departments-brand {
+        width: 7rem;
+        height: 2.3rem;
+    }
+
+    .departments-back {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .user-welcome strong {
+        max-width: 7rem;
+    }
+}

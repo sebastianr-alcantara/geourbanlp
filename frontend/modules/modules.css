@@ -281,6 +281,34 @@ a {
     gap: var(--spacing-3);
 }
 
+.modules-header .modules-header-actions .user-welcome {
+    display: flex;
+    min-width: 0;
+    min-height: 2.25rem;
+    align-items: center;
+    gap: var(--spacing-2);
+    padding: 0 var(--spacing-3);
+    border: 1px solid var(--colour-border-subtle);
+    border-radius: var(--radius-md);
+    background: var(--colour-surface-secondary);
+    color: var(--colour-text-primary);
+}
+
+.modules-header .modules-header-actions .user-welcome .material-icons {
+    flex: 0 0 auto;
+    color: var(--colour-accent);
+    font-size: 1.15rem;
+}
+
+.modules-header .modules-header-actions .user-welcome strong {
+    max-width: 18rem;
+    overflow: hidden;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 
 /* ===================== */
 /* THEME SELECTOR        */
@@ -841,10 +869,27 @@ a {
     .modules-header {
         align-items:
             flex-start;
+        flex-wrap:
+            wrap;
 
         padding:
             var(--spacing-4)
             var(--spacing-5);
+    }
+
+    .modules-header .modules-header-actions {
+        width: 100%;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+    }
+
+    .modules-header .modules-header-actions .user-welcome {
+        flex: 1 1 12rem;
+        margin-right: auto;
+    }
+
+    .modules-header .modules-header-actions .user-welcome strong {
+        max-width: min(18rem, 52vw);
     }
 
     .modules-header .modules-brand .modules-logo {
