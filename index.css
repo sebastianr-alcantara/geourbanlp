@@ -1,0 +1,559 @@
+/* ===================== */
+/* DESIGN TOKENS         */
+/* ===================== */
+
+:root {
+    color-scheme: light;
+
+    /* Brand */
+
+    --colour-primary: #17324D;
+    --colour-primary-hover: #21445F;
+    --colour-primary-active: #10283D;
+
+    --colour-primary-50: #F1F5F7;
+    --colour-primary-100: #DCE6EA;
+    --colour-primary-200: #B7CED3;
+    --colour-primary-300: #91ADB6;
+    --colour-primary-400: #6C919C;
+    --colour-primary-500: #547C8A;
+    --colour-primary-600: #426A79;
+    --colour-primary-700: #335867;
+    --colour-primary-800: #244554;
+    --colour-primary-900: #17324D;
+
+    --colour-accent: #C47D55;
+    --colour-accent-hover: #B66E48;
+    --colour-accent-active: #A55F3D;
+    --colour-accent-soft: #F4E8E1;
+
+    /* Backgrounds */
+
+    --colour-background: #F4F6F7;
+    --colour-surface: #FFFFFF;
+    --colour-surface-secondary: #EEF2F4;
+    --colour-surface-tertiary: #E4EAED;
+    --colour-surface-hover: #F1F4F5;
+
+    /* Typography */
+
+    --colour-text-primary: #17324D;
+    --colour-text-secondary: #536875;
+    --colour-text-tertiary: #81909A;
+    --colour-text-disabled: #ADB7BD;
+    --colour-text-inverse: #FFFFFF;
+
+    --font-family:
+        "Century Gothic",
+        "Avenir Next",
+        "Segoe UI",
+        sans-serif;
+
+    --font-size-sm: 0.625rem;
+    --font-size-base: 0.75rem;
+    --font-size-lg: 0.8125rem;
+    --font-size-xl: 0.875rem;
+    --font-size-2xl: 1rem;
+    --font-size-3xl: 1.125rem;
+    --font-size-4xl: 1.375rem;
+
+    --font-weight-regular: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+
+    --line-height-tight: 1.2;
+    --line-height-normal: 1.4;
+    --line-height-relaxed: 1.6;
+
+    /* Borders */
+
+    --colour-border: #D9E1E5;
+    --colour-border-subtle: #E8EDEF;
+    --colour-border-strong: #BAC7CD;
+
+    /* Spacing */
+
+    --spacing-1: 0.25rem;
+    --spacing-2: 0.5rem;
+    --spacing-3: 0.75rem;
+    --spacing-4: 1rem;
+    --spacing-5: 1.25rem;
+    --spacing-6: 1.5rem;
+    --spacing-8: 2rem;
+
+    /* Components */
+
+    --radius-sm: 0.25rem;
+    --radius-md: 0.375rem;
+    --radius-lg: 0.5rem;
+
+    --shadow-sm: 0 1px 2px rgb(23 50 77 / 6%);
+    --shadow-md: 0 3px 8px rgb(23 50 77 / 10%);
+
+    /* Interaction */
+
+    --colour-focus: #547C8A;
+    --colour-selection: #B7CED3;
+    --colour-on-primary: #FFFFFF;
+}
+
+/* ===================== */
+/* DARK MODE             */
+/* ===================== */
+
+[data-theme="dark"] {
+    color-scheme: dark;
+
+    --colour-primary: #6F9CA9;
+    --colour-primary-hover: #88AFBA;
+    --colour-primary-active: #9FC0C8;
+
+    --colour-background: #0D1822;
+    --colour-surface: #132330;
+    --colour-surface-secondary: #192C3A;
+    --colour-surface-tertiary: #213746;
+    --colour-surface-hover: #1D3342;
+
+    --colour-text-primary: #EDF3F5;
+    --colour-text-secondary: #B7C6CC;
+    --colour-text-tertiary: #8498A1;
+    --colour-text-disabled: #596E78;
+    --colour-text-inverse: #FFFFFF;
+
+    --colour-border: #294251;
+    --colour-border-subtle: #203744;
+    --colour-border-strong: #3D5967;
+
+    --colour-accent: #D58B62;
+    --colour-accent-hover: #DF9B76;
+    --colour-accent-active: #E8AA89;
+    --colour-accent-soft: #3A2924;
+
+    --colour-focus: #8FB4BE;
+    --colour-selection: #315565;
+    --colour-on-primary: #0D202C;
+
+    --shadow-sm: 0 1px 2px rgb(0 0 0 / 20%);
+    --shadow-md: 0 3px 8px rgb(0 0 0 / 28%);
+}
+
+/* ===================== */
+/* GLOBAL                */
+/* ===================== */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    min-height: 100%;
+    font-size: 16px;
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100%;
+    margin: 0;
+
+    background-color: var(--colour-background);
+    color: var(--colour-text-primary);
+
+    font-family: var(--font-family);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--line-height-normal);
+
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
+}
+
+button,
+select {
+    font: inherit;
+}
+
+::selection {
+    background-color: var(--colour-selection);
+    color: var(--colour-text-primary);
+}
+
+:focus-visible {
+    outline: 2px solid var(--colour-focus);
+    outline-offset: 3px;
+}
+
+/* ===================== */
+/* LOGIN                 */
+/* ===================== */
+
+.login {
+    width: 100%;
+    min-height: 100vh;
+
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+
+    background-color: var(--colour-background);
+}
+
+/* ===================== */
+/* BRAND                 */
+/* ===================== */
+
+.login .login-brand {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: var(--spacing-8);
+
+    background-color: var(--colour-primary-900);
+
+    overflow: hidden;
+}
+
+.login .login-brand::before,
+.login .login-brand::after {
+    content: "";
+    position: absolute;
+
+    border-radius: 50%;
+
+    pointer-events: none;
+}
+
+.login .login-brand::before {
+    width: 20rem;
+    height: 20rem;
+
+    left: -12rem;
+    top: -11rem;
+
+    background-color: var(--colour-accent);
+    opacity: 0.08;
+}
+
+.login .login-brand::after {
+    width: 32rem;
+    height: 32rem;
+
+    right: -14rem;
+    bottom: -18rem;
+
+    background-color: var(--colour-primary-500);
+    opacity: 0.15;
+}
+
+.login .login-brand .login-brand-content {
+    position: relative;
+    z-index: 1;
+
+    width: 100%;
+    max-width: 30rem;
+}
+
+
+/* ===================== */
+/* LOGO                  */
+/* ===================== */
+
+.login .login-brand .login-brand-content .login-logo {
+    display: flex;
+    align-items: center;
+}
+
+.login .login-brand .login-brand-content .login-logo .login-logo-image {
+    display: flex;
+
+    width: 18rem;
+    max-width: 100%;
+    height: auto;
+}
+
+
+/* ===================== */
+/* BRAND DESCRIPTION     */
+/* ===================== */
+
+.login .login-brand .login-brand-content .login-brand-description {
+    margin-top: var(--spacing-8);
+}
+
+.login .login-brand .login-brand-content .login-brand-description h1 {
+    max-width: 25rem;
+    margin: 0;
+
+    color: var(--colour-text-inverse);
+
+    font-size: 2rem;
+    font-weight: var(--font-weight-semibold);
+    line-height: 1.15;
+    letter-spacing: -0.04rem;
+}
+
+.login .login-brand .login-brand-content .login-brand-description p {
+    max-width: 27rem;
+    margin: var(--spacing-4) 0 0;
+
+    color: var(--colour-primary-200);
+
+    font-size: var(--font-size-lg);
+    line-height: var(--line-height-relaxed);
+}
+
+
+/* ===================== */
+/* ACCESS                */
+/* ===================== */
+
+.login .login-access {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: var(--spacing-8);
+
+    background-color: var(--colour-surface);
+
+    transition: background-color 0.2s ease;
+}
+
+.login .login-access .login-access-content {
+    width: 100%;
+    max-width: 22rem;
+}
+
+.login .login-access .login-access-content .login-access-header .login-access-label {
+    display: flex;
+    margin-bottom: var(--spacing-3);
+    color: var(--colour-accent);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: 0.12rem;
+}
+
+.login .login-access .login-access-content .login-access-header h2 {
+    margin: 0;
+
+    color: var(--colour-text-primary);
+
+    font-size: var(--font-size-4xl);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-tight);
+    letter-spacing: -0.02rem;
+}
+
+.login .login-access .login-access-content .login-access-header p {
+    margin: var(--spacing-3) 0 0;
+
+    color: var(--colour-text-secondary);
+
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-relaxed);
+}
+
+
+/* ===================== */
+/* THEME SELECTOR        */
+/* ===================== */
+
+.login .login-access .login-theme {
+    position: absolute;
+    top: var(--spacing-5);
+    right: var(--spacing-5);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+}
+
+.login .login-access .login-theme label {
+    color: var(--colour-text-tertiary);
+
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+}
+
+.login .login-access .login-theme select {
+    min-width: 6.5rem;
+    height: 2rem;
+
+    padding: 0 var(--spacing-3);
+
+    border: 1px solid var(--colour-border);
+    border-radius: var(--radius-md);
+
+    background-color: var(--colour-surface-secondary);
+    color: var(--colour-text-primary);
+
+    font-size: var(--font-size-base);
+
+    cursor: pointer;
+}
+
+.login .login-access .login-theme select:hover {
+    border-color: var(--colour-border-strong);
+    background-color: var(--colour-surface-hover);
+}
+
+
+/* ===================== */
+/* LOGIN BUTTON          */
+/* ===================== */
+
+.login .login-access .login-access-content .btn-login {
+    width: 100%;
+    min-height: 2.75rem;
+    margin-top: var(--spacing-6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-2);
+    border: none;
+    border-radius: var(--radius-lg);
+    background-color: var(--colour-primary);
+    color: var(--colour-on-primary);
+    font-family: inherit;
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    cursor: pointer;
+    transition:
+        background-color 0.15s ease,
+        transform 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+.login .login-access .login-access-content .btn-login svg {
+    width: 1rem;
+    height: 1rem;
+    flex-shrink: 0;
+    transition: transform 0.15s ease;
+}
+
+.login .login-access .login-access-content .btn-login:hover {
+    background-color: var(--colour-primary-hover);
+    box-shadow: var(--shadow-md);
+}
+
+.login .login-access .login-access-content .btn-login:hover svg {
+    transform: translateX(0.15rem);
+}
+
+.login .login-access .login-access-content .btn-login:active {
+    background-color: var(--colour-primary-active);
+    transform: translateY(1px);
+}
+
+/* ===================== */
+/* FOOTER                */
+/* ===================== */
+
+.login .login-access .login-access-content .login-access-footer {
+    margin-top: var(--spacing-6);
+    padding-top: var(--spacing-4);
+    border-top: 1px solid var(--colour-border-subtle);
+    color: var(--colour-text-tertiary);
+    font-size: var(--font-size-sm);
+    text-align: center;
+}
+
+
+/* ===================== */
+/* DARK MODE DETAILS     */
+/* ===================== */
+
+[data-theme="dark"] .login .login-brand {
+    background-color: #0B1C2B;
+}
+
+[data-theme="dark"] .login .login-brand .login-brand-content .login-brand-description p {
+    color: #B7CED3;
+}
+
+/* ===================== */
+/* RESPONSIVE            */
+/* ===================== */
+
+@media (max-width: 720px) {
+
+    .login {
+        grid-template-columns: 1fr;
+    }
+
+    .login .login-brand {
+        min-height: 17rem;
+        padding: var(--spacing-6);
+    }
+
+    .login .login-brand .login-brand-content {
+        max-width: 24rem;
+    }
+
+    .login .login-brand .login-brand-content .login-logo .login-logo-image {
+        width: 15rem;
+    }
+
+    .login .login-brand .login-brand-content .login-brand-description {
+        margin-top: var(--spacing-5);
+    }
+
+    .login .login-brand .login-brand-content .login-brand-description h1 {
+        font-size: var(--font-size-4xl);
+    }
+
+    .login .login-access {
+        padding:
+            5rem
+            var(--spacing-6)
+            var(--spacing-8);
+    }
+
+    .login .login-access .login-theme {
+        top: var(--spacing-4);
+        right: var(--spacing-4);
+    }
+
+}
+
+@media (max-width: 420px) {
+
+    .login .login-brand {
+        min-height: 15rem;
+        padding: var(--spacing-5);
+    }
+
+    .login .login-brand .login-brand-content .login-logo .login-logo-image {
+        width: 13rem;
+    }
+
+    .login .login-brand .login-brand-content .login-brand-description h1 {
+        font-size: var(--font-size-3xl);
+    }
+
+    .login .login-brand .login-brand-content .login-brand-description p {
+        font-size: var(--font-size-base);
+    }
+
+    .login .login-access {
+        padding:
+            5rem
+            var(--spacing-5)
+            var(--spacing-8);
+    }
+
+    .login .login-access .login-access-content {
+        max-width: 100%;
+    }
+
+    .login .login-access .login-theme label {
+        display: none;
+    }
+
+}

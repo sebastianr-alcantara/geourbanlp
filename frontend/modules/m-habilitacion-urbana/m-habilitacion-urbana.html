@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="description"
+        content="Geo Urban LP - Geovisor de Habilitación Urbana">
+
+    <title>
+        Geo Urban LP | Habilitación Urbana
+    </title>
+
+    <link
+        rel="icon"
+        href="../assets/icons/geourbanlp-light-icon.svg"
+        type="image/svg+xml">
+
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/ol@10.6.1/ol.css">
+
+    <link
+        rel="stylesheet"
+        href="m-habilitacion-urbana.css">
+
+</head>
+
+
+<body>
+
+    <div class="viewer">
+
+
+        <!-- ========================= -->
+        <!-- HEADER                    -->
+        <!-- ========================= -->
+
+        <header class="viewer-header">
+
+            <div class="viewer-header-left">
+
+                <a
+                    href="../modules.html"
+                    class="viewer-brand"
+                    aria-label="Volver a módulos">
+
+                    <img
+                        src="../assets/icons/geourbanlp-light-logo.svg"
+                        alt="Geo Urban LP"
+                        class="viewer-logo viewer-logo-light">
+
+                    <img
+                        src="../assets/icons/geourbanlp-dark-logo.svg"
+                        alt=""
+                        aria-hidden="true"
+                        class="viewer-logo viewer-logo-dark">
+
+                </a>
+
+                <div class="viewer-module">
+
+                    <span>
+                        GEOVISOR
+                    </span>
+
+                    <strong>
+                        Habilitación Urbana
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="viewer-header-actions">
+
+                <select
+                    id="select-theme"
+                    class="theme-select"
+                    aria-label="Seleccionar apariencia">
+
+                    <option value="system">
+                        Sistema
+                    </option>
+
+                    <option value="light">
+                        Claro
+                    </option>
+
+                    <option value="dark">
+                        Oscuro
+                    </option>
+
+                </select>
+
+
+                <a
+                    href="../modules.html"
+                    class="btn-header"
+                    aria-label="Volver a módulos">
+
+                    Módulos
+
+                </a>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- ========================= -->
+        <!-- VIEWER BODY               -->
+        <!-- ========================= -->
+
+        <div class="viewer-body">
+
+
+            <!-- ========================= -->
+            <!-- LEFT TOOLBAR              -->
+            <!-- ========================= -->
+
+            <aside
+                class="viewer-toolbar"
+                aria-label="Herramientas del geovisor">
+
+
+                <button
+                    class="tool-button"
+                    data-panel="layers"
+                    type="button"
+                    title="Capas">
+
+                    <span class="tool-icon">
+                        ◫
+                    </span>
+
+                    <span>
+                        Capas
+                    </span>
+
+                </button>
+
+
+                <button
+                    class="tool-button"
+                    data-panel="drawing"
+                    type="button"
+                    title="Dibujo">
+
+                    <span class="tool-icon">
+                        ✎
+                    </span>
+
+                    <span>
+                        Dibujar
+                    </span>
+
+                </button>
+
+
+                <button
+                    class="tool-button"
+                    data-panel="location"
+                    type="button"
+                    title="Localización">
+
+                    <span class="tool-icon">
+                        ◎
+                    </span>
+
+                    <span>
+                        Ubicar
+                    </span>
+
+                </button>
+
+
+                <button
+                    class="tool-button"
+                    data-panel="reports"
+                    type="button"
+                    title="Reportes">
+
+                    <span class="tool-icon">
+                        ▥
+                    </span>
+
+                    <span>
+                        Reportes
+                    </span>
+
+                </button>
+
+
+                <button
+                    class="tool-button"
+                    data-panel="records"
+                    type="button"
+                    title="Registros relacionados">
+
+                    <span class="tool-icon">
+                        ＋
+                    </span>
+
+                    <span>
+                        Registros
+                    </span>
+
+                </button>
+
+
+            </aside>
+
+
+
+            <!-- ========================= -->
+            <!-- SIDE PANEL                -->
+            <!-- ========================= -->
+
+            <aside
+                id="viewer-panel"
+                class="viewer-panel">
+
+                <div class="viewer-panel-header">
+
+                    <div>
+
+                        <span class="panel-label">
+                            HERRAMIENTAS
+                        </span>
+
+                        <h2 id="panel-title">
+                            Capas
+                        </h2>
+
+                    </div>
+
+                    <button
+                        id="btn-close-panel"
+                        class="btn-close-panel"
+                        type="button"
+                        aria-label="Cerrar panel">
+
+                        ×
+
+                    </button>
+
+                </div>
+
+
+                <div class="viewer-panel-content">
+
+
+                    <!-- ========================= -->
+                    <!-- LAYERS                    -->
+                    <!-- ========================= -->
+
+                    <section
+                        id="panel-layers"
+                        class="panel-section active">
+
+                        <div class="panel-section-description">
+                            Activa o desactiva la información visible en el mapa.
+                        </div>
+
+
+                        <div class="layer-group">
+
+                            <div class="layer-group-title">
+                                Reserva Territorial
+                            </div>
+
+
+                            <label class="layer-item">
+
+                                <input
+                                    type="checkbox"
+                                    data-layer="terrenos"
+                                    checked>
+
+                                <span>
+                                    Terrenos de interés
+                                </span>
+
+                            </label>
+
+
+                            <label class="layer-item">
+
+                                <input
+                                    type="checkbox"
+                                    data-layer="prospeccion">
+
+                                <span>
+                                    Prospección
+                                </span>
+
+                            </label>
+
+
+                            <label class="layer-item">
+
+                                <input
+                                    type="checkbox"
+                                    data-layer="compras">
+
+                                <span>
+                                    Terrenos comprados
+                                </span>
+
+                            </label>
+
+                        </div>
+
+
+                        <div class="layer-group">
+
+                            <div class="layer-group-title">
+                                Planeamiento
+                            </div>
+
+
+                            <label class="layer-item">
+
+                                <input
+                                    type="checkbox"
+                                    data-layer="zonificacion">
+
+                                <span>
+                                    Zonificación
+                                </span>
+
+                            </label>
+
+
+                            <label class="layer-item">
+
+                                <input
+                                    type="checkbox"
+                                    data-layer="vias">
+
+                                <span>
+                                    Sistema vial
+                                </span>
+
+                            </label>
+
+
+                            <label class="layer-item">
+
+                                <input
+                                    type="checkbox"
+                                    data-layer="afectaciones">
+
+                                <span>
+                                    Afectaciones
+                                </span>
+
+                            </label>
+
+                        </div>
+
+                    </section>
+
+
+
+                    <!-- ========================= -->
+                    <!-- DRAWING                   -->
+                    <!-- ========================= -->
+
+                    <section
+                        id="panel-drawing"
+                        class="panel-section">
+
+                        <div class="panel-section-description">
+                            Dibuja geometrías temporales para análisis y medición.
+                        </div>
+
+
+                        <div class="drawing-grid">
+
+                            <button
+                                class="panel-action"
+                                data-draw="Point"
+                                type="button">
+
+                                Punto
+
+                            </button>
+
+
+                            <button
+                                class="panel-action"
+                                data-draw="LineString"
+                                type="button">
+
+                                Línea
+
+                            </button>
+
+
+                            <button
+                                class="panel-action"
+                                data-draw="Polygon"
+                                type="button">
+
+                                Polígono
+
+                            </button>
+
+
+                            <button
+                                id="btn-clear-drawing"
+                                class="panel-action secondary"
+                                type="button">
+
+                                Limpiar
+
+                            </button>
+
+                        </div>
+
+                    </section>
+
+
+
+                    <!-- ========================= -->
+                    <!-- LOCATION                  -->
+                    <!-- ========================= -->
+
+                    <section
+                        id="panel-location"
+                        class="panel-section">
+
+                        <div class="panel-section-description">
+                            Busca una ubicación mediante coordenadas o tu posición actual.
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="input-longitude">
+                                Longitud
+                            </label>
+
+                            <input
+                                id="input-longitude"
+                                type="number"
+                                step="any"
+                                placeholder="-77.0428">
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="input-latitude">
+                                Latitud
+                            </label>
+
+                            <input
+                                id="input-latitude"
+                                type="number"
+                                step="any"
+                                placeholder="-12.0464">
+
+                        </div>
+
+
+                        <button
+                            id="btn-go-coordinate"
+                            class="panel-primary"
+                            type="button">
+
+                            Ir a coordenada
+
+                        </button>
+
+
+                        <button
+                            id="btn-my-location"
+                            class="panel-secondary"
+                            type="button">
+
+                            Usar mi ubicación
+
+                        </button>
+
+                    </section>
+
+
+
+                    <!-- ========================= -->
+                    <!-- REPORTS                   -->
+                    <!-- ========================= -->
+
+                    <section
+                        id="panel-reports"
+                        class="panel-section">
+
+                        <div class="panel-section-description">
+                            Indicadores generales de habilitación urbana.
+                        </div>
+
+
+                        <div class="kpi-grid">
+
+
+                            <article class="kpi-card">
+
+                                <span>
+                                    Terrenos
+                                </span>
+
+                                <strong id="kpi-terrenos">
+                                    0
+                                </strong>
+
+                            </article>
+
+
+                            <article class="kpi-card">
+
+                                <span>
+                                    Área evaluada
+                                </span>
+
+                                <strong id="kpi-area">
+                                    0 ha
+                                </strong>
+
+                            </article>
+
+
+                            <article class="kpi-card">
+
+                                <span>
+                                    En negociación
+                                </span>
+
+                                <strong id="kpi-negociacion">
+                                    0
+                                </strong>
+
+                            </article>
+
+
+                            <article class="kpi-card">
+
+                                <span>
+                                    Comprados
+                                </span>
+
+                                <strong id="kpi-comprados">
+                                    0
+                                </strong>
+
+                            </article>
+
+                        </div>
+
+
+                        <button
+                            id="btn-open-report"
+                            class="panel-primary"
+                            type="button">
+
+                            Ver reporte completo
+
+                        </button>
+
+                    </section>
+
+
+
+                    <!-- ========================= -->
+                    <!-- RELATED RECORDS           -->
+                    <!-- ========================= -->
+
+                    <section
+                        id="panel-records"
+                        class="panel-section">
+
+                        <div class="panel-section-description">
+                            Agrega información relacionada al terreno seleccionado.
+                        </div>
+
+
+                        <div
+                            id="selected-feature-message"
+                            class="selected-feature-message">
+
+                            Selecciona un terreno en el mapa.
+
+                        </div>
+
+
+                        <button
+                            class="record-action"
+                            data-record="contacto"
+                            type="button">
+
+                            + Contacto
+
+                        </button>
+
+
+                        <button
+                            class="record-action"
+                            data-record="negociacion"
+                            type="button">
+
+                            + Negociación
+
+                        </button>
+
+
+                        <button
+                            class="record-action"
+                            data-record="revision-partida"
+                            type="button">
+
+                            + Revisión de partida
+
+                        </button>
+
+
+                        <button
+                            class="record-action"
+                            data-record="visita"
+                            type="button">
+
+                            + Visita de campo
+
+                        </button>
+
+                    </section>
+
+
+                </div>
+
+            </aside>
+
+
+
+            <!-- ========================= -->
+            <!-- MAP                      -->
+            <!-- ========================= -->
+
+            <main class="map-container">
+
+                <div
+                    id="map"
+                    class="map">
+                </div>
+
+
+                <div class="map-controls">
+
+
+                    <button
+                        id="btn-home"
+                        class="map-control"
+                        type="button"
+                        title="Vista inicial">
+
+                       ⌂
+
+                    </button>
+
+
+                    <button
+                        id="btn-location"
+                        class="map-control"
+                        type="button"
+                        title="Mi ubicación">
+
+                        ◎
+
+                    </button>
+
+
+                </div>
+
+
+
+                <!-- ========================= -->
+                <!-- FEATURE POPUP             -->
+                <!-- ========================= -->
+
+                <div
+                    id="feature-popup"
+                    class="feature-popup"
+                    hidden>
+
+                    <div class="feature-popup-header">
+
+                        <div>
+
+                            <span>
+                                TERRENO
+                            </span>
+
+                            <strong id="popup-title">
+                                Terreno seleccionado
+                            </strong>
+
+                        </div>
+
+
+                        <button
+                            id="btn-close-popup"
+                            type="button">
+
+                            ×
+
+                        </button>
+
+                    </div>
+
+
+                    <div class="feature-popup-body">
+
+
+                        <div class="popup-field">
+
+                            <span>
+                                Código
+                            </span>
+
+                            <strong id="popup-code">
+                                -
+                            </strong>
+
+                        </div>
+
+
+                        <div class="popup-field">
+
+                            <span>
+                                Área
+                            </span>
+
+                            <strong id="popup-area">
+                                -
+                            </strong>
+
+                        </div>
+
+
+                        <div class="popup-field">
+
+                            <span>
+                                Estado
+                            </span>
+
+                            <strong id="popup-status">
+                                -
+                            </strong>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <button
+                        id="btn-feature-detail"
+                        class="popup-detail"
+                        type="button">
+
+                        Ver detalle
+
+                    </button>
+
+                </div>
+
+
+            </main>
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================= -->
+    <!-- RECORD MODAL              -->
+    <!-- ========================= -->
+
+    <dialog
+        id="record-modal"
+        class="record-modal">
+
+        <form
+            id="record-form"
+            method="dialog">
+
+            <div class="record-modal-header">
+
+                <div>
+
+                    <span>
+                        NUEVO REGISTRO
+                    </span>
+
+                    <h2 id="record-modal-title">
+                        Registro relacionado
+                    </h2>
+
+                </div>
+
+
+                <button
+                    id="btn-close-record"
+                    type="button"
+                    aria-label="Cerrar">
+
+                    ×
+
+                </button>
+
+            </div>
+
+
+            <div class="record-modal-body">
+
+                <div class="form-group">
+
+                    <label for="record-description">
+                        Descripción
+                    </label>
+
+                    <textarea
+                        id="record-description"
+                        rows="4"
+                        required>
+                    </textarea>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="record-date">
+                        Fecha
+                    </label>
+
+                    <input
+                        id="record-date"
+                        type="date"
+                        required>
+
+                </div>
+
+            </div>
+
+
+            <div class="record-modal-footer">
+
+                <button
+                    id="btn-cancel-record"
+                    class="modal-secondary"
+                    type="button">
+
+                    Cancelar
+
+                </button>
+
+
+                <button
+                    class="modal-primary"
+                    type="submit">
+
+                    Guardar
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </dialog>
+
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/ol@10.6.1/dist/ol.js">
+    </script>
+
+    <script
+        src="m-habilitacion-urbana.js">
+    </script>
+
+</body>
+
+</html>

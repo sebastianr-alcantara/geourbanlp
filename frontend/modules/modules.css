@@ -1,0 +1,934 @@
+/* ===================== */
+/* DESIGN TOKENS         */
+/* ===================== */
+
+:root {
+    color-scheme: light;
+
+    /* BRAND */
+
+    --colour-primary: #17324D;
+    --colour-primary-hover: #21445F;
+    --colour-primary-active: #10283D;
+
+    --colour-secondary: #547C8A;
+    --colour-secondary-light: #B7CED3;
+
+    --colour-accent: #C47D55;
+    --colour-accent-soft: #F4E8E1;
+
+
+    /* BACKGROUNDS */
+
+    --colour-background: #F4F6F7;
+    --colour-surface: #FFFFFF;
+    --colour-surface-secondary: #EEF2F4;
+    --colour-surface-hover: #F7F9FA;
+
+
+    /* TYPOGRAPHY */
+
+    --colour-text-primary: #17324D;
+    --colour-text-secondary: #536875;
+    --colour-text-tertiary: #81909A;
+    --colour-text-inverse: #FFFFFF;
+
+    --font-family:
+        "Century Gothic",
+        "Avenir Next",
+        "Segoe UI",
+        sans-serif;
+
+    --font-size-sm: 0.6875rem;
+    --font-size-base: 0.75rem;
+    --font-size-lg: 0.8125rem;
+    --font-size-xl: 0.875rem;
+    --font-size-2xl: 1rem;
+    --font-size-3xl: 1.25rem;
+    --font-size-4xl: 1.75rem;
+
+    --font-weight-regular: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+
+
+    /* BORDERS */
+
+    --colour-border: #D9E1E5;
+    --colour-border-subtle: #E8EDEF;
+    --colour-border-strong: #BAC7CD;
+
+
+    /* INTERACTION */
+
+    --colour-focus: #547C8A;
+    --colour-selection: #B7CED3;
+
+
+    /* SPACING */
+
+    --spacing-1: 0.25rem;
+    --spacing-2: 0.5rem;
+    --spacing-3: 0.75rem;
+    --spacing-4: 1rem;
+    --spacing-5: 1.25rem;
+    --spacing-6: 1.5rem;
+    --spacing-8: 2rem;
+    --spacing-10: 2.5rem;
+    --spacing-12: 3rem;
+
+
+    /* COMPONENTS */
+
+    --radius-sm: 0.25rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+
+    --shadow-sm:
+        0 1px 2px rgb(23 50 77 / 5%);
+
+    --shadow-md:
+        0 6px 20px rgb(23 50 77 / 8%);
+
+    --shadow-lg:
+        0 12px 30px rgb(23 50 77 / 12%);
+
+
+    /* MODULES */
+
+    --module-urban: #547C8A;
+    --module-departments: #596E92;
+    --module-admin: #B97051;
+}
+
+
+/* ===================== */
+/* DARK MODE             */
+/* ===================== */
+
+[data-theme="dark"] {
+    color-scheme: dark;
+
+    --colour-primary: #DCE8EC;
+    --colour-primary-hover: #FFFFFF;
+    --colour-primary-active: #B7CED3;
+
+    --colour-secondary: #7FA5AF;
+    --colour-secondary-light: #355563;
+
+    --colour-accent: #D58B62;
+    --colour-accent-soft: #3A2924;
+
+    --colour-background: #0D1822;
+    --colour-surface: #132330;
+    --colour-surface-secondary: #192C3A;
+    --colour-surface-hover: #1D3342;
+
+    --colour-text-primary: #EDF3F5;
+    --colour-text-secondary: #B7C6CC;
+    --colour-text-tertiary: #8498A1;
+    --colour-text-inverse: #0D1822;
+
+    --colour-border: #294251;
+    --colour-border-subtle: #203744;
+    --colour-border-strong: #3D5967;
+
+    --colour-focus: #8FB4BE;
+    --colour-selection: #315565;
+
+    --shadow-sm:
+        0 1px 2px rgb(0 0 0 / 18%);
+
+    --shadow-md:
+        0 6px 20px rgb(0 0 0 / 22%);
+
+    --shadow-lg:
+        0 12px 30px rgb(0 0 0 / 30%);
+
+    --module-urban: #7FA5AF;
+    --module-departments: #8998C0;
+    --module-admin: #D58B62;
+}
+
+
+/* ===================== */
+/* GLOBAL                */
+/* ===================== */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    min-height: 100%;
+    font-size: 16px;
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+    margin: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    background-color: var(--colour-background);
+    color: var(--colour-text-primary);
+
+    font-family: var(--font-family);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-regular);
+    line-height: 1.5;
+
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
+}
+
+button,
+select {
+    font: inherit;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+::selection {
+    background-color: var(--colour-selection);
+    color: var(--colour-text-primary);
+}
+
+:focus-visible {
+    outline: 2px solid var(--colour-focus);
+    outline-offset: 3px;
+}
+
+
+/* ===================== */
+/* HEADER                */
+/* ===================== */
+
+.modules-header {
+    min-height: 4.5rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: var(--spacing-5);
+
+    padding:
+        var(--spacing-3)
+        clamp(1.25rem, 4vw, 4rem);
+
+    border-bottom:
+        1px solid var(--colour-border-subtle);
+
+    background-color:
+        var(--colour-surface);
+}
+
+
+/* ===================== */
+/* BRAND                 */
+/* ===================== */
+
+.modules-header .modules-brand {
+    display: inline-flex;
+    align-items: center;
+
+    min-width: 0;
+}
+
+.modules-header .modules-brand .modules-logo {
+    display: block;
+
+    width: 13rem;
+    max-width: 100%;
+    height: auto;
+}
+
+.modules-header .modules-brand .modules-logo-light {
+    display: block;
+}
+
+.modules-header .modules-brand .modules-logo-dark {
+    display: none;
+}
+
+[data-theme="dark"] .modules-header .modules-brand .modules-logo-light {
+    display: none;
+}
+
+[data-theme="dark"] .modules-header .modules-brand .modules-logo-dark {
+    display: block;
+}
+
+
+/* ===================== */
+/* HEADER ACTIONS        */
+/* ===================== */
+
+.modules-header .modules-header-actions {
+    display: flex;
+    align-items: center;
+
+    gap: var(--spacing-3);
+}
+
+
+/* ===================== */
+/* THEME SELECTOR        */
+/* ===================== */
+
+.modules-header .modules-header-actions .theme-label {
+    color: var(--colour-text-tertiary);
+
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+}
+
+.modules-header .modules-header-actions .theme-select {
+    height: 2.25rem;
+    min-width: 6.5rem;
+
+    padding:
+        0
+        var(--spacing-3);
+
+    border:
+        1px solid var(--colour-border);
+
+    border-radius:
+        var(--radius-md);
+
+    background-color:
+        var(--colour-surface-secondary);
+
+    color:
+        var(--colour-text-primary);
+
+    cursor: pointer;
+
+    transition:
+        border-color 0.15s ease,
+        background-color 0.15s ease;
+}
+
+.modules-header .modules-header-actions .theme-select:hover {
+    border-color:
+        var(--colour-border-strong);
+
+    background-color:
+        var(--colour-surface-hover);
+}
+
+
+/* ===================== */
+/* LOGOUT                */
+/* ===================== */
+
+.modules-header .modules-header-actions .btn-logout {
+    min-height: 2.25rem;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: var(--spacing-2);
+
+    padding:
+        0
+        var(--spacing-3);
+
+    border:
+        1px solid var(--colour-border);
+
+    border-radius:
+        var(--radius-md);
+
+    background-color:
+        var(--colour-surface);
+
+    color:
+        var(--colour-text-secondary);
+
+    font-size:
+        var(--font-size-base);
+
+    font-weight:
+        var(--font-weight-semibold);
+
+    cursor: pointer;
+
+    transition:
+        border-color 0.15s ease,
+        background-color 0.15s ease,
+        color 0.15s ease;
+}
+
+.modules-header .modules-header-actions .btn-logout svg {
+    width: 1rem;
+    height: 1rem;
+
+    flex-shrink: 0;
+}
+
+.modules-header .modules-header-actions .btn-logout:hover {
+    border-color:
+        var(--colour-border-strong);
+
+    background-color:
+        var(--colour-surface-hover);
+
+    color:
+        var(--colour-text-primary);
+}
+
+
+/* ===================== */
+/* MAIN                  */
+/* ===================== */
+
+.modules-main {
+    width: 100%;
+    max-width: 82rem;
+
+    margin: 0 auto;
+
+    flex: 1;
+
+    padding:
+        var(--spacing-12)
+        clamp(1.25rem, 4vw, 4rem);
+}
+
+
+/* ===================== */
+/* INTRODUCTION          */
+/* ===================== */
+
+.modules-main .modules-introduction {
+    max-width: 42rem;
+}
+
+.modules-main .modules-introduction .modules-eyebrow {
+    display: block;
+
+    margin-bottom:
+        var(--spacing-3);
+
+    color:
+        var(--colour-accent);
+
+    font-size:
+        var(--font-size-sm);
+
+    font-weight:
+        var(--font-weight-bold);
+
+    letter-spacing:
+        0.14rem;
+}
+
+.modules-main .modules-introduction h1 {
+    margin: 0;
+
+    color:
+        var(--colour-text-primary);
+
+    font-size:
+        clamp(1.75rem, 3vw, 2.5rem);
+
+    font-weight:
+        var(--font-weight-semibold);
+
+    line-height: 1.15;
+
+    letter-spacing:
+        -0.06rem;
+}
+
+.modules-main .modules-introduction p {
+    max-width: 38rem;
+
+    margin:
+        var(--spacing-4)
+        0
+        0;
+
+    color:
+        var(--colour-text-secondary);
+
+    font-size:
+        var(--font-size-lg);
+
+    line-height: 1.7;
+}
+
+
+/* ===================== */
+/* MODULES GRID          */
+/* ===================== */
+
+.modules-main .modules-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap:
+        var(--spacing-5);
+
+    margin-top:
+        var(--spacing-10);
+}
+
+
+/* ===================== */
+/* MODULE CARD           */
+/* ===================== */
+
+.modules-main .modules-grid .module-card {
+    --module-colour:
+        var(--colour-secondary);
+
+    position: relative;
+
+    min-width: 0;
+    min-height: 18rem;
+
+    display: flex;
+    flex-direction: column;
+
+    padding:
+        var(--spacing-6);
+
+    border:
+        1px solid var(--colour-border-subtle);
+
+    border-radius:
+        var(--radius-lg);
+
+    background-color:
+        var(--colour-surface);
+
+    box-shadow:
+        var(--shadow-sm);
+
+    overflow: hidden;
+
+    transition:
+        border-color 0.18s ease,
+        box-shadow 0.18s ease,
+        transform 0.18s ease;
+}
+
+
+/* TOP ACCENT */
+
+.modules-main .modules-grid .module-card::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 0.2rem;
+
+    background-color:
+        var(--module-colour);
+
+    opacity: 0;
+
+    transition:
+        opacity 0.18s ease;
+}
+
+.modules-main .modules-grid .module-card:hover {
+    border-color:
+        var(--module-colour);
+
+    box-shadow:
+        var(--shadow-lg);
+
+    transform:
+        translateY(-0.2rem);
+}
+
+.modules-main .modules-grid .module-card:hover::before {
+    opacity: 1;
+}
+
+
+/* ===================== */
+/* MODULE COLOURS        */
+/* ===================== */
+
+.modules-main .modules-grid .module-card-urban {
+    --module-colour:
+        var(--module-urban);
+}
+
+.modules-main .modules-grid .module-card-departments {
+    --module-colour:
+        var(--module-departments);
+}
+
+.modules-main .modules-grid .module-card-admin {
+    --module-colour:
+        var(--module-admin);
+}
+
+
+/* ===================== */
+/* CARD HEADER           */
+/* ===================== */
+
+.modules-main .modules-grid .module-card.module-card-admin .module-card-header,
+.modules-main .modules-grid .module-card.module-card-departments .module-card-header,
+.modules-main .modules-grid .module-card.module-card-urban .module-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap:
+        var(--spacing-4);
+}
+
+.modules-main .modules-grid .module-card.module-card-admin .module-card-header .module-icon,
+.modules-main .modules-grid .module-card.module-card-departments .module-card-header .module-icon,
+.modules-main .modules-grid .module-card.module-card-urban .module-card-header .module-icon {
+    width: 3rem;
+    height: 3rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius:
+        var(--radius-md);
+
+    background-color:
+        color-mix(
+            in srgb,
+            var(--module-colour) 14%,
+            transparent
+        );
+
+    color:
+        var(--module-colour);
+}
+
+.modules-main .modules-grid .module-card.module-card-admin .module-card-header .module-icon svg,
+.modules-main .modules-grid .module-card.module-card-departments .module-card-header .module-icon svg,
+.modules-main .modules-grid .module-card.module-card-urban .module-card-header .module-icon svg {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.modules-main .modules-grid .module-card.module-card-admin .module-card-header .module-number,
+.modules-main .modules-grid .module-card.module-card-departments .module-card-header .module-number,
+.modules-main .modules-grid .module-card.module-card-urban .module-card-header .module-number {
+    color:
+        var(--colour-text-tertiary);
+
+    font-size:
+        var(--font-size-sm);
+
+    font-weight:
+        var(--font-weight-bold);
+
+    letter-spacing:
+        0.1rem;
+}
+
+
+/* ===================== */
+/* CARD CONTENT          */
+/* ===================== */
+
+.modules-main .modules-grid .module-card.module-card-admin .module-card-content,
+.modules-main .modules-grid .module-card.module-card-departments .module-card-content,
+.modules-main .modules-grid .module-card.module-card-urban .module-card-content {
+    margin-top:
+        var(--spacing-6);
+}
+
+.modules-main .modules-grid .module-card.module-card-admin .module-card-content .module-type,
+.modules-main .modules-grid .module-card.module-card-departments .module-card-content .module-type,
+.modules-main .modules-grid .module-card.module-card-urban .module-card-content .module-type {
+    display: block;
+
+    margin-bottom:
+        var(--spacing-2);
+
+    color:
+        var(--module-colour);
+
+    font-size:
+        var(--font-size-sm);
+
+    font-weight:
+        var(--font-weight-bold);
+
+    letter-spacing:
+        0.1rem;
+}
+
+.modules-main .modules-grid .module-card.module-card-admin .module-card-content h2,
+.modules-main .modules-grid .module-card.module-card-departments .module-card-content h2,
+.modules-main .modules-grid .module-card.module-card-urban .module-card-content h2 {
+    margin: 0;
+
+    color:
+        var(--colour-text-primary);
+
+    font-size:
+        var(--font-size-3xl);
+
+    font-weight:
+        var(--font-weight-semibold);
+
+    line-height: 1.3;
+
+    letter-spacing:
+        -0.02rem;
+}
+
+.modules-main .modules-grid .module-card.module-card-admin .module-card-content p,
+.modules-main .modules-grid .module-card.module-card-departments .module-card-content p,
+.modules-main .modules-grid .module-card.module-card-urban .module-card-content p {
+    margin:
+        var(--spacing-3)
+        0
+        0;
+
+    color:
+        var(--colour-text-secondary);
+
+    font-size:
+        var(--font-size-base);
+
+    line-height: 1.65;
+}
+
+
+/* ===================== */
+/* CARD FOOTER           */
+/* ===================== */
+
+.modules-main .modules-grid .module-card.module-card-admin .module-card-footer,
+.modules-main .modules-grid .module-card.module-card-departments .module-card-footer,
+.modules-main .modules-grid .module-card.module-card-urban .module-card-footer {
+    margin-top: auto;
+
+    padding-top:
+        var(--spacing-6);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap:
+        var(--spacing-3);
+
+    color:
+        var(--module-colour);
+
+    font-size:
+        var(--font-size-base);
+
+    font-weight:
+        var(--font-weight-semibold);
+}
+
+.modules-main .modules-grid .module-card.module-card-admin .module-card-footer svg,
+.modules-main .modules-grid .module-card.module-card-departments .module-card-footer svg,
+.modules-main .modules-grid .module-card.module-card-urban .module-card-footer svg {
+    width: 1.125rem;
+    height: 1.125rem;
+
+    flex-shrink: 0;
+
+    transition:
+        transform 0.18s ease;
+}
+
+.modules-main .modules-grid .module-card:hover
+.module-card-footer svg {
+    transform:
+        translateX(0.25rem);
+}
+
+
+/* ===================== */
+/* ADMIN MODULE          */
+/* ===================== */
+
+.modules-main .modules-grid .module-card-admin
+.module-icon {
+    background-color:
+        color-mix(
+            in srgb,
+            var(--module-admin) 12%,
+            transparent
+        );
+}
+
+
+/* ===================== */
+/* FOOTER                */
+/* ===================== */
+
+.modules-footer {
+    min-height: 3.5rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding:
+        var(--spacing-4)
+        var(--spacing-5);
+
+    border-top:
+        1px solid var(--colour-border-subtle);
+
+    background-color:
+        var(--colour-surface);
+
+    color:
+        var(--colour-text-tertiary);
+
+    font-size:
+        var(--font-size-sm);
+
+    text-align:
+        center;
+}
+
+
+/* ===================== */
+/* TABLET                */
+/* ===================== */
+
+@media (max-width: 960px) {
+
+    .modules-main .modules-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
+/* ===================== */
+/* MOBILE                */
+/* ===================== */
+
+@media (max-width: 640px) {
+
+    .modules-header {
+        align-items:
+            flex-start;
+
+        padding:
+            var(--spacing-4)
+            var(--spacing-5);
+    }
+
+    .modules-header .modules-brand .modules-logo {
+        width:
+            10.5rem;
+    }
+
+    .modules-header .modules-header-actions .theme-label {
+        display:
+            none;
+    }
+
+    .modules-main {
+        padding:
+            var(--spacing-8)
+            var(--spacing-5);
+    }
+
+    .modules-main .modules-grid {
+        grid-template-columns:
+            1fr;
+    }
+
+    .modules-main .modules-grid .module-card {
+        min-height:
+            15.5rem;
+    }
+
+}
+
+
+/* ===================== */
+/* SMALL MOBILE          */
+/* ===================== */
+
+@media (max-width: 480px) {
+
+    .modules-header {
+        gap:
+            var(--spacing-3);
+    }
+
+    .modules-header .modules-header-actions {
+        gap:
+            var(--spacing-2);
+    }
+
+    .modules-header .modules-header-actions .theme-select {
+        min-width:
+            5.5rem;
+    }
+
+    .modules-header .modules-header-actions .btn-logout {
+        width:
+            2.25rem;
+
+        padding:
+            0;
+    }
+
+    .modules-header .modules-header-actions .btn-logout span {
+        display:
+            none;
+    }
+
+    .modules-main {
+        padding:
+            var(--spacing-8)
+            var(--spacing-4);
+    }
+
+    .modules-main .modules-grid .module-card {
+        min-height:
+            14.5rem;
+
+        padding:
+            var(--spacing-5);
+    }
+
+    .modules-main .modules-grid .module-card.module-card-admin .module-card-content,
+.modules-main .modules-grid .module-card.module-card-departments .module-card-content,
+.modules-main .modules-grid .module-card.module-card-urban .module-card-content {
+        margin-top:
+            var(--spacing-5);
+    }
+
+}

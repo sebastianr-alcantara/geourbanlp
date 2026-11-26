@@ -1,0 +1,1141 @@
+:root {
+    color-scheme: light;
+
+    --colour-primary: #17324D;
+    --colour-primary-hover: #21445F;
+    --colour-secondary: #547C8A;
+
+    --colour-accent: #C47D55;
+
+    --colour-background: #F4F6F7;
+    --colour-surface: #FFFFFF;
+    --colour-surface-secondary: #EEF2F4;
+    --colour-surface-hover: #F7F9FA;
+
+    --colour-text-primary: #17324D;
+    --colour-text-secondary: #536875;
+    --colour-text-tertiary: #81909A;
+    --colour-text-inverse: #FFFFFF;
+
+    --colour-border: #D9E1E5;
+    --colour-border-subtle: #E8EDEF;
+    --colour-border-strong: #BAC7CD;
+
+    --colour-success: #3F746C;
+    --colour-warning: #B07A50;
+    --colour-danger: #B65454;
+
+    --font-family:
+        "Century Gothic",
+        "Avenir Next",
+        "Segoe UI",
+        sans-serif;
+
+    --spacing-1: 0.25rem;
+    --spacing-2: 0.5rem;
+    --spacing-3: 0.75rem;
+    --spacing-4: 1rem;
+    --spacing-5: 1.25rem;
+    --spacing-6: 1.5rem;
+
+    --radius-sm: 0.25rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+
+    --shadow-sm:
+        0 1px 3px rgb(23 50 77 / 8%);
+
+    --shadow-md:
+        0 8px 24px rgb(23 50 77 / 12%);
+
+    --header-height: 4rem;
+    --toolbar-width: 4.5rem;
+    --panel-width: 20rem;
+}
+
+
+[data-theme="dark"] {
+    color-scheme: dark;
+
+    --colour-primary: #DCE8EC;
+    --colour-primary-hover: #FFFFFF;
+
+    --colour-secondary: #7FA5AF;
+
+    --colour-accent: #D58B62;
+
+    --colour-background: #0D1822;
+
+    --colour-surface: #132330;
+    --colour-surface-secondary: #192C3A;
+    --colour-surface-hover: #1D3342;
+
+    --colour-text-primary: #EDF3F5;
+    --colour-text-secondary: #B7C6CC;
+    --colour-text-tertiary: #8498A1;
+
+    --colour-border: #294251;
+    --colour-border-subtle: #203744;
+    --colour-border-strong: #3D5967;
+
+    --shadow-sm:
+        0 1px 3px rgb(0 0 0 / 20%);
+
+    --shadow-md:
+        0 8px 24px rgb(0 0 0 / 30%);
+}
+
+
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+
+
+body {
+    overflow: hidden;
+
+    background:
+        var(--colour-background);
+
+    color:
+        var(--colour-text-primary);
+
+    font-family:
+        var(--font-family);
+
+    font-size:
+        0.75rem;
+}
+
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
+
+
+button {
+    cursor: pointer;
+}
+
+
+.viewer {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+}
+
+
+
+/* ===================== */
+/* HEADER                */
+/* ===================== */
+
+.viewer .viewer-header {
+    height:
+        var(--header-height);
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding:
+        0
+        1rem;
+
+    border-bottom:
+        1px solid
+        var(--colour-border-subtle);
+
+    background:
+        var(--colour-surface);
+
+    z-index: 50;
+}
+
+
+.viewer .viewer-header .viewer-header-left {
+    display: flex;
+    align-items: center;
+
+    gap: 1.25rem;
+}
+
+
+.viewer .viewer-header .viewer-header-left .viewer-brand {
+    display: flex;
+    align-items: center;
+}
+
+
+.viewer .viewer-header .viewer-header-left .viewer-brand .viewer-logo {
+    width: 10rem;
+    height: auto;
+
+    display: block;
+}
+
+
+.viewer .viewer-header .viewer-header-left .viewer-brand .viewer-logo-dark {
+    display: none;
+}
+
+
+[data-theme="dark"]
+.viewer .viewer-header .viewer-header-left .viewer-brand .viewer-logo-light {
+    display: none;
+}
+
+
+[data-theme="dark"]
+.viewer .viewer-header .viewer-header-left .viewer-brand .viewer-logo-dark {
+    display: block;
+}
+
+
+.viewer .viewer-header .viewer-header-left .viewer-module {
+    padding-left: 1.25rem;
+
+    border-left:
+        1px solid
+        var(--colour-border);
+}
+
+
+.viewer .viewer-header .viewer-header-left .viewer-module span {
+    display: block;
+
+    color:
+        var(--colour-text-tertiary);
+
+    font-size:
+        0.5625rem;
+
+    font-weight: 700;
+
+    letter-spacing:
+        0.1rem;
+}
+
+
+.viewer .viewer-header .viewer-header-left .viewer-module strong {
+    display: block;
+
+    margin-top:
+        0.15rem;
+
+    font-size:
+        0.75rem;
+}
+
+
+.viewer .viewer-header .viewer-header-actions {
+    display: flex;
+    align-items: center;
+
+    gap: 0.5rem;
+}
+
+
+.viewer .viewer-header .viewer-header-actions .theme-select,
+.viewer .viewer-header .viewer-header-actions .btn-header {
+    height: 2rem;
+
+    display: inline-flex;
+    align-items: center;
+
+    padding:
+        0
+        0.75rem;
+
+    border:
+        1px solid
+        var(--colour-border);
+
+    border-radius:
+        var(--radius-md);
+
+    background:
+        var(--colour-surface-secondary);
+
+    color:
+        var(--colour-text-primary);
+
+    text-decoration: none;
+}
+
+
+
+/* ===================== */
+/* BODY                  */
+/* ===================== */
+
+.viewer .viewer-body {
+    position: relative;
+
+    flex: 1;
+
+    min-height: 0;
+
+    display: flex;
+}
+
+
+
+/* ===================== */
+/* TOOLBAR               */
+/* ===================== */
+
+.viewer .viewer-body .viewer-toolbar {
+    width:
+        var(--toolbar-width);
+
+    flex-shrink: 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+
+    border-right:
+        1px solid
+        var(--colour-border-subtle);
+
+    background:
+        var(--colour-surface);
+
+    z-index: 30;
+}
+
+
+.viewer .viewer-body .viewer-toolbar .tool-button {
+    min-height: 4.5rem;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 0.25rem;
+
+    border: 0;
+    border-bottom:
+        1px solid
+        var(--colour-border-subtle);
+
+    background:
+        transparent;
+
+    color:
+        var(--colour-text-secondary);
+
+    font-size:
+        0.625rem;
+}
+
+
+.viewer .viewer-body .viewer-toolbar .tool-button:hover,
+.viewer .viewer-body .viewer-toolbar .tool-button.active {
+    background:
+        var(--colour-surface-hover);
+
+    color:
+        var(--colour-primary);
+}
+
+
+.viewer .viewer-body .viewer-toolbar .tool-button.active {
+    box-shadow:
+        inset 3px 0
+        var(--colour-accent);
+}
+
+
+.viewer .viewer-body .viewer-toolbar .tool-button .tool-icon {
+    font-size:
+        1.25rem;
+}
+
+
+
+/* ===================== */
+/* SIDE PANEL            */
+/* ===================== */
+
+.viewer .viewer-body .viewer-panel {
+    width:
+        var(--panel-width);
+
+    flex-shrink: 0;
+
+    border-right:
+        1px solid
+        var(--colour-border-subtle);
+
+    background:
+        var(--colour-surface);
+
+    overflow:
+        hidden;
+
+    transition:
+        width 0.2s ease;
+
+    z-index: 25;
+}
+
+
+.viewer .viewer-body .viewer-panel.closed {
+    width: 0;
+
+    border-right: 0;
+}
+
+
+.viewer .viewer-body .viewer-panel#viewer-panel .viewer-panel-header {
+    min-width:
+        var(--panel-width);
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    padding:
+        1rem;
+
+    border-bottom:
+        1px solid
+        var(--colour-border-subtle);
+}
+
+
+.viewer .viewer-body .viewer-panel#viewer-panel .viewer-panel-header .panel-label {
+    color:
+        var(--colour-accent);
+
+    font-size:
+        0.5625rem;
+
+    font-weight: 700;
+
+    letter-spacing:
+        0.1rem;
+}
+
+
+.viewer .viewer-body .viewer-panel#viewer-panel .viewer-panel-header h2 {
+    margin:
+        0.25rem
+        0
+        0;
+
+    font-size:
+        1rem;
+}
+
+
+.viewer .viewer-body .viewer-panel#viewer-panel .viewer-panel-header .btn-close-panel,
+.viewer .viewer-body .map-container .feature-popup#feature-popup .feature-popup-header #btn-close-popup,
+.record-modal#record-modal #record-form .record-modal-header #btn-close-record {
+    border: 0;
+
+    background:
+        transparent;
+
+    color:
+        var(--colour-text-tertiary);
+
+    font-size:
+        1.25rem;
+}
+
+
+.viewer .viewer-body .viewer-panel#viewer-panel .viewer-panel-content {
+    width:
+        var(--panel-width);
+
+    height:
+        calc(
+            100% - 4rem
+        );
+
+    padding:
+        1rem;
+
+    overflow-y:
+        auto;
+}
+
+
+.viewer .viewer-body .viewer-panel#viewer-panel .viewer-panel-content .panel-section {
+    display: none;
+}
+
+
+.viewer .viewer-body .viewer-panel#viewer-panel .viewer-panel-content .panel-section.active {
+    display: block;
+}
+
+
+.viewer .viewer-body .viewer-panel#viewer-panel .viewer-panel-content .panel-section#panel-drawing .panel-section-description,
+.viewer .viewer-body .viewer-panel#viewer-panel .viewer-panel-content .panel-section#panel-location .panel-section-description,
+.viewer .viewer-body .viewer-panel#viewer-panel .viewer-panel-content .panel-section#panel-records .panel-section-description,
+.viewer .viewer-body .viewer-panel#viewer-panel .viewer-panel-content .panel-section#panel-reports .panel-section-description,
+.viewer .viewer-body .viewer-panel#viewer-panel .viewer-panel-content .panel-section.active#panel-layers .panel-section-description {
+    margin-bottom:
+        1rem;
+
+    color:
+        var(--colour-text-secondary);
+
+    line-height:
+        1.6;
+}
+
+
+
+/* ===================== */
+/* LAYERS                */
+/* ===================== */
+
+.viewer .viewer-body .viewer-panel#viewer-panel .viewer-panel-content .panel-section.active#panel-layers .layer-group + .layer-group {
+    margin-top:
+        1.25rem;
+}
+
+
+.viewer .viewer-body .viewer-panel#viewer-panel .viewer-panel-content .panel-section.active#panel-layers .layer-group .layer-group-title {
+    margin-bottom:
+        0.5rem;
+
+    color:
+        var(--colour-text-tertiary);
+
+    font-size:
+        0.625rem;
+
+    font-weight:
+        700;
+
+    text-transform:
+        uppercase;
+
+    letter-spacing:
+        0.05rem;
+}
+
+
+.viewer .viewer-body .viewer-panel#viewer-panel .viewer-panel-content .panel-section.active#panel-layers .layer-group .layer-item {
+    min-height: 2.5rem;
+
+    display: flex;
+    align-items: center;
+
+    gap: 0.5rem;
+
+    padding:
+        0.5rem;
+
+    border-radius:
+        var(--radius-sm);
+
+    cursor: pointer;
+}
+
+
+.viewer .viewer-body .viewer-panel#viewer-panel .viewer-panel-content .panel-section.active#panel-layers .layer-group .layer-item:hover {
+    background:
+        var(--colour-surface-hover);
+}
+
+
+.viewer .viewer-body .viewer-panel#viewer-panel .viewer-panel-content .panel-section.active#panel-layers .layer-group .layer-item input {
+    accent-color:
+        var(--colour-accent);
+}
+
+
+
+/* ===================== */
+/* BUTTONS               */
+/* ===================== */
+
+.viewer .viewer-body .viewer-panel#viewer-panel .viewer-panel-content .panel-section#panel-drawing .drawing-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 0.5rem;
+}
+
+
+.viewer .viewer-body .viewer-panel#viewer-panel .viewer-panel-content .panel-section#panel-drawing .drawing-grid .panel-action,
+.viewer .viewer-body .viewer-panel#viewer-panel .viewer-panel-content .panel-section#panel-location .panel-primary,
+.viewer .viewer-body .viewer-panel#viewer-panel .viewer-panel-content .panel-section#panel-reports .panel-primary,
+.viewer .viewer-body .viewer-panel#viewer-panel .viewer-panel-content .panel-section#panel-location .panel-secondary,
+.viewer .viewer-body .viewer-panel#viewer-panel .viewer-panel-content .panel-section#panel-records .record-action {
+    min-height: 2.5rem;
+
+    border-radius:
+        var(--radius-md);
+
+    font-weight: 600;
+}
+
+
+.viewer .viewer-body .viewer-panel#viewer-panel .viewer-panel-content .panel-section#panel-drawing .drawing-grid .panel-action,
+.viewer .viewer-body .viewer-panel#viewer-panel .viewer-panel-content .panel-section#panel-location .panel-secondary,
+.viewer .viewer-body .viewer-panel#viewer-panel .viewer-panel-content .panel-section#panel-records .record-action {
+    border:
+        1px solid
+        var(--colour-border);
+
+    background:
+        var(--colour-surface);
+
+    color:
+        var(--colour-text-primary);
+}
+
+
+.viewer .viewer-body .viewer-panel#viewer-panel .viewer-panel-content .panel-section#panel-drawing .drawing-grid .panel-action:hover,
+.viewer .viewer-body .viewer-panel#viewer-panel .viewer-panel-content .panel-section#panel-location .panel-secondary:hover,
+.viewer .viewer-body .viewer-panel#viewer-panel .viewer-panel-content .panel-section#panel-records .record-action:hover {
+    background:
+        var(--colour-surface-hover);
+}
+
+
+.viewer .viewer-body .viewer-panel#viewer-panel .viewer-panel-content .panel-section#panel-location .panel-primary,
+.viewer .viewer-body .viewer-panel#viewer-panel .viewer-panel-content .panel-section#panel-reports .panel-primary {
+    width: 100%;
+
+    margin-top:
+        0.75rem;
+
+    border: 0;
+
+    background:
+        var(--colour-primary);
+
+    color:
+        var(--colour-text-inverse);
+}
+
+
+[data-theme="dark"]
+.viewer .viewer-body .viewer-panel#viewer-panel .viewer-panel-content .panel-section#panel-location .panel-primary,
+[data-theme="dark"]
+.viewer .viewer-body .viewer-panel#viewer-panel .viewer-panel-content .panel-section#panel-reports .panel-primary {
+    color:
+        #17324D;
+}
+
+
+
+.viewer .viewer-body .viewer-panel#viewer-panel .viewer-panel-content .panel-section#panel-records .record-action {
+    width: 100%;
+
+    margin-top:
+        0.5rem;
+
+    text-align:
+        left;
+
+    padding:
+        0
+        0.75rem;
+}
+
+
+
+/* ===================== */
+/* FORMS                 */
+/* ===================== */
+
+.record-modal#record-modal #record-form .record-modal-body .form-group,
+.viewer .viewer-body .viewer-panel#viewer-panel .viewer-panel-content .panel-section#panel-location .form-group {
+    margin-bottom:
+        0.75rem;
+}
+
+
+.record-modal#record-modal #record-form .record-modal-body .form-group label,
+.viewer .viewer-body .viewer-panel#viewer-panel .viewer-panel-content .panel-section#panel-location .form-group label {
+    display: block;
+
+    margin-bottom:
+        0.35rem;
+
+    color:
+        var(--colour-text-secondary);
+
+    font-size:
+        0.6875rem;
+
+    font-weight: 600;
+}
+
+
+.record-modal#record-modal #record-form .record-modal-body .form-group input,
+.viewer .viewer-body .viewer-panel#viewer-panel .viewer-panel-content .panel-section#panel-location .form-group input,
+.record-modal#record-modal #record-form .record-modal-body .form-group textarea,
+.viewer .viewer-body .viewer-panel#viewer-panel .viewer-panel-content .panel-section#panel-location .form-group textarea {
+    width: 100%;
+
+    padding:
+        0.65rem;
+
+    border:
+        1px solid
+        var(--colour-border);
+
+    border-radius:
+        var(--radius-md);
+
+    background:
+        var(--colour-surface);
+
+    color:
+        var(--colour-text-primary);
+
+    resize: vertical;
+}
+
+
+
+/* ===================== */
+/* KPI                   */
+/* ===================== */
+
+.viewer .viewer-body .viewer-panel#viewer-panel .viewer-panel-content .panel-section#panel-reports .kpi-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap:
+        0.5rem;
+}
+
+
+.viewer .viewer-body .viewer-panel#viewer-panel .viewer-panel-content .panel-section#panel-reports .kpi-grid .kpi-card {
+    padding:
+        0.75rem;
+
+    border:
+        1px solid
+        var(--colour-border-subtle);
+
+    border-radius:
+        var(--radius-md);
+
+    background:
+        var(--colour-surface-secondary);
+}
+
+
+.viewer .viewer-body .viewer-panel#viewer-panel .viewer-panel-content .panel-section#panel-reports .kpi-grid .kpi-card span {
+    display: block;
+
+    color:
+        var(--colour-text-tertiary);
+
+    font-size:
+        0.625rem;
+}
+
+
+.viewer .viewer-body .viewer-panel#viewer-panel .viewer-panel-content .panel-section#panel-reports .kpi-grid .kpi-card strong {
+    display: block;
+
+    margin-top:
+        0.25rem;
+
+    font-size:
+        1.125rem;
+}
+
+
+
+/* ===================== */
+/* MAP                   */
+/* ===================== */
+
+.viewer .viewer-body .map-container {
+    position: relative;
+
+    flex: 1;
+
+    min-width: 0;
+    min-height: 0;
+}
+
+
+.viewer .viewer-body .map-container .map {
+    position: absolute;
+
+    inset: 0;
+}
+
+
+.viewer .viewer-body .map-container .map-controls {
+    position: absolute;
+
+    top: 1rem;
+    right: 1rem;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 0.4rem;
+
+    z-index: 10;
+}
+
+
+.viewer .viewer-body .map-container .map-controls .map-control {
+    width: 2.5rem;
+    height: 2.5rem;
+
+    border:
+        1px solid
+        var(--colour-border);
+
+    border-radius:
+        var(--radius-md);
+
+    background:
+        var(--colour-surface);
+
+    color:
+        var(--colour-text-primary);
+
+    box-shadow:
+        var(--shadow-sm);
+}
+
+
+
+/* ===================== */
+/* FEATURE POPUP         */
+/* ===================== */
+
+.viewer .viewer-body .map-container .feature-popup {
+    position: absolute;
+
+    right: 1rem;
+    bottom: 1rem;
+
+    width: 18rem;
+
+    padding:
+        1rem;
+
+    border:
+        1px solid
+        var(--colour-border);
+
+    border-radius:
+        var(--radius-lg);
+
+    background:
+        var(--colour-surface);
+
+    box-shadow:
+        var(--shadow-md);
+
+    z-index: 20;
+}
+
+
+.viewer .viewer-body .map-container .feature-popup#feature-popup .feature-popup-header {
+    display: flex;
+    justify-content: space-between;
+
+    gap: 1rem;
+}
+
+
+.viewer .viewer-body .map-container .feature-popup#feature-popup .feature-popup-header span {
+    display: block;
+
+    color:
+        var(--colour-accent);
+
+    font-size:
+        0.5625rem;
+
+    font-weight: 700;
+
+    letter-spacing:
+        0.08rem;
+}
+
+
+.viewer .viewer-body .map-container .feature-popup#feature-popup .feature-popup-header strong {
+    display: block;
+
+    margin-top:
+        0.2rem;
+}
+
+
+.viewer .viewer-body .map-container .feature-popup#feature-popup .feature-popup-body {
+    margin-top:
+        1rem;
+}
+
+
+.viewer .viewer-body .map-container .feature-popup#feature-popup .feature-popup-body .popup-field {
+    display: flex;
+    justify-content: space-between;
+
+    gap: 1rem;
+
+    padding:
+        0.5rem
+        0;
+
+    border-bottom:
+        1px solid
+        var(--colour-border-subtle);
+}
+
+
+.viewer .viewer-body .map-container .feature-popup#feature-popup .feature-popup-body .popup-field span {
+    color:
+        var(--colour-text-tertiary);
+}
+
+
+.viewer .viewer-body .map-container .feature-popup#feature-popup .popup-detail {
+    width: 100%;
+
+    min-height:
+        2.25rem;
+
+    margin-top:
+        0.75rem;
+
+    border: 0;
+
+    border-radius:
+        var(--radius-md);
+
+    background:
+        var(--colour-primary);
+
+    color:
+        var(--colour-text-inverse);
+
+    font-weight: 600;
+}
+
+
+
+/* ===================== */
+/* RECORD MODAL          */
+/* ===================== */
+
+.record-modal {
+    width:
+        min(30rem, calc(100% - 2rem));
+
+    padding: 0;
+
+    border:
+        1px solid
+        var(--colour-border);
+
+    border-radius:
+        var(--radius-lg);
+
+    background:
+        var(--colour-surface);
+
+    color:
+        var(--colour-text-primary);
+
+    box-shadow:
+        var(--shadow-md);
+}
+
+
+.record-modal::backdrop {
+    background:
+        rgb(13 24 34 / 45%);
+}
+
+
+.record-modal#record-modal #record-form .record-modal-header,
+.record-modal#record-modal #record-form .record-modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding:
+        1rem;
+}
+
+
+.record-modal#record-modal #record-form .record-modal-header {
+    border-bottom:
+        1px solid
+        var(--colour-border-subtle);
+}
+
+
+.record-modal#record-modal #record-form .record-modal-header span {
+    color:
+        var(--colour-accent);
+
+    font-size:
+        0.5625rem;
+
+    font-weight: 700;
+
+    letter-spacing:
+        0.1rem;
+}
+
+
+.record-modal#record-modal #record-form .record-modal-header h2 {
+    margin:
+        0.25rem
+        0
+        0;
+
+    font-size:
+        1rem;
+}
+
+
+.record-modal#record-modal #record-form .record-modal-body {
+    padding:
+        1rem;
+}
+
+
+.record-modal#record-modal #record-form .record-modal-footer {
+    justify-content:
+        flex-end;
+
+    gap:
+        0.5rem;
+
+    border-top:
+        1px solid
+        var(--colour-border-subtle);
+}
+
+
+.record-modal#record-modal #record-form .record-modal-footer .modal-primary,
+.record-modal#record-modal #record-form .record-modal-footer .modal-secondary {
+    min-height:
+        2.25rem;
+
+    padding:
+        0
+        1rem;
+
+    border-radius:
+        var(--radius-md);
+
+    font-weight:
+        600;
+}
+
+
+.record-modal#record-modal #record-form .record-modal-footer .modal-primary {
+    border: 0;
+
+    background:
+        var(--colour-primary);
+
+    color:
+        var(--colour-text-inverse);
+}
+
+
+.record-modal#record-modal #record-form .record-modal-footer .modal-secondary {
+    border:
+        1px solid
+        var(--colour-border);
+
+    background:
+        var(--colour-surface);
+
+    color:
+        var(--colour-text-primary);
+}
+
+
+
+/* ===================== */
+/* RESPONSIVE            */
+/* ===================== */
+
+@media (max-width: 800px) {
+
+    .viewer .viewer-header .viewer-header-left .viewer-module {
+        display: none;
+    }
+
+    .viewer .viewer-body .viewer-panel {
+        position: absolute;
+
+        left:
+            var(--toolbar-width);
+
+        top: 0;
+        bottom: 0;
+
+        box-shadow:
+            var(--shadow-md);
+    }
+
+}
+
+
+@media (max-width: 520px) {
+
+    .viewer .viewer-header .viewer-header-left .viewer-brand .viewer-logo {
+        width: 7.5rem;
+    }
+
+    .viewer .viewer-header .viewer-header-actions .theme-select {
+        display: none;
+    }
+
+    .viewer .viewer-body .viewer-panel {
+        width:
+            calc(
+                100% - var(--toolbar-width)
+            );
+    }
+
+    .viewer .viewer-body .viewer-panel#viewer-panel .viewer-panel-header,
+    .viewer .viewer-body .viewer-panel#viewer-panel .viewer-panel-content {
+        min-width: 0;
+        width: 100%;
+    }
+
+}
