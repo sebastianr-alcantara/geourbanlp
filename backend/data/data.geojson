@@ -1,12 +1,12 @@
 {
   "type": "FeatureCollection",
-  "name": "habilitacion_urbana_ejemplos",
+  "name": "habilitacion_urbana",
   "features": [
     {
       "type": "Feature",
       "properties": {
-        "codigo": "HU-DEMO-001",
-        "nombre": "Lote demostrativo - Lurin",
+        "codigo": "HU-001",
+        "nombre": "Lote - Lurin",
         "area": 1200000,
         "area_unidad": "m2",
         "estado": "En evaluacion",
@@ -16,8 +16,7 @@
         "departamento": "Lima",
         "provincia": "Lima",
         "distrito": "Lurin",
-        "fuente": "Datos ficticios de demostracion",
-        "es_ejemplo": true
+        "fuente": "Archivo GeoJSON local"
       },
       "geometry": {
         "type": "Polygon",
@@ -33,8 +32,8 @@
     {
       "type": "Feature",
       "properties": {
-        "codigo": "HU-DEMO-002",
-        "nombre": "Lote demostrativo - Pachacamac",
+        "codigo": "HU-002",
+        "nombre": "Lote - Pachacamac",
         "area": 780000,
         "area_unidad": "m2",
         "estado": "En planificacion",
@@ -44,8 +43,7 @@
         "departamento": "Lima",
         "provincia": "Lima",
         "distrito": "Pachacamac",
-        "fuente": "Datos ficticios de demostracion",
-        "es_ejemplo": true
+        "fuente": "Archivo GeoJSON local"
       },
       "geometry": {
         "type": "Polygon",
@@ -61,8 +59,8 @@
     {
       "type": "Feature",
       "properties": {
-        "codigo": "HU-DEMO-003",
-        "nombre": "Lote demostrativo - Chilca",
+        "codigo": "HU-003",
+        "nombre": "Lote - Chilca",
         "area": 960000,
         "area_unidad": "m2",
         "estado": "En revision",
@@ -72,8 +70,7 @@
         "departamento": "Lima",
         "provincia": "Canete",
         "distrito": "Chilca",
-        "fuente": "Datos ficticios de demostracion",
-        "es_ejemplo": true
+        "fuente": "Archivo GeoJSON local"
       },
       "geometry": {
         "type": "Polygon",
@@ -89,8 +86,8 @@
     {
       "type": "Feature",
       "properties": {
-        "codigo": "HU-DEMO-004",
-        "nombre": "Lote demostrativo - Cieneguilla",
+        "codigo": "HU-004",
+        "nombre": "Lote - Cieneguilla",
         "area": 640000,
         "area_unidad": "m2",
         "estado": "Propuesta",
@@ -100,8 +97,7 @@
         "departamento": "Lima",
         "provincia": "Lima",
         "distrito": "Cieneguilla",
-        "fuente": "Datos ficticios de demostracion",
-        "es_ejemplo": true
+        "fuente": "Archivo GeoJSON local"
       },
       "geometry": {
         "type": "Polygon",

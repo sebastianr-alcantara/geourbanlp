@@ -94,45 +94,13 @@ const locationLayer = new ol.layer.Vector({
     })
 });
 
-const userLocationSource = new ol.source.Vector();
-const userLocationLayer = new ol.layer.Vector({
-    source: userLocationSource,
-    style: feature => {
-        if (feature.getGeometry().getType() === "Circle") {
-            return new ol.style.Style({
-                fill: new ol.style.Fill({
-                    color: "rgba(63,116,108,0.16)"
-                }),
-                stroke: new ol.style.Stroke({
-                    color: "rgba(63,116,108,0.55)",
-                    width: 1
-                })
-            });
-        }
-
-        return new ol.style.Style({
-            image: new ol.style.Circle({
-                radius: 7,
-                fill: new ol.style.Fill({
-                    color: "#3F746C"
-                }),
-                stroke: new ol.style.Stroke({
-                    color: "#FFFFFF",
-                    width: 2
-                })
-            })
-        });
-    }
-});
-
 const map = new ol.Map({
     target: "map",
     layers: [
         baseLayer,
         measurementLayer,
         drawingLayer,
-        locationLayer,
-        userLocationLayer
+        locationLayer
     ],
     view: new ol.View({
         center: ol.extent.getCenter(peruExtent),
@@ -148,7 +116,6 @@ const map = new ol.Map({
 drawingLayer.setZIndex(1000);
 measurementLayer.setZIndex(1001);
 locationLayer.setZIndex(1002);
-userLocationLayer.setZIndex(1003);
 
 map.getView().fit(peruExtent, {
     padding: [40, 40, 40, 40],
@@ -163,6 +130,7 @@ const basemapButtons = document.querySelectorAll("[data-basemap]");
 const managedServiceLayersContainer = document.getElementById("managed-service-layers");
 const managedFileLayersContainer = document.getElementById("managed-file-layers");
 const serviceLayerControls = document.getElementById("service-layer-controls");
+const fileLayerControls = document.getElementById("file-layer-controls");
 const legendContent = document.getElementById("legend-content");
 const mapLegend = document.getElementById("map-legend");
 const mapLegendToggleButton = document.getElementById("btn-toggle-map-legend");
@@ -1073,98 +1041,16 @@ document.getElementById("btn-pick-coordinate").addEventListener("click", () => {
 });
 
 
-let geolocationWatchId = null;
-let hasInitialLocationFix = false;
-
-const userLocationButton = document.getElementById("btn-my-location");
-const locationPickStatus = document.getElementById("location-pick-status");
-
-function stopLocationTracking() {
-    if (geolocationWatchId !== null) {
-        navigator.geolocation.clearWatch(geolocationWatchId);
-        geolocationWatchId = null;
+const userLocationLayer = window.GeoLocation.createTracker({
+    map,
+    button: document.getElementById("btn-my-location"),
+    status: document.getElementById("location-pick-status"),
+    beforeStart: () => {
+        if (activeBasemap === "3d") {
+            showOsmBasemap();
+        }
     }
-
-    hasInitialLocationFix = false;
-    userLocationButton.setAttribute("aria-pressed", "false");
-    userLocationButton.textContent = "Seguir mi ubicación";
-}
-
-function updateUserLocation(position) {
-    const longitude = position.coords.longitude;
-    const latitude = position.coords.latitude;
-    const coordinate = ol.proj.fromLonLat([longitude, latitude]);
-    const accuracy = position.coords.accuracy / Math.cos(latitude * Math.PI / 180);
-
-    userLocationSource.clear();
-    userLocationSource.addFeatures([
-        new ol.Feature({
-            geometry: new ol.geom.Circle(coordinate, accuracy)
-        }),
-        new ol.Feature({
-            geometry: new ol.geom.Point(coordinate)
-        })
-    ]);
-
-    const view = map.getView();
-    if (!hasInitialLocationFix) {
-        view.animate({
-            center: coordinate,
-            zoom: 16,
-            duration: 600
-        });
-        hasInitialLocationFix = true;
-    } else {
-        view.setCenter(coordinate);
-    }
-
-    locationPickStatus.textContent =
-        `Siguiendo ubicación en tiempo real · ${latitude.toFixed(6)}, ${longitude.toFixed(6)} (±${Math.round(position.coords.accuracy)} m).`;
-}
-
-function locateUser() {
-    if (!navigator.geolocation) {
-        locationPickStatus.textContent =
-            "Este navegador no permite obtener la ubicación actual.";
-        return;
-    }
-
-    if (geolocationWatchId !== null) {
-        stopLocationTracking();
-        locationPickStatus.textContent = "Seguimiento de ubicación detenido.";
-        return;
-    }
-
-    if (activeBasemap === "3d") {
-        showOsmBasemap();
-    }
-
-    userLocationButton.setAttribute("aria-pressed", "true");
-    userLocationButton.textContent = "Dejar de seguir ubicación";
-    locationPickStatus.textContent =
-        "Solicitando permiso para seguir la ubicación en tiempo real…";
-
-    try {
-        geolocationWatchId = navigator.geolocation.watchPosition(
-            updateUserLocation,
-            error => {
-                stopLocationTracking();
-                locationPickStatus.textContent =
-                    `No se pudo seguir la ubicación: ${error.message}`;
-            },
-            {
-                enableHighAccuracy: true,
-                maximumAge: 1000,
-                timeout: 15000
-            }
-        );
-    } catch (error) {
-        stopLocationTracking();
-        locationPickStatus.textContent =
-            `No se pudo iniciar el seguimiento de ubicación: ${error.message}`;
-    }
-}
-
+});
 
 document
     .getElementById(
@@ -1175,15 +1061,6 @@ document
         goToCoordinate
     );
 
-
-document
-    .getElementById(
-        "btn-my-location"
-    )
-    .addEventListener(
-        "click",
-        locateUser
-    );
 
 const placeSearchForm = document.getElementById("place-search-form");
 const placeSearchMode = document.getElementById("place-search-mode");
@@ -1219,7 +1096,7 @@ function updatePlaceSearchMode() {
         },
         terrain: {
             label: "Código, nombre o distrito",
-            placeholder: "Ej. HU-DEMO-001 o Lurín",
+            placeholder: "Código o nombre del terreno",
             button: "Buscar terreno",
             status: "Busca en los terrenos de las capas vectoriales cargadas."
         }
@@ -1610,14 +1487,7 @@ function setServiceStatus(message) {
     serviceStatus.textContent = message;
 }
 
-function escapeXml(value) {
-    return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&apos;");
-}
+const {escapeXml} = window.GeoMarkup;
 
 function createCategoryStyle(color) {
     return new ol.style.Style({
@@ -1756,7 +1626,7 @@ function updateLegend() {
         if (fileLayers.length > 0) {
             informationGroup.append(
                 createLegendSubgroup(
-                    "Capas de ejemplo e importadas (GeoJSON/KML/KMZ)",
+                    "Capas GeoJSON/KML/KMZ",
                     fileLayers
                 )
             );
@@ -2097,7 +1967,7 @@ function renderManagedLayers() {
         externalLayers.filter(entry =>
             entry.type === "GeoJSON" || entry.type === "KML" || entry.type === "KMZ"
         ),
-        "Los datos GeoJSON de ejemplo y los archivos KML/KMZ aparecerán aquí."
+        "Las capas GeoJSON, KML y KMZ aparecerán aquí."
     );
 }
 
@@ -2216,17 +2086,29 @@ function applyWmsCategories(entry) {
 }
 
 function renderSymbologyControls() {
-    serviceLayerControls.replaceChildren();
+    renderSymbologyGroup(
+        serviceLayerControls,
+        externalLayers.filter(entry => entry.type === "WFS" || entry.type === "WMS"),
+        "Las herramientas de simbología aparecerán al agregar un servicio WFS o WMS."
+    );
+    renderSymbologyGroup(
+        fileLayerControls,
+        externalLayers.filter(entry => entry.group === "files")
+    );
+}
 
-    if (externalLayers.length === 0) {
+function renderSymbologyGroup(container, entries, emptyMessage) {
+    container.replaceChildren();
+
+    if (entries.length === 0 && emptyMessage) {
         const message = document.createElement("p");
         message.className = "empty-layer-message";
-        message.textContent = "Las herramientas de simbología aparecerán al agregar una capa.";
-        serviceLayerControls.append(message);
+        message.textContent = emptyMessage;
+        container.append(message);
         return;
     }
 
-    externalLayers.forEach(entry => {
+    entries.forEach(entry => {
         const card = document.createElement("div");
         card.className = "service-symbology-card";
         const title = document.createElement("strong");
@@ -2337,7 +2219,7 @@ function renderSymbologyControls() {
         }
 
         card.append(controls);
-        serviceLayerControls.append(card);
+        container.append(card);
     });
 }
 
@@ -2376,7 +2258,7 @@ function registerExternalLayer({
 
 async function loadExampleGeoJson() {
     if (window.location.protocol === "file:") {
-        setServiceStatus("Sirve el proyecto por HTTP para cargar los datos GeoJSON de ejemplo.");
+        setServiceStatus("Sirve el proyecto por HTTP para cargar los datos GeoJSON.");
         return;
     }
 
@@ -2404,20 +2286,33 @@ async function loadExampleGeoJson() {
             source: new ol.source.Vector({features})
         });
         registerExternalLayer({
-            name: "Datos demostrativos de habilitación urbana",
+            name: "Datos de habilitación urbana",
             type: "GeoJSON",
             layer,
             features,
             group: "files"
         });
-        setServiceStatus(`Se cargaron ${features.length} entidades GeoJSON de ejemplo.`);
+        setServiceStatus(`Se cargaron ${features.length} entidades GeoJSON.`);
     } catch (error) {
-        setServiceStatus(`No se pudieron cargar los datos GeoJSON de ejemplo: ${error.message}`);
+        setServiceStatus(`No se pudieron cargar los datos GeoJSON: ${error.message}`);
     }
 }
 
+function serviceEndpoint(serviceUrl, overriddenParameters) {
+    const url = new URL(serviceUrl);
+    for (const key of [...url.searchParams.keys()]) {
+        if (overriddenParameters.includes(key.toLowerCase())) {
+            url.searchParams.delete(key);
+        }
+    }
+    return url;
+}
+
 async function loadWfsLayer(serviceUrl, layerName) {
-    const requestUrl = new URL(serviceUrl);
+    const requestUrl = serviceEndpoint(serviceUrl, [
+        "service", "version", "request", "typename", "typenames",
+        "outputformat", "srsname", "count", "maxfeatures"
+    ]);
     requestUrl.searchParams.set("service", "WFS");
     requestUrl.searchParams.set("version", "2.0.0");
     requestUrl.searchParams.set("request", "GetFeature");
@@ -2465,21 +2360,35 @@ async function loadWfsLayer(serviceUrl, layerName) {
 }
 
 function addWmsLayer(serviceUrl, layerName) {
+    const originalUrl = new URL(serviceUrl);
+    const stylesKey = [...originalUrl.searchParams.keys()].find(key =>
+        key.toLowerCase() === "styles"
+    );
+    const endpoint = serviceEndpoint(serviceUrl, [
+        "service", "request", "version", "layers", "styles", "format",
+        "transparent", "width", "height", "bbox", "srs", "crs"
+    ]);
     const source = new ol.source.TileWMS({
-        url: serviceUrl,
+        url: endpoint.href,
         params: {
             VERSION: "1.1.1",
             LAYERS: layerName,
+            STYLES: stylesKey ? originalUrl.searchParams.get(stylesKey) : "",
             FORMAT: "image/png",
             TRANSPARENT: true
         },
         serverType: "geoserver"
     });
     const layer = new ol.layer.Tile({source});
+    source.on("tileloaderror", () => {
+        if (externalLayers.some(entry => entry.layer === layer)) {
+            setServiceStatus(`No se pudo cargar la capa WMS "${layerName}". Revisa el servicio y el nombre de la capa.`);
+        }
+    });
     registerExternalLayer({
         name: layerName,
         layerName,
-        serviceUrl,
+        serviceUrl: endpoint.href,
         type: "WMS",
         layer,
         group: "services"
@@ -2584,24 +2493,22 @@ async function importSpatialFile(file) {
     setServiceStatus(`Se importó "${file.name}" (${features.length} entidades).`);
 }
 
-document.getElementById("btn-import-file").addEventListener("click", async () => {
-    const fileInput = document.getElementById("spatial-file");
+document.getElementById("spatial-file").addEventListener("change", async event => {
+    const fileInput = event.currentTarget;
     const file = fileInput.files[0];
     if (!file) {
-        setServiceStatus("Selecciona un archivo KML o KMZ.");
         return;
     }
 
-    const button = document.getElementById("btn-import-file");
-    button.disabled = true;
+    fileInput.disabled = true;
     setServiceStatus(`Importando "${file.name}"…`);
     try {
         await importSpatialFile(file);
-        fileInput.value = "";
     } catch (error) {
         setServiceStatus(`No se pudo importar el archivo: ${error.message}`);
     } finally {
-        button.disabled = false;
+        fileInput.value = "";
+        fileInput.disabled = false;
     }
 });
 

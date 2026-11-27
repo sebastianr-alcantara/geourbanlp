@@ -65,7 +65,7 @@
                 </nav>
                 <div class="sidebar-note">
                     <span class="material-icons" aria-hidden="true">info</span>
-                    <p>Esta pantalla administra datos de demostración locales.</p>
+                    <p>Los cambios se guardan en este navegador.</p>
                 </div>
             </aside>
 
@@ -80,19 +80,19 @@
 
                 <div class="prototype-warning" role="note">
                     <span class="material-icons" aria-hidden="true">warning</span>
-                    <p><strong>Prototipo local:</strong> los cambios se guardan en este navegador. No hay autenticación ni control real de acceso; no uses datos personales o permisos reales aquí.</p>
+                    <p><strong>Almacenamiento local:</strong> los cambios se guardan en este navegador. No hay autenticación ni control real de acceso; no uses datos personales o permisos reales aquí.</p>
                 </div>
                 <p id="admin-status" class="admin-status" role="status" aria-live="polite"></p>
 
                 <section id="view-overview" class="admin-view">
                     <div class="section-heading">
-                        <div><h2>Resumen</h2><p>Estado de la configuración de ejemplo.</p></div>
+                        <div><h2>Resumen</h2><p>Estado de la configuración.</p></div>
                     </div>
                     <div class="metric-grid">
-                        <article class="metric-card"><span>Usuarios</span><strong id="metric-users">0</strong><small>Perfiles de demostración</small></article>
+                        <article class="metric-card"><span>Usuarios</span><strong id="metric-users">0</strong><small>Perfiles registrados</small></article>
                         <article class="metric-card"><span>Áreas de trabajo</span><strong id="metric-areas">0</strong><small>Con alcance por módulo</small></article>
                         <article class="metric-card"><span>Plazas</span><strong id="metric-plazas">0</strong><small>Ubicaciones asignables</small></article>
-                        <article class="metric-card"><span>Registros este mes</span><strong id="metric-activity">0</strong><small>Conteo de actividad de ejemplo</small></article>
+                        <article class="metric-card"><span>Registros este mes</span><strong id="metric-activity">0</strong><small>Conteo de actividad</small></article>
                     </div>
                     <div class="content-card role-guide">
                         <div class="section-heading"><div><h3>Perfiles disponibles</h3><p>La asignación se configura por usuario y módulo.</p></div></div>
@@ -110,10 +110,10 @@
                         <div><h2>Usuarios y roles</h2><p>Asigna área, frentes autorizados y un perfil distinto para cada módulo.</p></div>
                     </div>
                     <div class="content-card form-card">
-                        <h3>Agregar usuario de ejemplo</h3>
+                        <h3>Agregar usuario</h3>
                         <form id="user-form" class="inline-form">
                             <label>Nombre<input name="name" type="text" required maxlength="80" placeholder="Nombre para mostrar"></label>
-                            <label>Correo de ejemplo<input name="email" type="email" required maxlength="120" placeholder="usuario@example.local"></label>
+                            <label>Correo<input name="email" type="email" required maxlength="120" placeholder="usuario@example.local"></label>
                             <label>Área<select name="areaId" id="new-user-area" required></select></label>
                             <button class="button button-primary" type="submit"><span class="material-icons" aria-hidden="true">person_add</span>Agregar usuario</button>
                         </form>
@@ -159,7 +159,7 @@
 
                 <section id="view-areas" class="admin-view" hidden>
                     <div class="section-heading">
-                        <div><h2>Áreas y plazas</h2><p>El acceso efectivo de ejemplo combina el rol del usuario con los módulos habilitados para su área.</p></div>
+                        <div><h2>Áreas y plazas</h2><p>La configuración combina el rol del usuario con los módulos habilitados para su área.</p></div>
                     </div>
                     <div class="content-card form-card">
                         <h3>Crear área de trabajo</h3>
@@ -193,7 +193,7 @@
                         <div><h2>Actividad de creación</h2><p>Consulta cuántos registros creó cada persona por área y mes.</p></div>
                         <button id="btn-export-activity" class="button button-secondary" type="button"><span class="material-icons" aria-hidden="true">download</span>Exportar CSV</button>
                     </div>
-                    <div class="prototype-note"><span class="material-icons" aria-hidden="true">info</span>Los conteos mostrados son datos de ejemplo. En producción deben provenir de eventos auditables del backend.</div>
+                    <div class="prototype-note"><span class="material-icons" aria-hidden="true">info</span>Los conteos mostrados no provienen de eventos auditables del backend.</div>
                     <div class="content-card activity-filters">
                         <label>Mes<input id="activity-month" type="month"></label>
                         <label>Área<select id="activity-area"></select></label>
@@ -235,7 +235,8 @@
     </div>
     <script src="../../shared/js/theme.js"></script>
     <script src="../../shared/js/messages.js"></script>
-    <script src="js/main.js"></script>
+    <script src="../../shared/js/markup.js"></script>
+    <script src="m-administracion.js"></script>
     <script src="../../shared/js/demo-profile.js"></script>
 </body>
 </html>

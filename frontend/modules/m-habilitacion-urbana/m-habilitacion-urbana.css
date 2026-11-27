@@ -596,6 +596,7 @@ button {
 
 .viewer .viewer-body .viewer-panel#viewer-panel .viewer-panel-content .managed-layer-list,
 .viewer .viewer-body .viewer-panel#viewer-panel .viewer-panel-content .service-layer-controls,
+.viewer .viewer-body .viewer-panel#viewer-panel .viewer-panel-content .file-layer-controls,
 .viewer .viewer-body .viewer-panel#viewer-panel .viewer-panel-content .legend-content {
     display: flex;
     flex-direction: column;
@@ -971,14 +972,8 @@ button {
 }
 
 
-.viewer .viewer-body .viewer-panel#viewer-panel .viewer-panel-content .panel-section#panel-services .file-import-group .panel-secondary {
-    min-height: 2.5rem;
-    border-radius: var(--radius-md);
-    font-weight: 600;
-}
-
-
-.viewer .viewer-body .viewer-panel#viewer-panel .viewer-panel-content .panel-section#panel-services .service-layer-controls {
+.viewer .viewer-body .viewer-panel#viewer-panel .viewer-panel-content .service-layer-controls,
+.viewer .viewer-body .viewer-panel#viewer-panel .viewer-panel-content .file-layer-controls:not(:empty) {
     margin-top: 1rem;
 }
 

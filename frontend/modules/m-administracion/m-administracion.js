@@ -15,7 +15,7 @@ const moduleRoleFields = {
 const defaultLayersByGroup = {
     "sub-inmobiliario": ["Terrenos de interés", "Prospección", "Terrenos comprados"],
     "sub-arquitectonico": ["Zonificación", "Sistema vial", "Afectaciones"],
-    "sub-importadas": ["Datos demostrativos de habilitación urbana"],
+    "sub-importadas": ["Datos de habilitación urbana"],
     "sub-openstreetmap": ["OpenStreetMap"],
     "sub-google-cesium": ["Google Maps", "Google Híbrido", "Mapa 3D (Cesium)"],
     "sub-limites-departamentos": ["Límites departamentales"],
@@ -83,6 +83,16 @@ function normalizeStructureGroup(group, isRoot = false) {
         ))
     )) {
         throw new Error(`El grupo "${group.name}" contiene una capa inválida.`);
+    }
+
+    if (group.id === "sub-importadas") {
+        group.layers.forEach(layer => {
+            if (layer.id === "sub-importadas-layer-1" &&
+                layer.name === "Datos demostrativos de habilitación urbana" &&
+                layer.type === undefined) {
+                layer.name = "Datos de habilitación urbana";
+            }
+        });
     }
 
     group.subgroups.forEach(subgroup => normalizeStructureGroup(subgroup));
@@ -570,7 +580,7 @@ function loadState(seedData) {
         normalizeLayerStructures(parsed.layerStructures);
         return parsed;
     } catch (error) {
-        setStatus(`No se pudo leer la configuración guardada: ${error.message}. Se muestran datos de ejemplo.`);
+        setStatus(`No se pudo leer la configuración guardada: ${error.message}. Se muestran los datos iniciales.`);
         return createSeedState(seedData);
     }
 }
@@ -594,14 +604,7 @@ function saveState(message = "Cambios guardados en este navegador.") {
     }
 }
 
-function escapeHtml(value) {
-    return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#39;");
-}
+const {escapeHtml} = window.GeoMarkup;
 
 function createId(prefix) {
     return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
@@ -859,7 +862,7 @@ function renderUsers() {
     document.getElementById("user-result-count").textContent =
         `${users.length} de ${state.users.length} usuarios`;
     userTableEmpty.textContent = state.users.length === 0
-        ? "Aún no hay usuarios. Agrega un perfil de ejemplo para comenzar."
+        ? "Aún no hay usuarios. Agrega un perfil para comenzar."
         : "No hay usuarios que coincidan con la búsqueda.";
     userTableEmpty.hidden = users.length > 0;
 }
@@ -1166,7 +1169,7 @@ document.getElementById("user-form").addEventListener("submit", event => {
     const email = String(formData.get("email")).trim();
     const areaId = String(formData.get("areaId"));
     if (!name || !email || !state.areas.some(area => area.id === areaId)) {
-        setStatus("Ingresa nombre, correo de ejemplo y área válida.");
+        setStatus("Ingresa nombre, correo y área válida.");
         return;
     }
 

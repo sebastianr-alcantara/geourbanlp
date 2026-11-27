@@ -129,10 +129,11 @@
                                 </div>
                             </details>
                             <details class="layer-subgroup">
-                                <summary class="layer-subgroup-title">Capas de ejemplo e importadas (GeoJSON/KML/KMZ)</summary>
+                                <summary class="layer-subgroup-title">Capas GeoJSON/KML/KMZ</summary>
                                 <div id="managed-file-layers" class="managed-layer-list">
-                                    <p class="empty-layer-message">Los datos GeoJSON de ejemplo y los archivos KML/KMZ aparecerán aquí.</p>
+                                    <p class="empty-layer-message">Las capas GeoJSON, KML y KMZ aparecerán aquí.</p>
                                 </div>
+                                <div id="file-layer-controls" class="file-layer-controls"></div>
                             </details>
                         </details>
                         <details class="layer-group layer-group-parent">
@@ -159,7 +160,7 @@
                     </section>
 
                     <section id="panel-services" class="panel-section">
-                        <div class="panel-section-description">Conecta un servicio WFS o WMS publicado con acceso desde el navegador. La importación KMZ/KML se procesa localmente.</div>
+                        <div class="panel-section-description">Conecta un servicio WFS 2.0 con salida GeoJSON o WMS 1.1.1. Los archivos KML/KMZ se importan al seleccionarlos y se procesan localmente.</div>
                         <div class="form-group">
                             <label for="service-type">Tipo de servicio</label>
                             <select id="service-type">
@@ -179,11 +180,10 @@
                         <div class="file-import-group">
                             <label for="spatial-file">Archivo espacial (KML o KMZ)</label>
                             <input id="spatial-file" type="file" accept=".kml,.kmz,application/vnd.google-earth.kml+xml,application/vnd.google-earth.kmz">
-                            <button id="btn-import-file" class="panel-secondary" type="button">Importar archivo</button>
                         </div>
                         <p id="service-status" class="service-status" role="status" aria-live="polite">Los servicios deben permitir solicitudes CORS desde este sitio.</p>
                         <div id="service-layer-controls" class="service-layer-controls">
-                            <p class="empty-layer-message">Las herramientas de simbología aparecerán al agregar una capa.</p>
+                            <p class="empty-layer-message">Las herramientas de simbología aparecerán al agregar un servicio WFS o WMS.</p>
                         </div>
                     </section>
 
@@ -378,7 +378,9 @@
     <script src="https://cdn.jsdelivr.net/npm/ol@10.6.1/dist/ol.js"></script>
     <script src="../../shared/js/theme.js"></script>
     <script src="../../shared/js/messages.js"></script>
-    <script src="js/main.js"></script>
+    <script src="../../shared/js/location.js"></script>
+    <script src="../../shared/js/markup.js"></script>
+    <script src="m-habilitacion-urbana.js"></script>
     <script src="../../shared/js/demo-profile.js"></script>
 </body>
 </html>
