@@ -1,0 +1,142 @@
+{
+  "plaza_hu": [
+    {
+      "id": 1,
+      "codigo": "plaza-lima",
+      "nombre": "Lima",
+      "estado_sistema": "Habilitado"
+    },
+    {
+      "id": 2,
+      "codigo": "plaza-arequipa",
+      "nombre": "Arequipa",
+      "estado_sistema": "Habilitado"
+    },
+    {
+      "id": 3,
+      "codigo": "plaza-trujillo",
+      "nombre": "Trujillo",
+      "estado_sistema": "Habilitado"
+    }
+  ],
+  "frente_hu": [
+    {
+      "id": 1,
+      "codigo": "frente-lima-norte",
+      "id_plaza_hu": 1,
+      "nombre": "Lima Norte",
+      "estado_sistema": "Habilitado"
+    },
+    {
+      "id": 2,
+      "codigo": "frente-lima-sur",
+      "id_plaza_hu": 1,
+      "nombre": "Lima Sur",
+      "estado_sistema": "Habilitado"
+    },
+    {
+      "id": 3,
+      "codigo": "frente-arequipa-centro",
+      "id_plaza_hu": 2,
+      "nombre": "Arequipa Centro",
+      "estado_sistema": "Habilitado"
+    },
+    {
+      "id": 4,
+      "codigo": "frente-trujillo-centro",
+      "id_plaza_hu": 3,
+      "nombre": "Trujillo Centro",
+      "estado_sistema": "Habilitado"
+    }
+  ],
+  "relacion_frentehu_usuario": [
+    {
+      "id": 1,
+      "codigo": "relacion-001",
+      "id_frente_hu": 1,
+      "id_usuario": 1,
+      "estado_sistema": "Habilitado"
+    },
+    {
+      "id": 2,
+      "codigo": "relacion-002",
+      "id_frente_hu": 2,
+      "id_usuario": 1,
+      "estado_sistema": "Habilitado"
+    },
+    {
+      "id": 3,
+      "codigo": "relacion-003",
+      "id_frente_hu": 2,
+      "id_usuario": 2,
+      "estado_sistema": "Habilitado"
+    },
+    {
+      "id": 4,
+      "codigo": "relacion-004",
+      "id_frente_hu": 3,
+      "id_usuario": 2,
+      "estado_sistema": "Habilitado"
+    },
+    {
+      "id": 5,
+      "codigo": "relacion-005",
+      "id_frente_hu": 1,
+      "id_usuario": 3,
+      "estado_sistema": "Habilitado"
+    },
+    {
+      "id": 6,
+      "codigo": "relacion-006",
+      "id_frente_hu": 3,
+      "id_usuario": 4,
+      "estado_sistema": "Habilitado"
+    }
+  ],
+  "usuarios": [
+    {
+      "id": 1,
+      "codigo": "user-developer",
+      "nombre": "SEBASTIÁN ROMALDO ALCÁNTARA LUYO",
+      "correo": "salcantara",
+      "areaId": "area-planificacion",
+      "rol_habilitacion_urbana": "Desarrollador",
+      "rol_departamentos": "Desarrollador",
+      "rol_administracion": "Desarrollador",
+      "estado_sistema": "Habilitado"
+    },
+    {
+      "id": 2,
+      "codigo": "user-manager",
+      "nombre": "CARMEN VICTORIA GUADALUPE FERNANDEZ",
+      "correo": "cguadalupe",
+      "areaId": "area-planificacion",
+      "rol_habilitacion_urbana": "Administrador",
+      "rol_departamentos": "Administrador",
+      "rol_administracion": "Administrador",
+      "estado_sistema": "Habilitado"
+    },
+    {
+      "id": 3,
+      "codigo": "user-creator",
+      "nombre": "Luis Arturo Luna",
+      "correo": "aluna",
+      "areaId": "area-reserva-territorial",
+      "rol_habilitacion_urbana": "Creador",
+      "rol_departamentos": "Visualizador",
+      "rol_administracion": null,
+      "estado_sistema": "Habilitado"
+    },
+    {
+      "id": 4,
+      "codigo": "user-viewer",
+      "nombre": "Gabriela Insua",
+      "correo": "ginsua",
+      "areaId": "area-mejora-continua",
+      "rol_habilitacion_urbana": "Visualizador",
+      "rol_departamentos": "Visualizador",
+      "rol_administracion": null,
+      "estado_sistema": "Habilitado"
+    }
+  ]
+}

@@ -43,21 +43,13 @@
 
         <div class="viewer-body">
             <aside class="viewer-toolbar" aria-label="Herramientas del geovisor">
-                <button class="tool-button active" data-panel="layers" type="button" title="Capas">
+                <button class="tool-button" data-panel="layers" type="button" title="Capas">
                     <span class="tool-icon material-icons" aria-hidden="true">layers</span>
                     <span>Capas</span>
-                </button>
-                <button class="tool-button" data-panel="timeline" type="button" title="Línea de tiempo">
-                    <span class="tool-icon material-icons" aria-hidden="true">date_range</span>
-                    <span>Tiempo</span>
                 </button>
                 <button class="tool-button" data-panel="services" type="button" title="Servicios WFS/WMS e importación">
                     <span class="tool-icon material-icons" aria-hidden="true">layers</span>
                     <span>Servicios</span>
-                </button>
-                <button class="tool-button" data-panel="legend" type="button" title="Leyenda del mapa">
-                    <span class="tool-icon material-icons" aria-hidden="true">list_alt</span>
-                    <span>Leyenda</span>
                 </button>
                 <button class="tool-button" data-panel="drawing" type="button" title="Dibujo">
                     <span class="tool-icon material-icons" aria-hidden="true">edit</span>
@@ -71,9 +63,9 @@
                     <span class="tool-icon material-icons" aria-hidden="true">my_location</span>
                     <span>Ubicar</span>
                 </button>
-                <button class="tool-button" data-panel="directions" type="button" title="Crear una ruta">
-                    <span class="tool-icon material-icons" aria-hidden="true">directions</span>
-                    <span>Rutas</span>
+                <button class="tool-button" data-panel="place-search" type="button" title="Buscar un lugar">
+                    <span class="tool-icon material-icons" aria-hidden="true">travel_explore</span>
+                    <span>Buscar</span>
                 </button>
                 <button class="tool-button" data-panel="reports" type="button" title="Reportes">
                     <span class="tool-icon material-icons" aria-hidden="true">assessment</span>
@@ -81,7 +73,7 @@
                 </button>
             </aside>
 
-            <aside id="viewer-panel" class="viewer-panel">
+            <aside id="viewer-panel" class="viewer-panel closed">
                 <div class="viewer-panel-header">
                     <div class="viewer-panel-heading">
                         <span class="panel-label">HERRAMIENTAS</span>
@@ -90,7 +82,7 @@
                     <button id="btn-close-panel" class="btn-close-panel" type="button" aria-label="Cerrar panel">×</button>
                 </div>
                 <div class="viewer-panel-content">
-                    <section id="panel-layers" class="panel-section active">
+                    <section id="panel-layers" class="panel-section">
                         <div class="panel-section-description">Activa o desactiva la información visible en el mapa.</div>
                         <details class="layer-group layer-group-parent">
                             <summary class="layer-group-title">Los Portales</summary>
@@ -163,17 +155,6 @@
                         </details>
                     </section>
 
-                    <section id="panel-timeline" class="panel-section">
-                        <div class="panel-section-description">Filtra los terrenos y capas con el atributo fecha_registro. La fecha seleccionada muestra las entidades registradas hasta ese día.</div>
-                        <div class="timeline-control">
-                            <label for="timeline-date">Fecha de corte</label>
-                            <output id="timeline-date-output" for="timeline-date">Sin datos</output>
-                            <input id="timeline-date" type="range" min="0" max="0" step="1" value="0" disabled>
-                        </div>
-                        <button id="btn-toggle-timeline" class="panel-secondary timeline-toggle" type="button" aria-pressed="false" disabled>Activar línea de tiempo</button>
-                        <p id="timeline-status" class="timeline-status" role="status" aria-live="polite">Carga una capa que incluya el atributo fecha_registro para usar la línea de tiempo.</p>
-                    </section>
-
                     <section id="panel-services" class="panel-section">
                         <div class="panel-section-description">Conecta un servicio WFS o WMS publicado con acceso desde el navegador. La importación KMZ/KML se procesa localmente.</div>
                         <div class="form-group">
@@ -203,15 +184,13 @@
                         </div>
                     </section>
 
-                    <section id="panel-legend" class="panel-section">
-                        <div class="panel-section-description">La leyenda se actualiza al agregar capas y cambiar su simbología.</div>
-                        <div id="legend-content" class="legend-content">
-                            <p class="empty-layer-message">No hay capas externas con simbología para mostrar.</p>
-                        </div>
-                    </section>
-
                     <section id="panel-drawing" class="panel-section">
                         <div class="panel-section-description">Dibuja geometrías y edita sus vértices al terminar. Arrastra un vértice para moverlo o haz clic en un segmento para añadir otro.</div>
+                        <div class="drawing-style-control">
+                            <label for="drawing-color">Color de los dibujos</label>
+                            <input id="drawing-color" type="color" value="#C47D55" aria-label="Cambiar color de los dibujos">
+                            <output id="drawing-color-value" for="drawing-color">#C47D55</output>
+                        </div>
                         <div class="drawing-grid">
                             <button class="panel-action" data-draw="Point" type="button">Punto</button>
                             <button class="panel-action" data-draw="LineString" type="button">Línea</button>
@@ -265,32 +244,26 @@
                         <button id="btn-my-location" class="panel-secondary" type="button" aria-pressed="false">Seguir mi ubicación</button>
                     </section>
 
-                    <section id="panel-directions" class="panel-section">
-                        <div class="panel-section-description">Crea una ruta en Google Maps desde una dirección o tu ubicación hasta un destino.</div>
-                        <form id="directions-form" action="https://www.google.com/maps/dir/" method="get" target="_blank" rel="noopener noreferrer">
-                            <input type="hidden" name="api" value="1">
+                    <section id="panel-place-search" class="panel-section">
+                        <div class="panel-section-description">Busca por dirección, plaza de trabajo o terreno y ubícalo en el mapa.</div>
+                        <form id="place-search-form" class="place-search-form">
                             <div class="form-group">
-                                <label for="directions-origin">Origen</label>
-                                <input id="directions-origin" name="origin" type="text" autocomplete="off" placeholder="Dirección o latitud, longitud" required>
-                            </div>
-                            <button id="btn-use-current-origin" class="panel-secondary" type="button">Usar mi ubicación actual</button>
-                            <div class="form-group">
-                                <label for="directions-destination">Destino</label>
-                                <input id="directions-destination" name="destination" type="text" autocomplete="off" placeholder="Dirección o latitud, longitud" required>
-                            </div>
-                            <button id="btn-use-map-destination" class="panel-secondary" type="button">Usar coordenadas seleccionadas</button>
-                            <div class="form-group">
-                                <label for="directions-mode">Medio de transporte</label>
-                                <select id="directions-mode" name="travelmode">
-                                    <option value="driving">Automóvil</option>
-                                    <option value="walking">A pie</option>
-                                    <option value="bicycling">Bicicleta</option>
-                                    <option value="transit">Transporte público</option>
+                                <label for="place-search-mode">Buscar por</label>
+                                <select id="place-search-mode" name="mode">
+                                    <option value="address">Dirección (actual)</option>
+                                    <option value="plaza">Plaza</option>
+                                    <option value="terrain">Terreno</option>
                                 </select>
                             </div>
-                            <button class="panel-primary" type="submit">Abrir ruta en Google Maps</button>
+                            <div class="form-group">
+                                <label id="place-search-query-label" for="place-search-input">Nombre o dirección</label>
+                                <input id="place-search-input" name="q" type="search" autocomplete="off" placeholder="Ej. Larcomar, Miraflores" required>
+                            </div>
+                            <button id="btn-search-place" class="panel-primary" type="submit">Buscar lugar</button>
                         </form>
-                        <p id="directions-status" class="directions-status" role="status" aria-live="polite">La ruta se abrirá en una nueva pestaña. No requiere una clave API.</p>
+                        <p id="place-search-status" class="place-search-status" role="status" aria-live="polite">Busca una dirección, una plaza configurada o un terreno cargado.</p>
+                        <div id="place-search-results" class="place-search-results" aria-label="Resultados de búsqueda"></div>
+                        <p id="place-search-attribution" class="place-search-attribution">Búsqueda geográfica por <a href="https://nominatim.openstreetmap.org/" target="_blank" rel="noopener noreferrer">OpenStreetMap Nominatim</a>.</p>
                     </section>
 
                     <section id="panel-reports" class="panel-section">
@@ -310,6 +283,76 @@
             <main class="map-container">
                 <div id="map" class="map"></div>
                 <div id="cesium-map" class="cesium-map" aria-label="Mapa tridimensional de Perú" hidden></div>
+                <nav id="map-tools-toolbar" class="map-tools-toolbar" aria-label="Herramientas del mapa" data-html2canvas-ignore>
+                    <button id="btn-toggle-timeline-panel" class="map-tool-button" type="button" title="Mostrar línea de tiempo" aria-label="Mostrar línea de tiempo" aria-pressed="false">
+                        <span class="material-icons" aria-hidden="true">date_range</span>
+                    </button>
+                    <button id="btn-toggle-map-legend" class="map-tool-button" type="button" title="Mostrar leyenda" aria-label="Mostrar leyenda" aria-pressed="false">
+                        <span class="material-icons" aria-hidden="true">list_alt</span>
+                    </button>
+                    <button id="btn-map-screenshot" class="map-tool-button" type="button" title="Capturar mapa" aria-label="Capturar mapa" aria-expanded="false" aria-controls="map-screenshot-actions">
+                        <span class="material-icons" aria-hidden="true">photo_camera</span>
+                    </button>
+                    <span id="map-screenshot-status" class="map-tools-status" role="status" aria-live="polite"></span>
+                </nav>
+                <aside id="map-screenshot-actions" class="map-screenshot-actions" aria-label="Opciones de captura" hidden data-html2canvas-ignore>
+                    <div class="map-screenshot-actions-header">
+                        <h2>Captura del mapa</h2>
+                        <button id="btn-close-map-screenshot-actions" class="map-screenshot-close" type="button" aria-label="Cerrar opciones de captura">
+                            <span class="material-icons" aria-hidden="true">close</span>
+                        </button>
+                    </div>
+                    <img id="map-screenshot-preview" class="map-screenshot-preview" alt="Vista previa de la captura del mapa">
+                    <p id="map-screenshot-actions-status" class="map-screenshot-actions-status" role="status" aria-live="polite">Elige cómo quieres guardar la captura.</p>
+                    <div class="map-screenshot-actions-buttons">
+                        <button id="btn-download-map-screenshot" class="map-screenshot-action" type="button">
+                            <span class="material-icons" aria-hidden="true">download</span>
+                            <span>Descargar PNG</span>
+                        </button>
+                        <button id="btn-copy-map-screenshot" class="map-screenshot-action" type="button">
+                            <span class="material-icons" aria-hidden="true">content_copy</span>
+                            <span>Copiar imagen</span>
+                        </button>
+                    </div>
+                </aside>
+                <aside id="map-legend" class="map-legend" aria-label="Leyenda del mapa" hidden>
+                    <div class="map-legend-header">
+                        <h2>Leyenda</h2>
+                        <button id="btn-close-map-legend" class="map-legend-close" type="button" aria-label="Cerrar leyenda" data-html2canvas-ignore>
+                            <span class="material-icons" aria-hidden="true">close</span>
+                        </button>
+                    </div>
+                    <div id="legend-content" class="legend-content"></div>
+                </aside>
+                <section id="map-timeline" class="map-timeline" aria-label="Línea de tiempo" hidden>
+                    <div class="map-timeline-header">
+                        <div class="map-timeline-title">
+                            <span class="material-icons" aria-hidden="true">date_range</span>
+                            <strong>Terrenos por fecha</strong>
+                        </div>
+                        <button id="btn-close-timeline" class="map-timeline-close" type="button" aria-label="Cerrar línea de tiempo" data-html2canvas-ignore>
+                            <span class="material-icons" aria-hidden="true">close</span>
+                        </button>
+                    </div>
+                    <div class="timeline-control">
+                        <div class="timeline-control-header">
+                            <strong>Rango de fechas</strong>
+                            <div class="timeline-date-values">
+                                <span>Desde <output id="timeline-start-output" for="timeline-start">Sin datos</output></span>
+                                <span>Hasta <output id="timeline-end-output" for="timeline-end">Sin datos</output></span>
+                            </div>
+                        </div>
+                        <div id="timeline-range-slider" class="timeline-range-slider" aria-label="Rango de fechas">
+                            <div class="timeline-range-track" aria-hidden="true"></div>
+                            <div id="timeline-range-selection" class="timeline-range-selection" aria-hidden="true"></div>
+                            <input id="timeline-start" class="timeline-range-input timeline-range-start" type="range" min="0" max="0" step="1" value="0" aria-label="Fecha inicial" disabled>
+                            <input id="timeline-end" class="timeline-range-input timeline-range-end" type="range" min="0" max="0" step="1" value="0" aria-label="Fecha final" disabled>
+                        </div>
+                    </div>
+                    <div class="map-timeline-footer">
+                        <p id="timeline-status" class="timeline-status" role="status" aria-live="polite">Carga una capa que incluya el atributo fecha_registro para usar la línea de tiempo.</p>
+                    </div>
+                </section>
                 <div id="feature-popup" class="feature-popup" hidden>
                     <div class="feature-popup-header">
                         <div class="feature-popup-heading">

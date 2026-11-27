@@ -47,6 +47,9 @@
                     <button class="nav-item" type="button" data-view="users">
                         <span class="material-icons" aria-hidden="true">manage_accounts</span><span>Usuarios y roles</span>
                     </button>
+                    <button class="nav-item" type="button" data-view="data-tables">
+                        <span class="material-icons" aria-hidden="true">table_view</span><span>Tablas de datos</span>
+                    </button>
                     <button class="nav-item" type="button" data-view="areas">
                         <span class="material-icons" aria-hidden="true">domain</span><span>Áreas y plazas</span>
                     </button>
@@ -71,7 +74,7 @@
                         <p>Usuarios, permisos, actividad y organización de capas.</p>
                     </div>
                     <button id="btn-reset-demo" class="button button-quiet" type="button">
-                        <span class="material-icons" aria-hidden="true">restart_alt</span>Restablecer ejemplo
+                        <span class="material-icons" aria-hidden="true">restart_alt</span>Restablecer desde data.json
                     </button>
                 </div>
 
@@ -91,23 +94,6 @@
                         <article class="metric-card"><span>Plazas</span><strong id="metric-plazas">0</strong><small>Ubicaciones asignables</small></article>
                         <article class="metric-card"><span>Registros este mes</span><strong id="metric-activity">0</strong><small>Conteo de actividad de ejemplo</small></article>
                     </div>
-                    <div class="content-card form-card">
-                        <div class="section-heading"><div><h3>Nombre mostrado en los módulos</h3><p>Este nombre de demostración aparece en los encabezados de este navegador.</p></div></div>
-                        <form id="demo-user-name-form" class="inline-form compact-form">
-                            <label>Nombre de usuario<input id="demo-user-name" name="name" type="text" required maxlength="80" placeholder="SEBASTIÁN ROMALDO ALCÁNTARA LUYO"></label>
-                            <button class="button button-primary" type="submit"><span class="material-icons" aria-hidden="true">save</span>Guardar nombre</button>
-                        </form>
-                        <p id="demo-user-status" class="profile-status" role="status" aria-live="polite"></p>
-                    </div>
-                    <div class="content-card overview-card">
-                        <div class="section-heading"><div><h3>Accesos rápidos</h3><p>Gestiona cada aspecto desde su sección.</p></div></div>
-                        <div class="quick-actions">
-                            <button class="quick-action" type="button" data-open-view="users"><span class="material-icons" aria-hidden="true">manage_accounts</span><span>Asignar roles por módulo</span></button>
-                            <button class="quick-action" type="button" data-open-view="areas"><span class="material-icons" aria-hidden="true">location_on</span><span>Configurar áreas y plazas</span></button>
-                            <button class="quick-action" type="button" data-open-view="activity"><span class="material-icons" aria-hidden="true">bar_chart</span><span>Consultar actividad mensual</span></button>
-                            <button class="quick-action" type="button" data-open-view="layers"><span class="material-icons" aria-hidden="true">account_tree</span><span>Editar grupos de capas</span></button>
-                        </div>
-                    </div>
                     <div class="content-card role-guide">
                         <div class="section-heading"><div><h3>Perfiles disponibles</h3><p>La asignación se configura por usuario y módulo.</p></div></div>
                         <div class="role-guide-grid">
@@ -121,7 +107,7 @@
 
                 <section id="view-users" class="admin-view" hidden>
                     <div class="section-heading">
-                        <div><h2>Usuarios y roles</h2><p>Asigna área, plazas autorizadas y un perfil distinto para cada módulo.</p></div>
+                        <div><h2>Usuarios y roles</h2><p>Asigna área, frentes autorizados y un perfil distinto para cada módulo.</p></div>
                     </div>
                     <div class="content-card form-card">
                         <h3>Agregar usuario de ejemplo</h3>
@@ -132,7 +118,43 @@
                             <button class="button button-primary" type="submit"><span class="material-icons" aria-hidden="true">person_add</span>Agregar usuario</button>
                         </form>
                     </div>
-                    <div id="user-list" class="user-list" aria-live="polite"></div>
+                    <div id="user-list" class="content-card table-card user-table-card">
+                        <div class="user-table-toolbar">
+                            <label class="table-search">
+                                <span class="material-icons" aria-hidden="true">search</span>
+                                <input id="user-search" type="search" aria-label="Buscar usuarios" placeholder="Buscar por nombre, correo, área, plaza o rol">
+                            </label>
+                            <p id="user-result-count" role="status" aria-live="polite"></p>
+                            <p class="user-table-scroll-hint">Desplaza la tabla horizontalmente para ver todos los campos.</p>
+                        </div>
+                        <div class="table-scroll">
+                            <table class="user-table">
+                                <colgroup>
+                                    <col class="user-column">
+                                    <col class="email-column">
+                                    <col class="area-column">
+                                    <col class="frentes-column">
+                                    <col class="habilitacion-column">
+                                    <col class="departamentos-column">
+                                    <col class="administracion-column">
+                                    <col class="actions-column">
+                                </colgroup>
+                                <thead id="user-table-head"></thead>
+                                <tbody id="user-table-body"></tbody>
+                            </table>
+                            <p id="user-table-empty" class="empty-state" hidden></p>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="view-data-tables" class="admin-view" hidden>
+                    <div class="section-heading">
+                        <div><h2>Tablas de datos</h2><p>Vista de solo lectura de las tablas cargadas desde backend/data/data.json.</p></div>
+                    </div>
+                    <div id="json-table-plaza-hu" class="content-card table-card data-json-table"></div>
+                    <div id="json-table-frente-hu" class="content-card table-card data-json-table"></div>
+                    <div id="json-table-relacion-frentehu-usuario" class="content-card table-card data-json-table"></div>
+                    <div id="json-table-usuarios" class="content-card table-card data-json-table"></div>
                 </section>
 
                 <section id="view-areas" class="admin-view" hidden>
@@ -148,12 +170,21 @@
                     </div>
                     <div id="area-list" class="area-list"></div>
                     <div class="content-card form-card plaza-card">
-                        <div class="section-heading"><div><h3>Plazas de trabajo</h3><p>Agrega ubicaciones y asígnalas individualmente en la ficha de cada usuario.</p></div></div>
+                        <div class="section-heading"><div><h3>Plazas de Habilitación Urbana</h3><p>Una plaza puede contener uno o más frentes. Los registros deshabilitados quedan protegidos de cambios.</p></div></div>
                         <form id="plaza-form" class="inline-form compact-form">
                             <label>Nombre de plaza<input name="name" type="text" required maxlength="80" placeholder="Ej. Cusco"></label>
                             <button class="button button-primary" type="submit"><span class="material-icons" aria-hidden="true">add_location_alt</span>Agregar plaza</button>
                         </form>
                         <div id="plaza-list" class="plaza-list"></div>
+                        <div class="front-management">
+                            <div class="section-heading"><div><h3>Frentes de Habilitación Urbana</h3><p>Relaciona cada frente con una plaza habilitada.</p></div></div>
+                            <form id="frente-form" class="inline-form compact-form">
+                                <label>Nombre de frente<input name="name" type="text" required maxlength="80" placeholder="Ej. Lima Norte"></label>
+                                <label>Plaza<select id="frente-plaza" name="plazaId" required></select></label>
+                                <button class="button button-primary" type="submit"><span class="material-icons" aria-hidden="true">add_location_alt</span>Agregar frente</button>
+                            </form>
+                            <div id="frente-list" class="plaza-list front-list"></div>
+                        </div>
                     </div>
                 </section>
 
@@ -186,18 +217,18 @@
 
                 <section id="view-layers" class="admin-view" hidden>
                     <div class="section-heading">
-                        <div><h2>Estructura de capas</h2><p>Define grupos y subgrupos para organizar capas por módulo.</p></div>
+                        <div><h2>Estructura de capas</h2><p>Administra grupos anidados y capas para cada módulo. Arrastra los indicadores o usa las flechas para reordenar; la flecha junto a cada grupo permite contraerlo o expandirlo.</p></div>
                         <label class="module-picker">Módulo<select id="structure-module"></select></label>
                     </div>
-                    <div class="prototype-note"><span class="material-icons" aria-hidden="true">info</span>Esta estructura de ejemplo se guarda localmente; todavía no está conectada al árbol de capas del geovisor.</div>
+                    <div class="prototype-note"><span class="material-icons" aria-hidden="true">info</span>La estructura se guarda localmente como configuración; aún no modifica las capas activas del geovisor.</div>
                     <div class="content-card form-card">
-                        <h3>Crear grupo</h3>
+                        <h3>Crear grupo principal</h3>
                         <form id="layer-group-form" class="inline-form compact-form">
-                            <label>Nombre del grupo<input name="name" type="text" required maxlength="80" placeholder="Ej. Información Base"></label>
-                            <button class="button button-primary" type="submit"><span class="material-icons" aria-hidden="true">create_new_folder</span>Agregar grupo</button>
+                            <label>Nombre del grupo principal<input name="name" type="text" required maxlength="80" placeholder="Ej. Información Base"></label>
+                            <button class="button button-primary" type="submit"><span class="material-icons" aria-hidden="true">create_new_folder</span>Agregar grupo principal</button>
                         </form>
                     </div>
-                    <div id="layer-structure-list" class="layer-structure-list"></div>
+                    <div id="layer-structure-list" class="layer-structure-list" data-group-list-parent=""></div>
                 </section>
             </main>
         </div>

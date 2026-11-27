@@ -117,24 +117,42 @@ const baseLayer = new ol.layer.Tile({
 const drawingSource =
     new ol.source.Vector();
 
-const drawingLayer = new ol.layer.Vector({
-    source: drawingSource,
-    style: new ol.style.Style({
-        fill: new ol.style.Fill({color:"rgba(196,125,85,0.18)"}),
+const drawingColorInput = document.getElementById("drawing-color");
+const drawingColorValue = document.getElementById("drawing-color-value");
+
+function createDrawingStyle(color) {
+    const red = parseInt(color.slice(1, 3), 16);
+    const green = parseInt(color.slice(3, 5), 16);
+    const blue = parseInt(color.slice(5, 7), 16);
+
+    return new ol.style.Style({
+        fill: new ol.style.Fill({
+            color: `rgba(${red}, ${green}, ${blue}, 0.18)`
+        }),
         stroke: new ol.style.Stroke({
-            color:
-                "#C47D55",
-            width:
-                2
+            color,
+            width: 2
         }),
         image: new ol.style.Circle({
             radius: 5,
-            fill: new ol.style.Fill({
-                color:
-                    "#C47D55"
+            fill: new ol.style.Fill({color}),
+            stroke: new ol.style.Stroke({
+                color: "#FFFFFF",
+                width: 2
             })
         })
-    })
+    });
+}
+
+const drawingLayer = new ol.layer.Vector({
+    source: drawingSource,
+    style: createDrawingStyle(drawingColorInput.value)
+});
+
+drawingColorInput.addEventListener("input", () => {
+    const color = drawingColorInput.value.toUpperCase();
+    drawingLayer.setStyle(createDrawingStyle(color));
+    drawingColorValue.textContent = color;
 });
 
 const measurementSource = new ol.source.Vector();
@@ -238,6 +256,7 @@ map.getView().fit(peruExtent, {
 });
 
 const mapElement = document.getElementById("map");
+const mapContainer = document.querySelector(".map-container");
 const cesiumElement = document.getElementById("cesium-map");
 const basemapStatus = document.getElementById("basemap-status");
 const basemapButtons = document.querySelectorAll("[data-basemap]");
@@ -245,10 +264,29 @@ const managedServiceLayersContainer = document.getElementById("managed-service-l
 const managedFileLayersContainer = document.getElementById("managed-file-layers");
 const serviceLayerControls = document.getElementById("service-layer-controls");
 const legendContent = document.getElementById("legend-content");
-const timelineRange = document.getElementById("timeline-date");
-const timelineDateOutput = document.getElementById("timeline-date-output");
-const timelineToggle = document.getElementById("btn-toggle-timeline");
+const mapLegend = document.getElementById("map-legend");
+const mapLegendToggleButton = document.getElementById("btn-toggle-map-legend");
+const mapLegendCloseButton = document.getElementById("btn-close-map-legend");
+const mapScreenshotButton = document.getElementById("btn-map-screenshot");
+const mapScreenshotStatus = document.getElementById("map-screenshot-status");
+const mapScreenshotActions = document.getElementById("map-screenshot-actions");
+const mapScreenshotPreview = document.getElementById("map-screenshot-preview");
+const mapScreenshotActionsStatus = document.getElementById("map-screenshot-actions-status");
+const mapScreenshotDownloadButton = document.getElementById("btn-download-map-screenshot");
+const mapScreenshotCopyButton = document.getElementById("btn-copy-map-screenshot");
+const mapScreenshotCloseButton = document.getElementById("btn-close-map-screenshot-actions");
+const timelinePanel = document.getElementById("map-timeline");
+const timelinePanelButton = document.getElementById("btn-toggle-timeline-panel");
+const timelineCloseButton = document.getElementById("btn-close-timeline");
+const timelineStartRange = document.getElementById("timeline-start");
+const timelineEndRange = document.getElementById("timeline-end");
+const timelineRangeSlider = document.getElementById("timeline-range-slider");
+const timelineRangeSelection = document.getElementById("timeline-range-selection");
+const timelineStartOutput = document.getElementById("timeline-start-output");
+const timelineEndOutput = document.getElementById("timeline-end-output");
 const timelineStatus = document.getElementById("timeline-status");
+let mapScreenshotBlob = null;
+let mapScreenshotPreviewUrl = null;
 let cesiumViewer = null;
 let cesiumViewerToken = null;
 let cesiumLoadPromise = null;
@@ -476,7 +514,7 @@ const panelTitle =
 
 const toolButtons =
     document.querySelectorAll(
-        ".tool-button"
+        ".tool-button[data-panel]"
     );
 
 
@@ -484,14 +522,8 @@ const panelTitles = {
     layers:
         "Capas",
 
-    timeline:
-        "Línea de tiempo",
-
     services:
         "Servicios WFS/WMS",
-
-    legend:
-        "Leyenda",
 
     drawing:
         "Dibujo",
@@ -502,8 +534,8 @@ const panelTitles = {
     location:
         "Localización",
 
-    directions:
-        "Rutas",
+    "place-search":
+        "Buscar lugar",
 
     reports:
         "Reportes e indicadores"
@@ -617,6 +649,184 @@ document
             );
         }
     );
+
+function hideTimelinePanel() {
+    timelinePanel.hidden = true;
+    timelinePanelButton.classList.remove("active");
+    timelinePanelButton.setAttribute("aria-pressed", "false");
+    timelinePanelButton.title = "Mostrar línea de tiempo";
+    timelinePanelButton.setAttribute("aria-label", timelinePanelButton.title);
+    setTimelineEnabled(false);
+}
+
+timelinePanelButton.addEventListener("click", () => {
+    const showTimeline = timelinePanel.hidden;
+    timelinePanel.hidden = !showTimeline;
+    timelinePanelButton.classList.toggle("active", showTimeline);
+    timelinePanelButton.setAttribute("aria-pressed", String(showTimeline));
+    timelinePanelButton.title = showTimeline
+        ? "Ocultar línea de tiempo"
+        : "Mostrar línea de tiempo";
+    timelinePanelButton.setAttribute("aria-label", timelinePanelButton.title);
+    setTimelineEnabled(showTimeline);
+});
+
+timelineCloseButton.addEventListener("click", hideTimelinePanel);
+
+function setMapLegendVisible(visible) {
+    mapLegend.hidden = !visible;
+    mapLegendToggleButton.classList.toggle("active", visible);
+    mapLegendToggleButton.setAttribute("aria-pressed", String(visible));
+    mapLegendToggleButton.title = visible ? "Ocultar leyenda" : "Mostrar leyenda";
+    mapLegendToggleButton.setAttribute("aria-label", mapLegendToggleButton.title);
+    if (visible) {
+        updateLegend();
+    }
+}
+
+mapLegendToggleButton.addEventListener("click", () => {
+    setMapLegendVisible(mapLegend.hidden);
+});
+mapLegendCloseButton.addEventListener("click", () => setMapLegendVisible(false));
+
+let html2canvasLoadPromise = null;
+
+function loadHtml2Canvas() {
+    if (typeof window.html2canvas === "function") {
+        return Promise.resolve(window.html2canvas);
+    }
+
+    if (!html2canvasLoadPromise) {
+        html2canvasLoadPromise = new Promise((resolve, reject) => {
+            const script = document.createElement("script");
+            script.src = "https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js";
+            script.onload = () => {
+                if (typeof window.html2canvas !== "function") {
+                    html2canvasLoadPromise = null;
+                    reject(new Error("La biblioteca de captura no está disponible."));
+                    return;
+                }
+                resolve(window.html2canvas);
+            };
+            script.onerror = () => {
+                html2canvasLoadPromise = null;
+                reject(new Error("No se pudo cargar la biblioteca de captura."));
+            };
+            document.head.appendChild(script);
+        });
+    }
+
+    return html2canvasLoadPromise;
+}
+
+function clearMapScreenshotPreview() {
+    if (mapScreenshotPreviewUrl) {
+        URL.revokeObjectURL(mapScreenshotPreviewUrl);
+        mapScreenshotPreviewUrl = null;
+    }
+    mapScreenshotPreview.removeAttribute("src");
+    mapScreenshotBlob = null;
+}
+
+function hideMapScreenshotActions() {
+    mapScreenshotActions.hidden = true;
+    mapScreenshotButton.setAttribute("aria-expanded", "false");
+    clearMapScreenshotPreview();
+}
+
+async function captureMapScreenshot() {
+    mapScreenshotButton.disabled = true;
+    mapScreenshotActions.hidden = true;
+    mapScreenshotButton.setAttribute("aria-expanded", "false");
+    clearMapScreenshotPreview();
+    mapScreenshotStatus.textContent = "Preparando la captura del mapa…";
+
+    try {
+        const html2canvas = await loadHtml2Canvas();
+        map.renderSync();
+        const canvas = await html2canvas(mapContainer, {
+            backgroundColor: null,
+            imageTimeout: 15000,
+            ignoreElements: element => element.hasAttribute("data-html2canvas-ignore"),
+            logging: false,
+            scale: Math.min(window.devicePixelRatio || 1, 2),
+            useCORS: true
+        });
+        const image = await new Promise((resolve, reject) => {
+            canvas.toBlob(blob => {
+                if (!blob) {
+                    reject(new Error("El navegador no pudo generar la imagen PNG."));
+                    return;
+                }
+                resolve(blob);
+            }, "image/png");
+        });
+
+        mapScreenshotBlob = image;
+        mapScreenshotPreviewUrl = URL.createObjectURL(image);
+        mapScreenshotPreview.src = mapScreenshotPreviewUrl;
+        mapScreenshotActionsStatus.textContent = "Elige cómo quieres guardar la captura.";
+        mapScreenshotActions.hidden = false;
+        mapScreenshotButton.setAttribute("aria-expanded", "true");
+        mapScreenshotStatus.textContent =
+            `Captura lista (${canvas.width} × ${canvas.height}).`;
+    } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        mapScreenshotStatus.textContent = `No se pudo capturar el mapa: ${message}`;
+    } finally {
+        mapScreenshotButton.disabled = false;
+    }
+}
+
+function downloadMapScreenshot() {
+    if (!mapScreenshotBlob) {
+        mapScreenshotActionsStatus.textContent = "Primero captura el mapa.";
+        return;
+    }
+
+    const imageUrl = URL.createObjectURL(mapScreenshotBlob);
+    const downloadLink = document.createElement("a");
+    downloadLink.href = imageUrl;
+    downloadLink.download = `geourbanlp-mapa-${new Date().toISOString().slice(0, 10)}.png`;
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    downloadLink.remove();
+    window.setTimeout(() => URL.revokeObjectURL(imageUrl), 60000);
+    mapScreenshotActionsStatus.textContent = "La descarga de la imagen PNG ha comenzado.";
+}
+
+async function copyMapScreenshot() {
+    if (!mapScreenshotBlob) {
+        mapScreenshotActionsStatus.textContent = "Primero captura el mapa.";
+        return;
+    }
+
+    if (!window.isSecureContext || !navigator.clipboard || typeof navigator.clipboard.write !== "function" ||
+        typeof window.ClipboardItem !== "function") {
+        mapScreenshotActionsStatus.textContent =
+            "Copiar requiere un navegador compatible y una conexión segura (HTTPS o localhost).";
+        return;
+    }
+
+    mapScreenshotCopyButton.disabled = true;
+    mapScreenshotActionsStatus.textContent = "Copiando imagen…";
+    try {
+        await navigator.clipboard.write([
+            new window.ClipboardItem({"image/png": mapScreenshotBlob})
+        ]);
+        mapScreenshotActionsStatus.textContent = "Imagen PNG copiada al portapapeles.";
+    } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        mapScreenshotActionsStatus.textContent = `No se pudo copiar la imagen: ${message}`;
+    } finally {
+        mapScreenshotCopyButton.disabled = false;
+    }
+}
+
+mapScreenshotButton.addEventListener("click", captureMapScreenshot);
+mapScreenshotDownloadButton.addEventListener("click", downloadMapScreenshot);
+mapScreenshotCopyButton.addEventListener("click", copyMapScreenshot);
+mapScreenshotCloseButton.addEventListener("click", hideMapScreenshotActions);
 
 
 
@@ -913,15 +1123,21 @@ function goToCoordinate() {
 
     stopCoordinatePick();
 
+    if (activeBasemap === "3d") {
+        showOsmBasemap();
+    }
+
+    const coordinate = ol.proj.fromLonLat([longitude, latitude]);
+    locationSource.clear();
+    locationSource.addFeature(new ol.Feature({
+        geometry: new ol.geom.Point(coordinate)
+    }));
+
     map
         .getView()
         .animate({
 
-            center:
-                ol.proj.fromLonLat([
-                    longitude,
-                    latitude
-                ]),
+            center: coordinate,
 
             zoom:
                 16,
@@ -1069,62 +1285,370 @@ document
         locateUser
     );
 
-const directionsForm = document.getElementById("directions-form");
-const directionsOrigin = document.getElementById("directions-origin");
-const directionsDestination = document.getElementById("directions-destination");
-const directionsStatus = document.getElementById("directions-status");
+const placeSearchForm = document.getElementById("place-search-form");
+const placeSearchMode = document.getElementById("place-search-mode");
+const placeSearchInput = document.getElementById("place-search-input");
+const placeSearchQueryLabel = document.getElementById("place-search-query-label");
+const placeSearchButton = document.getElementById("btn-search-place");
+const placeSearchStatus = document.getElementById("place-search-status");
+const placeSearchResults = document.getElementById("place-search-results");
+const placeSearchAttribution = document.getElementById("place-search-attribution");
+let lastPlaceSearchAt = 0;
+let placeSearchPending = false;
 
-document.getElementById("btn-use-current-origin").addEventListener("click", () => {
-    if (!navigator.geolocation) {
-        directionsStatus.textContent = "Este navegador no permite obtener la ubicación actual.";
-        return;
-    }
+function normalizePlaceSearchText(value) {
+    return String(value)
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLocaleLowerCase("es-PE");
+}
 
-    directionsStatus.textContent = "Solicitando permiso para obtener la ubicación actual…";
-    navigator.geolocation.getCurrentPosition(
-        position => {
-            const {latitude, longitude} = position.coords;
-            directionsOrigin.value = `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`;
-            directionsStatus.textContent = "La ubicación actual se estableció como origen.";
+function updatePlaceSearchMode() {
+    const modeSettings = {
+        address: {
+            label: "Nombre o dirección",
+            placeholder: "Ej. Larcomar, Miraflores",
+            button: "Buscar lugar",
+            status: "Ingresa una dirección o lugar para buscarlo en Perú."
         },
-        error => {
-            directionsStatus.textContent = `No se pudo obtener la ubicación: ${error.message}`;
+        plaza: {
+            label: "Nombre de la plaza",
+            placeholder: "Ej. Lima",
+            button: "Buscar plaza",
+            status: "Busca una plaza configurada en Administración."
         },
-        {
-            enableHighAccuracy: true,
-            maximumAge: 10000,
-            timeout: 15000
+        terrain: {
+            label: "Código, nombre o distrito",
+            placeholder: "Ej. HU-DEMO-001 o Lurín",
+            button: "Buscar terreno",
+            status: "Busca en los terrenos de las capas vectoriales cargadas."
         }
+    };
+    const settings = modeSettings[placeSearchMode.value];
+    placeSearchQueryLabel.textContent = settings.label;
+    placeSearchInput.placeholder = settings.placeholder;
+    placeSearchButton.textContent = settings.button;
+    placeSearchStatus.textContent = settings.status;
+    placeSearchAttribution.hidden = placeSearchMode.value === "terrain";
+    placeSearchResults.replaceChildren();
+}
+
+function createPlaceResultButton(iconName, label, ariaLabel, onSelect) {
+    const resultButton = document.createElement("button");
+    resultButton.className = "place-result-button";
+    resultButton.type = "button";
+    resultButton.setAttribute("aria-label", ariaLabel);
+
+    const icon = document.createElement("span");
+    icon.className = "material-icons";
+    icon.setAttribute("aria-hidden", "true");
+    icon.textContent = iconName;
+
+    const name = document.createElement("span");
+    name.textContent = label;
+    resultButton.append(icon, name);
+    resultButton.addEventListener("click", onSelect);
+    return resultButton;
+}
+
+function showPlaceOnMap(longitude, latitude, label) {
+    if (activeBasemap === "3d") {
+        showOsmBasemap();
+    }
+
+    const coordinate = ol.proj.fromLonLat([longitude, latitude]);
+    locationSource.clear();
+    locationSource.addFeature(new ol.Feature({
+        geometry: new ol.geom.Point(coordinate)
+    }));
+    map.getView().animate({
+        center: coordinate,
+        zoom: 16,
+        duration: 600
+    });
+    placeSearchStatus.textContent = `Ubicación mostrada en el mapa: ${label}.`;
+}
+
+async function searchNominatim(query) {
+    const delay = Math.max(0, 1000 - (Date.now() - lastPlaceSearchAt));
+    if (delay > 0) {
+        await new Promise(resolve => window.setTimeout(resolve, delay));
+    }
+
+    const searchUrl = new URL("https://nominatim.openstreetmap.org/search");
+    searchUrl.searchParams.set("format", "jsonv2");
+    searchUrl.searchParams.set("q", query);
+    searchUrl.searchParams.set("countrycodes", "pe");
+    searchUrl.searchParams.set("addressdetails", "1");
+    searchUrl.searchParams.set("limit", "5");
+    searchUrl.searchParams.set("accept-language", "es");
+    lastPlaceSearchAt = Date.now();
+
+    const response = await fetch(searchUrl, {
+        headers: {
+            Accept: "application/json"
+        }
+    });
+    if (!response.ok) {
+        throw new Error(`El servicio de búsqueda respondió HTTP ${response.status}.`);
+    }
+
+    const places = await response.json();
+    if (!Array.isArray(places)) {
+        throw new Error("El servicio devolvió una respuesta de búsqueda no válida.");
+    }
+
+    return places.filter(place =>
+        place &&
+        typeof place.display_name === "string" &&
+        Number.isFinite(Number(place.lat)) &&
+        Number.isFinite(Number(place.lon)) &&
+        Number(place.lat) >= -90 &&
+        Number(place.lat) <= 90 &&
+        Number(place.lon) >= -180 &&
+        Number(place.lon) <= 180
     );
-});
+}
 
-document.getElementById("btn-use-map-destination").addEventListener("click", () => {
-    const longitude = Number(document.getElementById("input-longitude").value);
-    const latitude = Number(document.getElementById("input-latitude").value);
-    if (
-        document.getElementById("input-longitude").value.trim() === "" ||
-        document.getElementById("input-latitude").value.trim() === "" ||
-        !Number.isFinite(longitude) ||
-        !Number.isFinite(latitude)
-    ) {
-        directionsStatus.textContent =
-            "Selecciona un punto desde Ubicar o ingresa sus coordenadas antes de usarlo como destino.";
+function renderGeographicResults(places) {
+    placeSearchResults.replaceChildren();
+    if (places.length === 0) {
+        placeSearchStatus.textContent = "No se encontraron lugares coincidentes en Perú.";
         return;
     }
 
-    directionsDestination.value = `${latitude}, ${longitude}`;
-    directionsStatus.textContent = "Las coordenadas seleccionadas se establecieron como destino.";
-});
+    places.forEach(place => {
+        const resultButton = createPlaceResultButton(
+            "place",
+            place.display_name,
+            `Mostrar ${place.display_name} en el mapa`,
+            () => showPlaceOnMap(Number(place.lon), Number(place.lat), place.display_name)
+        );
+        placeSearchResults.append(resultButton);
+    });
+    placeSearchStatus.textContent =
+        `Se encontraron ${places.length} resultados. Selecciona uno para verlo en el mapa.`;
+}
 
-directionsForm.addEventListener("submit", event => {
-    if (!directionsOrigin.value.trim() || !directionsDestination.value.trim()) {
-        event.preventDefault();
-        directionsStatus.textContent = "Ingresa un origen y un destino para abrir la ruta.";
+function getConfiguredPlazas() {
+    const savedState = localStorage.getItem("geourbanlp-admin-prototype-v1");
+    if (!savedState) {
+        return [];
+    }
+
+    const adminState = JSON.parse(savedState);
+    if (!adminState || !Array.isArray(adminState.plazas)) {
+        throw new Error("La configuración de plazas guardada no tiene un formato válido.");
+    }
+
+    if (adminState.plazas.some(plaza =>
+        !plaza || typeof plaza.name !== "string" || !plaza.name.trim()
+    )) {
+        throw new Error("La configuración de plazas contiene nombres vacíos o inválidos.");
+    }
+
+    return adminState.plazas;
+}
+
+function renderPlazaResults(query) {
+    const normalizedQuery = normalizePlaceSearchText(query);
+    const plazas = getConfiguredPlazas();
+    if (plazas.length === 0) {
+        placeSearchStatus.textContent =
+            "No hay plazas configuradas. Agrégalas en el módulo Administración.";
         return;
     }
 
-    directionsStatus.textContent = "Abriendo la ruta en Google Maps en una nueva pestaña…";
+    const matches = plazas.filter(plaza =>
+        normalizePlaceSearchText(plaza.name).includes(normalizedQuery)
+    );
+    if (matches.length === 0) {
+        placeSearchStatus.textContent = "No se encontraron plazas con ese nombre.";
+        return;
+    }
+
+    matches.forEach(plaza => {
+        const resultButton = createPlaceResultButton(
+            "location_city",
+            `${plaza.name} · Buscar ubicación en Perú`,
+            `Buscar la ubicación de la plaza ${plaza.name}`,
+            async () => {
+                if (placeSearchPending) {
+                    return;
+                }
+
+                placeSearchPending = true;
+                placeSearchButton.disabled = true;
+                placeSearchResults.replaceChildren();
+                placeSearchStatus.textContent = `Buscando la plaza ${plaza.name} en Perú…`;
+                try {
+                    renderGeographicResults(
+                        await searchNominatim(`${plaza.name}, Perú`)
+                    );
+                } catch (error) {
+                    const message = error instanceof Error ? error.message : String(error);
+                    placeSearchStatus.textContent = `No se pudo buscar la plaza: ${message}`;
+                } finally {
+                    placeSearchPending = false;
+                    placeSearchButton.disabled = false;
+                }
+            }
+        );
+        placeSearchResults.append(resultButton);
+    });
+    placeSearchStatus.textContent =
+        `Se encontraron ${matches.length} plazas. Selecciona una para ubicarla en el mapa.`;
+}
+
+function getTerrainSearchRecords(query) {
+    const normalizedQuery = normalizePlaceSearchText(query);
+    return externalLayers.flatMap(entry =>
+        (Array.isArray(entry.features) ? entry.features : [])
+            .map((feature, index) => ({entry, feature, index}))
+            .filter(({feature}) => {
+                const geometry = feature.getGeometry();
+                if (!geometry || !["Polygon", "MultiPolygon"].includes(geometry.getType())) {
+                    return false;
+                }
+
+                return Object.entries(feature.getProperties()).some(([key, value]) =>
+                    key !== feature.getGeometryName() &&
+                    ["string", "number", "boolean"].includes(typeof value) &&
+                    normalizePlaceSearchText(value).includes(normalizedQuery)
+                );
+            })
+    );
+}
+
+function includeTerrainInTimeline(feature) {
+    const registrationDate = getFeatureRegistrationDate(feature);
+    if (!timelineEnabled || registrationDate === null || !timelineStartRange.dataset.startDate) {
+        return;
+    }
+
+    const startDate = Number(timelineStartRange.dataset.startDate);
+    const selectedDay = Math.round((registrationDate - startDate) / millisecondsPerDay);
+    const startDay = Number(timelineStartRange.value);
+    const endDay = Number(timelineEndRange.value);
+    timelineStartRange.value = String(Math.min(startDay, selectedDay));
+    timelineEndRange.value = String(Math.max(endDay, selectedDay));
+    timelineStartRange.max = timelineEndRange.value;
+    timelineEndRange.min = timelineStartRange.value;
+    updateTimelineFilter();
+}
+
+function showTerrainOnMap(entry, feature, label) {
+    const geometry = feature.getGeometry();
+    if (!geometry) {
+        placeSearchStatus.textContent = `El terreno "${label}" no tiene geometría para mostrar.`;
+        return;
+    }
+
+    if (activeBasemap === "3d") {
+        showOsmBasemap();
+    }
+    entry.layer.setVisible(true);
+    renderManagedLayers();
+    updateLegend();
+    includeTerrainInTimeline(feature);
+
+    const extent = geometry.getExtent();
+    if (ol.extent.isEmpty(extent)) {
+        placeSearchStatus.textContent = `El terreno "${label}" no tiene una extensión válida.`;
+        return;
+    }
+
+    const coordinate = ol.extent.getCenter(extent);
+    locationSource.clear();
+    locationSource.addFeature(new ol.Feature({
+        geometry: new ol.geom.Point(coordinate)
+    }));
+    map.getView().fit(extent, {
+        padding: [40, 40, 40, 40],
+        maxZoom: 17,
+        duration: 600
+    });
+    placeSearchStatus.textContent = `Terreno mostrado en el mapa: ${label}.`;
+}
+
+function renderTerrainResults(query) {
+    const matches = getTerrainSearchRecords(query);
+    if (matches.length === 0) {
+        placeSearchStatus.textContent =
+            "No se encontraron terrenos coincidentes en las capas vectoriales cargadas.";
+        return;
+    }
+
+    const visibleMatches = matches.slice(0, 50);
+    visibleMatches.forEach(({entry, feature, index}) => {
+        const properties = feature.getProperties();
+        const name = properties.nombre || properties.name || properties.terreno ||
+            properties.codigo || `Terreno ${index + 1}`;
+        const code = properties.codigo && properties.codigo !== name
+            ? String(properties.codigo)
+            : "";
+        const district = properties.distrito || properties.district || "";
+        const label = [name, code, district, entry.name]
+            .filter(Boolean)
+            .join(" · ");
+        const resultButton = createPlaceResultButton(
+            "landscape",
+            label,
+            `Mostrar terreno ${label} en el mapa`,
+            () => showTerrainOnMap(entry, feature, String(name))
+        );
+        placeSearchResults.append(resultButton);
+    });
+
+    placeSearchStatus.textContent = matches.length > visibleMatches.length
+        ? `Se encontraron ${matches.length} terrenos. Mostrando los primeros ${visibleMatches.length}.`
+        : `Se encontraron ${matches.length} terrenos. Selecciona uno para verlo en el mapa.`;
+}
+
+placeSearchMode.addEventListener("change", updatePlaceSearchMode);
+
+placeSearchForm.addEventListener("submit", async event => {
+    event.preventDefault();
+    if (placeSearchPending) {
+        return;
+    }
+
+    const query = placeSearchInput.value.trim();
+    if (!query) {
+        placeSearchStatus.textContent = "Escribe un término para iniciar la búsqueda.";
+        return;
+    }
+
+    placeSearchResults.replaceChildren();
+    if (placeSearchMode.value === "plaza") {
+        try {
+            renderPlazaResults(query);
+        } catch (error) {
+            const message = error instanceof Error ? error.message : String(error);
+            placeSearchStatus.textContent = `No se pudieron leer las plazas: ${message}`;
+        }
+        return;
+    }
+    if (placeSearchMode.value === "terrain") {
+        renderTerrainResults(query);
+        return;
+    }
+
+    placeSearchPending = true;
+    placeSearchButton.disabled = true;
+    placeSearchStatus.textContent = "Buscando lugares en Perú…";
+    try {
+        renderGeographicResults(await searchNominatim(query));
+    } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        placeSearchStatus.textContent = `No se pudo buscar el lugar: ${message}`;
+    } finally {
+        placeSearchPending = false;
+        placeSearchButton.disabled = false;
+    }
 });
+
+updatePlaceSearchMode();
 
 
 /* ===================== */
@@ -1309,32 +1833,38 @@ function createLegendGroup(title) {
 function updateLegend() {
     legendContent.replaceChildren();
 
-    const portalLayers = externalLayers.filter(entry => entry.group === "portales");
-    const portalGroup = createLegendGroup("Los Portales");
-    portalGroup.append(
-        createLegendSubgroup(
-            "Desarrollo Inmobiliario",
-            portalLayers.filter(entry => entry.subgroup === "inmobiliario")
-        ),
-        createLegendSubgroup(
-            "Desarrollo Arquitectónico",
-            portalLayers.filter(entry => entry.subgroup === "arquitectonico")
-        )
-    );
-    legendContent.append(portalGroup);
+    const activeLayers = externalLayers.filter(entry => entry.layer.getVisible());
+    const portalLayers = activeLayers.filter(entry => entry.group === "portales");
+    if (portalLayers.length > 0) {
+        const portalGroup = createLegendGroup("Los Portales");
+        const realEstateLayers = portalLayers.filter(entry => entry.subgroup === "inmobiliario");
+        const architectureLayers = portalLayers.filter(entry => entry.subgroup === "arquitectonico");
+        if (realEstateLayers.length > 0) {
+            portalGroup.append(createLegendSubgroup("Desarrollo Inmobiliario", realEstateLayers));
+        }
+        if (architectureLayers.length > 0) {
+            portalGroup.append(createLegendSubgroup("Desarrollo Arquitectónico", architectureLayers));
+        }
+        legendContent.append(portalGroup);
+    }
 
-    const informationGroup = createLegendGroup("Información Base");
-    informationGroup.append(
-        createLegendSubgroup(
-            "Capas de servicios WFS/WMS",
-            externalLayers.filter(entry => entry.group === "services")
-        ),
-        createLegendSubgroup(
-            "Capas de ejemplo e importadas (GeoJSON/KML/KMZ)",
-            externalLayers.filter(entry => entry.group === "files")
-        )
-    );
-    legendContent.append(informationGroup);
+    const serviceLayers = activeLayers.filter(entry => entry.group === "services");
+    const fileLayers = activeLayers.filter(entry => entry.group === "files");
+    if (serviceLayers.length > 0 || fileLayers.length > 0) {
+        const informationGroup = createLegendGroup("Información Base");
+        if (serviceLayers.length > 0) {
+            informationGroup.append(createLegendSubgroup("Capas de servicios WFS/WMS", serviceLayers));
+        }
+        if (fileLayers.length > 0) {
+            informationGroup.append(
+                createLegendSubgroup(
+                    "Capas de ejemplo e importadas (GeoJSON/KML/KMZ)",
+                    fileLayers
+                )
+            );
+        }
+        legendContent.append(informationGroup);
+    }
 
     const basemapGroup = createLegendGroup("Mapa Base");
     const baseLegend = document.createElement("section");
@@ -1387,8 +1917,9 @@ function formatTimelineDate(timestamp) {
 }
 
 function updateTimelineFilter() {
-    const startDate = Number(timelineRange.dataset.startDate);
-    const selectedDate = startDate + Number(timelineRange.value) * millisecondsPerDay;
+    const startDate = Number(timelineStartRange.dataset.startDate);
+    const fromDate = startDate + Number(timelineStartRange.value) * millisecondsPerDay;
+    const throughDate = startDate + Number(timelineEndRange.value) * millisecondsPerDay;
     let visibleCount = 0;
     let datedCount = 0;
 
@@ -1405,7 +1936,8 @@ function updateTimelineFilter() {
             }
 
             datedCount += 1;
-            const isVisible = !timelineEnabled || registrationDate <= selectedDate;
+            const isVisible = !timelineEnabled ||
+                (registrationDate >= fromDate && registrationDate <= throughDate);
             if (isVisible) {
                 visibleCount += 1;
             }
@@ -1415,9 +1947,21 @@ function updateTimelineFilter() {
         source.addFeatures(visibleFeatures);
     });
 
-    timelineDateOutput.textContent = formatTimelineDate(selectedDate);
+    const fromDateLabel = formatTimelineDate(fromDate);
+    const throughDateLabel = formatTimelineDate(throughDate);
+    timelineStartOutput.textContent = fromDateLabel;
+    timelineEndOutput.textContent = throughDateLabel;
+    const daySpan = Number(timelineEndRange.max);
+    const startPercentage = daySpan > 0
+        ? Number(timelineStartRange.value) / daySpan * 100
+        : 0;
+    const endPercentage = daySpan > 0
+        ? Number(timelineEndRange.value) / daySpan * 100
+        : 0;
+    timelineRangeSlider.style.setProperty("--timeline-range-start", `${startPercentage}%`);
+    timelineRangeSlider.style.setProperty("--timeline-range-end", `${endPercentage}%`);
     timelineStatus.textContent = timelineEnabled
-        ? `Mostrando ${visibleCount} de ${datedCount} entidades registradas hasta el ${formatTimelineDate(selectedDate)}.`
+        ? `Mostrando ${visibleCount} de ${datedCount} entidades registradas entre el ${fromDateLabel} y el ${throughDateLabel}.`
         : `${datedCount} entidades con fecha disponibles. Filtro temporal desactivado.`;
 }
 
@@ -1425,14 +1969,20 @@ function updateTimelineControls() {
     const datedFeatures = getTimelineEntries()
         .flatMap(group => group.datedFeatures);
     if (datedFeatures.length === 0) {
-        timelineEnabled = false;
-        timelineToggle.setAttribute("aria-pressed", "false");
-        timelineToggle.textContent = "Activar línea de tiempo";
-        timelineRange.disabled = true;
-        timelineToggle.disabled = true;
-        timelineDateOutput.textContent = "Sin datos";
-        timelineStatus.textContent =
-            "Carga una capa que incluya el atributo fecha_registro para usar la línea de tiempo.";
+        delete timelineStartRange.dataset.startDate;
+        timelineStartRange.max = "0";
+        timelineStartRange.value = "0";
+        timelineEndRange.max = "0";
+        timelineEndRange.value = "0";
+        timelineStartRange.disabled = true;
+        timelineEndRange.disabled = true;
+        timelineStartOutput.textContent = "Sin datos";
+        timelineEndOutput.textContent = "Sin datos";
+        timelineRangeSlider.style.setProperty("--timeline-range-start", "0%");
+        timelineRangeSlider.style.setProperty("--timeline-range-end", "0%");
+        timelineStatus.textContent = timelineEnabled
+            ? "La línea de tiempo está activa. Carga una capa que incluya el atributo fecha_registro para filtrar."
+            : "Carga una capa que incluya el atributo fecha_registro para usar la línea de tiempo.";
         return;
     }
 
@@ -1443,23 +1993,68 @@ function updateTimelineControls() {
     const latestDate = timestamps.reduce((latest, timestamp) =>
         Math.max(latest, timestamp)
     );
-    timelineRange.dataset.startDate = String(earliestDate);
-    timelineRange.min = "0";
-    timelineRange.max = String(Math.floor((latestDate - earliestDate) / millisecondsPerDay));
-    timelineRange.value = timelineRange.max;
-    timelineRange.disabled = !timelineEnabled;
-    timelineToggle.disabled = false;
+    const daySpan = String(Math.floor((latestDate - earliestDate) / millisecondsPerDay));
+    timelineStartRange.dataset.startDate = String(earliestDate);
+    timelineStartRange.min = "0";
+    timelineStartRange.max = daySpan;
+    timelineStartRange.value = "0";
+    timelineEndRange.min = "0";
+    timelineEndRange.max = daySpan;
+    timelineEndRange.value = daySpan;
+    timelineStartRange.disabled = !timelineEnabled;
+    timelineEndRange.disabled = !timelineEnabled;
     updateTimelineFilter();
 }
 
-timelineRange.addEventListener("input", updateTimelineFilter);
-timelineToggle.addEventListener("click", () => {
-    timelineEnabled = !timelineEnabled;
-    timelineToggle.setAttribute("aria-pressed", String(timelineEnabled));
-    timelineToggle.textContent = timelineEnabled
-        ? "Desactivar línea de tiempo"
-        : "Activar línea de tiempo";
-    timelineRange.disabled = !timelineEnabled;
+function setTimelineEnabled(enabled) {
+    timelineEnabled = enabled;
+    const hasDateRange = Boolean(timelineStartRange.dataset.startDate);
+    timelineStartRange.disabled = !timelineEnabled || !hasDateRange;
+    timelineEndRange.disabled = !timelineEnabled || !hasDateRange;
+
+    if (hasDateRange) {
+        updateTimelineFilter();
+    } else {
+        timelineStatus.textContent = timelineEnabled
+            ? "La línea de tiempo está activa. Carga una capa que incluya el atributo fecha_registro para filtrar."
+            : "Carga una capa que incluya el atributo fecha_registro para usar la línea de tiempo.";
+    }
+}
+
+timelineStartRange.addEventListener("input", () => {
+    timelineEndRange.min = timelineStartRange.value;
+    updateTimelineFilter();
+});
+timelineEndRange.addEventListener("input", () => {
+    timelineStartRange.max = timelineEndRange.value;
+    updateTimelineFilter();
+});
+timelineRangeSlider.addEventListener("pointerdown", event => {
+    if (!timelineEnabled ||
+        (event.target !== timelineRangeSlider &&
+            event.target !== timelineRangeSelection &&
+            event.target !== timelineRangeSlider.querySelector(".timeline-range-track"))) {
+        return;
+    }
+
+    const bounds = timelineRangeSlider.getBoundingClientRect();
+    if (!bounds.width) {
+        return;
+    }
+
+    const daySpan = Number(timelineEndRange.max);
+    const pointerRatio = Math.min(1, Math.max(0, (event.clientX - bounds.left) / bounds.width));
+    const selectedDay = Math.round(pointerRatio * daySpan);
+    const startDay = Number(timelineStartRange.value);
+    const endDay = Number(timelineEndRange.value);
+
+    if (Math.abs(selectedDay - startDay) <= Math.abs(selectedDay - endDay)) {
+        timelineStartRange.value = String(Math.min(selectedDay, endDay));
+        timelineEndRange.min = timelineStartRange.value;
+    } else {
+        timelineEndRange.value = String(Math.max(selectedDay, startDay));
+        timelineStartRange.max = timelineEndRange.value;
+    }
     updateTimelineFilter();
 });
 
