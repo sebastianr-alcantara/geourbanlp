@@ -527,6 +527,16 @@ function setStatus(message) {
     statusElement.textContent = message;
 }
 
+async function confirmDisable(message) {
+    try {
+        return await window.GeoMessages.confirm(message, {confirmText: "Deshabilitar"});
+    } catch (error) {
+        console.error("No se pudo mostrar la confirmación.", error);
+        setStatus("No se pudo mostrar la confirmación. Inténtalo de nuevo.");
+        return false;
+    }
+}
+
 function loadState(seedData) {
     try {
         const saved = localStorage.getItem(storageKey);
@@ -1294,7 +1304,7 @@ document.getElementById("user-list").addEventListener("change", event => {
     renderOverview();
 });
 
-document.getElementById("user-list").addEventListener("click", event => {
+document.getElementById("user-list").addEventListener("click", async event => {
     const sortButton = event.target.closest("[data-sort-users]");
     if (sortButton) {
         const sortKey = sortButton.dataset.sortUsers;
@@ -1313,7 +1323,10 @@ document.getElementById("user-list").addEventListener("click", event => {
         return;
     }
     const user = state.users.find(item => item.id === button.dataset.disableUser);
-    if (!user || !isSystemEnabled(user) || !window.confirm(`¿Deshabilitar el usuario "${user.name}"?`)) {
+    if (!user || !isSystemEnabled(user)) {
+        return;
+    }
+    if (!await confirmDisable(`¿Deshabilitar el usuario "${user.name}"?`) || !isSystemEnabled(user)) {
         return;
     }
     user.estado_sistema = "Deshabilitado";
@@ -1338,13 +1351,16 @@ document.getElementById("area-list").addEventListener("change", event => {
     renderUsers();
 });
 
-document.getElementById("plaza-list").addEventListener("click", event => {
+document.getElementById("plaza-list").addEventListener("click", async event => {
     const button = event.target.closest("[data-disable-plaza]");
     if (!button) {
         return;
     }
     const plaza = state.plazas.find(item => item.id === button.dataset.disablePlaza);
-    if (!plaza || !isSystemEnabled(plaza) || !window.confirm(`¿Deshabilitar la plaza "${plaza.name}"? Sus frentes no podrán modificarse ni asignarse.`)) {
+    if (!plaza || !isSystemEnabled(plaza)) {
+        return;
+    }
+    if (!await confirmDisable(`¿Deshabilitar la plaza "${plaza.name}"? Sus frentes no podrán modificarse ni asignarse.`) || !isSystemEnabled(plaza)) {
         return;
     }
     plaza.estado_sistema = "Deshabilitado";
@@ -1352,7 +1368,7 @@ document.getElementById("plaza-list").addEventListener("click", event => {
     renderAll();
 });
 
-document.getElementById("frente-list").addEventListener("click", event => {
+document.getElementById("frente-list").addEventListener("click", async event => {
     const button = event.target.closest("[data-disable-front]");
     if (!button) {
         return;
@@ -1362,7 +1378,8 @@ document.getElementById("frente-list").addEventListener("click", event => {
     if (!front || !isSystemEnabled(front) || !isSystemEnabled(plaza)) {
         return;
     }
-    if (!window.confirm(`¿Deshabilitar el frente "${front.name}"? Sus asignaciones quedarán bloqueadas.`)) {
+    if (!await confirmDisable(`¿Deshabilitar el frente "${front.name}"? Sus asignaciones quedarán bloqueadas.`) ||
+        !isSystemEnabled(front) || !isSystemEnabled(plaza)) {
         return;
     }
     front.estado_sistema = "Deshabilitado";
