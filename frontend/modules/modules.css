@@ -7,28 +7,12 @@
 
     /* BRAND */
 
-    --colour-primary: #17324D;
-    --colour-primary-hover: #21445F;
     --colour-primary-active: #10283D;
 
     --colour-secondary: #547C8A;
 
-    --colour-accent: #C47D55;
-
-
-    /* BACKGROUNDS */
-
-    --colour-background: #F4F6F7;
-    --colour-surface: #FFFFFF;
-    --colour-surface-secondary: #EEF2F4;
-    --colour-surface-hover: #F7F9FA;
-
-
     /* TYPOGRAPHY */
 
-    --colour-text-primary: #17324D;
-    --colour-text-secondary: #536875;
-    --colour-text-tertiary: #81909A;
     --colour-text-inverse: #FFFFFF;
 
     --font-family:
@@ -50,8 +34,6 @@
 
     /* BORDERS */
 
-    --colour-border: #D9E1E5;
-    --colour-border-subtle: #E8EDEF;
     --colour-border-strong: #BAC7CD;
 
 
@@ -104,26 +86,12 @@
 [data-theme="dark"] {
     color-scheme: dark;
 
-    --colour-primary: #DCE8EC;
-    --colour-primary-hover: #FFFFFF;
     --colour-primary-active: #B7CED3;
 
     --colour-secondary: #7FA5AF;
 
-    --colour-accent: #D58B62;
-
-    --colour-background: #0D1822;
-    --colour-surface: #132330;
-    --colour-surface-secondary: #192C3A;
-    --colour-surface-hover: #1D3342;
-
-    --colour-text-primary: #EDF3F5;
-    --colour-text-secondary: #B7C6CC;
-    --colour-text-tertiary: #8498A1;
     --colour-text-inverse: #0D1822;
 
-    --colour-border: #294251;
-    --colour-border-subtle: #203744;
     --colour-border-strong: #3D5967;
 
     --colour-focus: #8FB4BE;
@@ -148,11 +116,6 @@
 /* GLOBAL                */
 /* ===================== */
 
-*,
-*::before,
-*::after {
-    box-sizing: border-box;
-}
 
 html {
     min-height: 100%;

@@ -1,5 +1,3 @@
-const root = document.documentElement;
-const themeSelect = document.getElementById("select-theme");
 const statusElement = document.getElementById("admin-status");
 const storageKey = "geourbanlp-admin-prototype-v1";
 const roles = ["Desarrollador", "Administrador", "Creador", "Visualizador"];
@@ -612,31 +610,6 @@ function formatMonth(month) {
         year: "numeric"
     }).format(new Date(`${month}-01T12:00:00`));
 }
-
-function getThemePreference() {
-    const saved = localStorage.getItem("geourbanlp-theme");
-    return ["system", "light", "dark"].includes(saved) ? saved : "system";
-}
-
-function applyTheme(preference) {
-    const theme = preference === "system"
-        ? window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
-        : preference;
-    root.setAttribute("data-theme", theme);
-    root.setAttribute("data-theme-preference", preference);
-    themeSelect.value = preference;
-}
-
-themeSelect.addEventListener("change", () => {
-    localStorage.setItem("geourbanlp-theme", themeSelect.value);
-    applyTheme(themeSelect.value);
-});
-
-window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
-    if (root.getAttribute("data-theme-preference") === "system") {
-        applyTheme("system");
-    }
-});
 
 function navigateTo(view) {
     activeView = view;
@@ -1779,7 +1752,6 @@ async function initializeAdmin() {
         state = loadState(seedData);
         adminMain.inert = false;
         adminMain.removeAttribute("aria-busy");
-        applyTheme(getThemePreference());
         renderAll();
     } catch (error) {
         adminMain.inert = false;

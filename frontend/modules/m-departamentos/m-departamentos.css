@@ -1,19 +1,6 @@
 :root {
-    --primary: #17324D;
-    --accent: #C47D55;
-    --background: #F4F6F7;
-    --surface: #FFFFFF;
-    --text: #17324D;
-    --text-secondary: #536875;
-    --border: #D9E1E5;
     --radius-md: 0.55rem;
     font-family: "Century Gothic", "Avenir Next", "Segoe UI", sans-serif;
-}
-
-*,
-*::before,
-*::after {
-    box-sizing: border-box;
 }
 
 html,
