@@ -542,13 +542,8 @@ body {
     background: var(--primary-hover);
 }
 
-.admin-app > .admin-layout > .admin-main .button.button-secondary:hover,
-.admin-app > .admin-layout > .admin-main .button.button-quiet:hover {
+.admin-app > .admin-layout > .admin-main .button.button-secondary:hover {
     background: var(--surface-hover);
-}
-
-.admin-app > .admin-layout > .admin-main .button.button-quiet {
-    color: var(--text-secondary);
 }
 
 .admin-app > .admin-layout > .admin-main > #view-areas > .area-list,

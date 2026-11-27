@@ -1679,26 +1679,6 @@ layerStructureList.addEventListener("dragend", () => {
     });
 });
 
-document.getElementById("btn-reset-demo").addEventListener("click", async event => {
-    if (!window.confirm("Se reemplazarán los cambios guardados localmente por los registros actuales de data.json. ¿Continuar?")) {
-        return;
-    }
-
-    const resetButton = event.currentTarget;
-    resetButton.disabled = true;
-    try {
-        seedData = await loadSeedData();
-        state = createSeedState(seedData);
-        collapsedStructureGroups.clear();
-        saveState("Se cargaron los datos actuales de data.json.");
-        renderAll();
-    } catch (error) {
-        setStatus(`No se pudieron cargar los datos de data.json: ${error.message}`);
-    } finally {
-        resetButton.disabled = false;
-    }
-});
-
 async function initializeAdmin() {
     const adminMain = document.querySelector(".admin-main");
     adminMain.setAttribute("aria-busy", "true");

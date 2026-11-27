@@ -12,10 +12,8 @@
     --colour-primary-active: #10283D;
 
     --colour-secondary: #547C8A;
-    --colour-secondary-light: #B7CED3;
 
     --colour-accent: #C47D55;
-    --colour-accent-soft: #F4E8E1;
 
 
     /* BACKGROUNDS */
@@ -42,13 +40,10 @@
     --font-size-sm: 0.6875rem;
     --font-size-base: 0.75rem;
     --font-size-lg: 0.8125rem;
-    --font-size-xl: 0.875rem;
-    --font-size-2xl: 1rem;
     --font-size-3xl: 1.25rem;
     --font-size-4xl: 1.75rem;
 
     --font-weight-regular: 400;
-    --font-weight-medium: 500;
     --font-weight-semibold: 600;
     --font-weight-bold: 700;
 
@@ -68,7 +63,6 @@
 
     /* SPACING */
 
-    --spacing-1: 0.25rem;
     --spacing-2: 0.5rem;
     --spacing-3: 0.75rem;
     --spacing-4: 1rem;
@@ -115,10 +109,8 @@
     --colour-primary-active: #B7CED3;
 
     --colour-secondary: #7FA5AF;
-    --colour-secondary-light: #355563;
 
     --colour-accent: #D58B62;
-    --colour-accent-soft: #3A2924;
 
     --colour-background: #0D1822;
     --colour-surface: #132330;
