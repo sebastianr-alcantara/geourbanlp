@@ -33,6 +33,33 @@ function createDefaultLayers(groupId) {
     }));
 }
 
+function parseWfsGetFeatureUrl(value) {
+    let url;
+    try {
+        url = new URL(value);
+    } catch {
+        return null;
+    }
+
+    const service = url.searchParams.get("service");
+    const request = url.searchParams.get("request");
+    const layerName = url.searchParams.get("typeName") ||
+        url.searchParams.get("typeNames");
+
+    if (
+        !["http:", "https:"].includes(url.protocol) ||
+        !service ||
+        service.toUpperCase() !== "WFS" ||
+        !request ||
+        request.toLowerCase() !== "getfeature" ||
+        !layerName
+    ) {
+        return null;
+    }
+
+    return url;
+}
+
 function createStructureGroup(id, name) {
     return {id, name, subgroups: [], layers: createDefaultLayers(id)};
 }
@@ -48,7 +75,14 @@ function normalizeStructureGroup(group, isRoot = false) {
         group.layers = isRoot ? [] : createDefaultLayers(group.id);
     }
     if (group.layers.some(layer =>
-        !layer || typeof layer.id !== "string" || typeof layer.name !== "string"
+        !layer ||
+        typeof layer.id !== "string" ||
+        typeof layer.name !== "string" ||
+        (layer.type !== undefined && layer.type !== "WFS") ||
+        (layer.type === "WFS" && (
+            typeof layer.serviceUrl !== "string" ||
+            !parseWfsGetFeatureUrl(layer.serviceUrl)
+        ))
     )) {
         throw new Error(`El grupo "${group.name}" contiene una capa inválida.`);
     }
@@ -1037,6 +1071,9 @@ function renderStructureGroup(group, isRoot = false, parentId = "", groupIndex =
                                 <span class="structure-layer-name">
                                     <span class="material-icons" aria-hidden="true">layers</span>
                                     <span>${escapeHtml(layer.name)}</span>
+                                    ${layer.type === "WFS"
+                                        ? `<a class="structure-layer-service" href="${escapeHtml(layer.serviceUrl)}" target="_blank" rel="noopener noreferrer" title="${escapeHtml(layer.serviceUrl)}" aria-label="Abrir el servicio WFS de ${escapeHtml(layer.name)}">WFS</a>`
+                                        : ""}
                                 </span>
                                 <div class="structure-order-controls">
                                     <button class="structure-icon-button" type="button" data-move-layer="${escapeHtml(layer.id)}" data-group="${groupId}" data-move-direction="up" aria-label="Subir capa ${escapeHtml(layer.name)}" title="Subir capa"${index === 0 ? " disabled" : ""}>
@@ -1060,7 +1097,19 @@ function renderStructureGroup(group, isRoot = false, parentId = "", groupIndex =
                 </form>
                 ${isRoot ? "" : `
                     <form class="layer-form" data-add-layer="${groupId}">
-                        <input name="name" type="text" required maxlength="80" aria-label="Nueva capa para ${name}" placeholder="Nombre de la capa">
+                        <label>Nombre de la capa
+                            <input name="name" type="text" required maxlength="80" aria-label="Nueva capa para ${name}" placeholder="Nombre de la capa">
+                        </label>
+                        <label>Tipo de capa
+                            <select name="type" data-layer-type aria-label="Tipo de capa para ${name}">
+                                <option value="regular">Capa regular</option>
+                                <option value="WFS">Servicio WFS</option>
+                            </select>
+                        </label>
+                        <label class="layer-service-url" data-wfs-url-field hidden>URL GetFeature del servicio WFS
+                            <input name="serviceUrl" type="url" placeholder="https://servidor/ows?service=WFS&amp;request=GetFeature&amp;typeName=espacio:capa" autocomplete="url">
+                            <small>Pega la URL GetFeature completa, incluyendo typeName o typeNames.</small>
+                        </label>
                         <button class="button button-secondary" type="submit"><span class="material-icons" aria-hidden="true">add</span>Agregar capa</button>
                     </form>`}
             </div>
@@ -1399,9 +1448,25 @@ document.getElementById("layer-structure-list").addEventListener("submit", event
     const layerForm = event.target.closest("[data-add-layer]");
     if (layerForm) {
         event.preventDefault();
-        const name = String(new FormData(layerForm).get("name")).trim();
+        const formData = new FormData(layerForm);
+        const name = String(formData.get("name")).trim();
         if (!name) {
             setStatus("Escribe el nombre de la capa.");
+            return;
+        }
+
+        const type = String(formData.get("type"));
+        let wfsUrl = null;
+        if (type === "WFS") {
+            wfsUrl = parseWfsGetFeatureUrl(
+                String(formData.get("serviceUrl") || "").trim()
+            );
+            if (!wfsUrl) {
+                setStatus("Pega una URL HTTP/HTTPS completa de WFS GetFeature que incluya typeName o typeNames.");
+                return;
+            }
+        } else if (type !== "regular") {
+            setStatus("Selecciona un tipo de capa válido.");
             return;
         }
 
@@ -1414,8 +1479,16 @@ document.getElementById("layer-structure-list").addEventListener("submit", event
             return;
         }
 
-        group.layers.push({id: createId("layer"), name});
-        saveState(`Se agregó la capa "${name}".`);
+        const layer = {id: createId("layer"), name};
+        if (type === "WFS") {
+            layer.type = "WFS";
+            layer.serviceUrl = wfsUrl.href;
+        }
+        group.layers.push(layer);
+        saveState(type === "WFS"
+            ? `Se agregó la capa WFS "${name}".`
+            : `Se agregó la capa "${name}".`
+        );
         renderLayerStructure();
         return;
     }
@@ -1444,6 +1517,23 @@ document.getElementById("layer-structure-list").addEventListener("submit", event
         });
         saveState(`Se agregó el grupo "${name}" dentro de "${group.name}".`);
         renderLayerStructure();
+    }
+});
+
+document.getElementById("layer-structure-list").addEventListener("change", event => {
+    const typeSelect = event.target.closest("[data-layer-type]");
+    if (!typeSelect) {
+        return;
+    }
+
+    const layerForm = typeSelect.closest("[data-add-layer]");
+    const serviceUrlField = layerForm.querySelector("[data-wfs-url-field]");
+    const serviceUrlInput = layerForm.querySelector("[name='serviceUrl']");
+    const isWfs = typeSelect.value === "WFS";
+    serviceUrlField.hidden = !isWfs;
+    serviceUrlInput.required = isWfs;
+    if (!isWfs) {
+        serviceUrlInput.value = "";
     }
 });
 

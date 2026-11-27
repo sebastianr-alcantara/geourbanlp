@@ -1116,8 +1116,24 @@ body {
     gap: 0.5rem;
 }
 
-.admin-app > .admin-layout > .admin-main > #view-layers > #layer-structure-list .structure-layer-name > span:last-child {
+.admin-app > .admin-layout > .admin-main > #view-layers > #layer-structure-list .structure-layer-name > span:nth-child(2) {
     overflow-wrap: anywhere;
+}
+
+.admin-app > .admin-layout > .admin-main > #view-layers > #layer-structure-list .structure-layer-service {
+    flex: 0 0 auto;
+    padding: 0.1rem 0.35rem;
+    border-radius: var(--radius-sm);
+    background: var(--surface-secondary);
+    color: var(--text-secondary);
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.admin-app > .admin-layout > .admin-main > #view-layers > #layer-structure-list .structure-layer-service:hover {
+    color: var(--primary);
+    text-decoration: underline;
 }
 
 .admin-app > .admin-layout > .admin-main > #view-layers > #layer-structure-list .structure-layer-name > .material-icons {
@@ -1160,6 +1176,40 @@ body {
     grid-template-columns: minmax(10rem, 1fr) auto;
     gap: 0.45rem;
     margin-top: 0.5rem;
+}
+
+.admin-app > .admin-layout > .admin-main > #view-layers > #layer-structure-list .structure-group-content > .layer-form {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: end;
+}
+
+.admin-app > .admin-layout > .admin-main > #view-layers > #layer-structure-list .layer-form > label {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 0.35rem;
+    color: var(--text-secondary);
+    font-size: 0.72rem;
+    font-weight: 600;
+}
+
+.admin-app > .admin-layout > .admin-main > #view-layers > #layer-structure-list .layer-form > .layer-service-url,
+.admin-app > .admin-layout > .admin-main > #view-layers > #layer-structure-list .layer-form > button {
+    grid-column: 1 / -1;
+}
+
+.admin-app > .admin-layout > .admin-main > #view-layers > #layer-structure-list .layer-form > .layer-service-url[hidden] {
+    display: none;
+}
+
+.admin-app > .admin-layout > .admin-main > #view-layers > #layer-structure-list .layer-form > .layer-service-url > small {
+    color: var(--text-tertiary);
+    font-size: 0.68rem;
+    font-weight: 400;
+}
+
+.admin-app > .admin-layout > .admin-main > #view-layers > #layer-structure-list .layer-form > button {
+    justify-self: start;
 }
 
 .admin-app > .admin-header > .admin-header-actions > .visually-hidden {

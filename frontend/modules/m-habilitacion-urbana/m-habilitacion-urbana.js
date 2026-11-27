@@ -1532,8 +1532,6 @@ function includeTerrainInTimeline(feature) {
     const endDay = Number(timelineEndRange.value);
     timelineStartRange.value = String(Math.min(startDay, selectedDay));
     timelineEndRange.value = String(Math.max(endDay, selectedDay));
-    timelineStartRange.max = timelineEndRange.value;
-    timelineEndRange.min = timelineStartRange.value;
     updateTimelineFilter();
 }
 
@@ -1958,8 +1956,14 @@ function updateTimelineFilter() {
     const endPercentage = daySpan > 0
         ? Number(timelineEndRange.value) / daySpan * 100
         : 0;
-    timelineRangeSlider.style.setProperty("--timeline-range-start", `${startPercentage}%`);
-    timelineRangeSlider.style.setProperty("--timeline-range-end", `${endPercentage}%`);
+    timelineRangeSlider.style.setProperty(
+        "--timeline-range-start",
+        `calc(${startPercentage}% + ${0.5 - startPercentage / 100}rem)`
+    );
+    timelineRangeSlider.style.setProperty(
+        "--timeline-range-end",
+        `calc(${endPercentage}% + ${0.5 - endPercentage / 100}rem)`
+    );
     timelineStatus.textContent = timelineEnabled
         ? `Mostrando ${visibleCount} de ${datedCount} entidades registradas entre el ${fromDateLabel} y el ${throughDateLabel}.`
         : `${datedCount} entidades con fecha disponibles. Filtro temporal desactivado.`;
@@ -1970,8 +1974,10 @@ function updateTimelineControls() {
         .flatMap(group => group.datedFeatures);
     if (datedFeatures.length === 0) {
         delete timelineStartRange.dataset.startDate;
+        timelineStartRange.min = "0";
         timelineStartRange.max = "0";
         timelineStartRange.value = "0";
+        timelineEndRange.min = "0";
         timelineEndRange.max = "0";
         timelineEndRange.value = "0";
         timelineStartRange.disabled = true;
@@ -1995,6 +2001,7 @@ function updateTimelineControls() {
     );
     const daySpan = String(Math.floor((latestDate - earliestDate) / millisecondsPerDay));
     timelineStartRange.dataset.startDate = String(earliestDate);
+    // Both handles must use the same scale to keep their visual positions aligned.
     timelineStartRange.min = "0";
     timelineStartRange.max = daySpan;
     timelineStartRange.value = "0";
@@ -2022,38 +2029,81 @@ function setTimelineEnabled(enabled) {
 }
 
 timelineStartRange.addEventListener("input", () => {
-    timelineEndRange.min = timelineStartRange.value;
+    if (Number(timelineStartRange.value) > Number(timelineEndRange.value)) {
+        timelineStartRange.value = timelineEndRange.value;
+    }
     updateTimelineFilter();
 });
 timelineEndRange.addEventListener("input", () => {
-    timelineStartRange.max = timelineEndRange.value;
+    if (Number(timelineEndRange.value) < Number(timelineStartRange.value)) {
+        timelineEndRange.value = timelineStartRange.value;
+    }
     updateTimelineFilter();
 });
 timelineRangeSlider.addEventListener("pointerdown", event => {
-    if (!timelineEnabled ||
-        (event.target !== timelineRangeSlider &&
-            event.target !== timelineRangeSelection &&
-            event.target !== timelineRangeSlider.querySelector(".timeline-range-track"))) {
+    if (!timelineEnabled || timelineStartRange.disabled || event.button !== 0) {
         return;
     }
 
     const bounds = timelineRangeSlider.getBoundingClientRect();
-    if (!bounds.width) {
+    const thumbRadius = parseFloat(getComputedStyle(document.documentElement).fontSize) / 2;
+    const trackWidth = bounds.width - 2 * thumbRadius;
+    if (trackWidth <= 0) {
         return;
     }
 
     const daySpan = Number(timelineEndRange.max);
-    const pointerRatio = Math.min(1, Math.max(0, (event.clientX - bounds.left) / bounds.width));
-    const selectedDay = Math.round(pointerRatio * daySpan);
+    const dayAt = clientX => {
+        const ratio = Math.min(1, Math.max(0, (clientX - bounds.left - thumbRadius) / trackWidth));
+        return Math.round(ratio * daySpan);
+    };
     const startDay = Number(timelineStartRange.value);
     const endDay = Number(timelineEndRange.value);
 
+    if (
+        startDay === endDay &&
+        (event.target === timelineStartRange || event.target === timelineEndRange)
+    ) {
+        // When the handles overlap, the drag direction selects which one moves.
+        event.preventDefault();
+        event.target.focus();
+        timelineRangeSlider.setPointerCapture(event.pointerId);
+        let movingRange = null;
+        const onPointerMove = moveEvent => {
+            const selectedDay = dayAt(moveEvent.clientX);
+            if (!movingRange && selectedDay !== startDay) {
+                movingRange = selectedDay < startDay ? timelineStartRange : timelineEndRange;
+                movingRange.focus();
+            }
+            if (movingRange === timelineStartRange) {
+                timelineStartRange.value = String(Math.min(selectedDay, endDay));
+            } else if (movingRange === timelineEndRange) {
+                timelineEndRange.value = String(Math.max(selectedDay, startDay));
+            }
+            updateTimelineFilter();
+        };
+        const stopDragging = () => {
+            timelineRangeSlider.removeEventListener("pointermove", onPointerMove);
+            timelineRangeSlider.removeEventListener("lostpointercapture", stopDragging);
+        };
+        timelineRangeSlider.addEventListener("pointermove", onPointerMove);
+        timelineRangeSlider.addEventListener("lostpointercapture", stopDragging);
+        return;
+    }
+
+    if (
+        event.target !== timelineRangeSlider &&
+        event.target !== timelineRangeSelection &&
+        event.target !== timelineRangeSlider.querySelector(".timeline-range-track")
+    ) {
+        return;
+    }
+
+    const selectedDay = dayAt(event.clientX);
     if (Math.abs(selectedDay - startDay) <= Math.abs(selectedDay - endDay)) {
         timelineStartRange.value = String(Math.min(selectedDay, endDay));
-        timelineEndRange.min = timelineStartRange.value;
     } else {
         timelineEndRange.value = String(Math.max(selectedDay, startDay));
-        timelineStartRange.max = timelineEndRange.value;
     }
     updateTimelineFilter();
 });

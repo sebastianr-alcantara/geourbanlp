@@ -1669,7 +1669,7 @@ button {
 
 .viewer .viewer-body .map-container .timeline-range-slider {
     position: relative;
-    flex: 1;
+    flex: 0 0 1.5rem;
     min-width: 6rem;
     height: 1.5rem;
     touch-action: pan-y;
@@ -1731,8 +1731,9 @@ button {
 }
 
 .viewer .viewer-body .map-container .timeline-range-input::-moz-range-thumb {
-    width: 0.75rem;
-    height: 0.75rem;
+    box-sizing: border-box;
+    width: 1rem;
+    height: 1rem;
     border: 2px solid var(--colour-surface);
     border-radius: 50%;
     background: var(--colour-primary);
